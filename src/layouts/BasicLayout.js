@@ -238,6 +238,7 @@ class BasicLayout extends React.PureComponent {
       <Layout>
         {isTop && !isMobile ? null : (
           <SiderMenu
+             // 系统logo
             logo={logo}
             Authorized={Authorized}
             theme={navTheme}
