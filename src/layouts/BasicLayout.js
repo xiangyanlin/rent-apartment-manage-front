@@ -178,13 +178,13 @@ class BasicLayout extends React.PureComponent {
     const currRouterData = this.matchParamsPath(pathname);
 
     if (!currRouterData) {
-      return '好客租房管理系统';
+      return '租房管理系统';
     }
     const message = formatMessage({
       id: currRouterData.locale || currRouterData.name,
       defaultMessage: currRouterData.name,
     });
-    return `${message} - 好客租房管理系统`;
+    return `${message} - 租房管理系统`;
   };
 
   getLayoutStyle = () => {
@@ -238,7 +238,7 @@ class BasicLayout extends React.PureComponent {
       <Layout>
         {isTop && !isMobile ? null : (
           <SiderMenu
-             // 系统logo
+            // 系统logo
             logo={logo}
             Authorized={Authorized}
             theme={navTheme}

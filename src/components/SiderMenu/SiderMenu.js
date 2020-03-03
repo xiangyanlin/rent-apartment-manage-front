@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import Link from 'umi/link';
 import styles from './index.less';
 import BaseMenu, { getMenuMatches } from './BaseMenu';
+import img from '../../assets/081-school-1.svg';
 import { urlToList } from '../_utils/pathTools';
 
 const { Sider } = Layout;
@@ -110,6 +111,7 @@ export default class SiderMenu extends PureComponent {
         <div className={styles.logo} id="logo">
           <Link to="/">
             {/* <img src={logo} alt="logo" /> */}
+            <img alt="img" className={styles.logo} src={img} />
             <h1>租房管理系统</h1>
           </Link>
         </div>
