@@ -17,10 +17,10 @@ export default [
     Routes: ['src/pages/Authorized'],
     authority: ['admin', 'user'],
     routes: [
-
       { path: '/', redirect: '/dashboard/analysis' },
 
-      { //房源管理
+      {
+        //房源管理
         path: '/house',
         name: 'house',
         icon: 'home',
@@ -28,27 +28,28 @@ export default [
           {
             path: '/house/resource',
             name: 'resource',
-            component: './haoke/House/Resource'
+            component: './xyl/House/Resource',
           },
           {
             path: '/house/addResource',
             name: 'addResource',
-            component: './haoke/House/AddResource'
+            component: './xyl/House/AddResource',
           },
           {
             path: '/house/kanfang',
             name: 'kanfang',
-            component: './haoke/House/KanFang'
+            component: './xyl/House/KanFang',
           },
           {
             path: '/house/zufang',
             name: 'zufang',
-            component: './haoke/House/ZuFang'
-          }
-        ]
+            component: './xyl/House/ZuFang',
+          },
+        ],
       },
 
-      { //房东管理
+      {
+        //房东管理
         path: '/fangdong',
         name: 'fangdong',
         icon: 'key',
@@ -56,12 +57,13 @@ export default [
           {
             path: '/fangdong/list',
             name: 'list',
-            component: './haoke/FangDong/List'
-          }
-        ]
+            component: './xyl/FangDong/List',
+          },
+        ],
       },
 
-      { //用户管理
+      {
+        //用户管理
         path: '/users',
         name: 'users',
         icon: 'user',
@@ -69,12 +71,13 @@ export default [
           {
             path: '/users/list',
             name: 'list',
-            component: './haoke/Users/List'
-          }
-        ]
+            component: './xyl/Users/List',
+          },
+        ],
       },
 
-      { //合约管理
+      {
+        //合约管理
         path: '/heyue',
         name: 'heyue',
         icon: 'file-text',
@@ -82,12 +85,13 @@ export default [
           {
             path: '/heyue/list',
             name: 'list',
-            component: './haoke/HeYue/List'
-          }
-        ]
+            component: './xyl/HeYue/List',
+          },
+        ],
       },
 
-      { //资讯管理
+      {
+        //资讯管理
         path: '/news',
         name: 'news',
         icon: 'message',
@@ -95,12 +99,13 @@ export default [
           {
             path: '/news/list',
             name: 'list',
-            component: './haoke/News/List'
-          }
-        ]
+            component: './xyl/News/List',
+          },
+        ],
       },
 
-      { //问答管理
+      {
+        //问答管理
         path: '/qa',
         name: 'qa',
         icon: 'question-circle',
@@ -108,12 +113,13 @@ export default [
           {
             path: '/news/list',
             name: 'list',
-            component: './haoke/News/List'
-          }
-        ]
+            component: './xyl/News/List',
+          },
+        ],
       },
 
-      { //财务管理
+      {
+        //财务管理
         path: '/finance',
         name: 'finance',
         icon: 'money-collect',
@@ -121,17 +127,18 @@ export default [
           {
             path: '/finance/bill',
             name: 'bill',
-            component: './haoke/Finance/Bill'
+            component: './xyl/Finance/Bill',
           },
           {
             path: '/finance/tixian',
             name: 'tixian',
-            component: './haoke/Finance/TiXian'
-          }
-        ]
+            component: './xyl/Finance/TiXian',
+          },
+        ],
       },
 
-      { //系统管理
+      {
+        //系统管理
         path: '/system',
         name: 'system',
         icon: 'laptop',
@@ -139,19 +146,19 @@ export default [
           {
             path: '/system/interface',
             name: 'interface',
-            component: './haoke/System/Interface'
+            component: './xyl/System/Interface',
           },
           {
             path: '/system/dict',
             name: 'dict',
-            component: './haoke/System/Dict'
+            component: './xyl/System/Dict',
           },
           {
             path: '/system/contract',
             name: 'contract',
-            component: './haoke/System/Contract'
-          }
-        ]
+            component: './xyl/System/Contract',
+          },
+        ],
       },
 
       // dashboard
