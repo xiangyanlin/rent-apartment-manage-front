@@ -60,13 +60,14 @@ export default {
   externals: {
     '@antv/data-set': 'DataSet',
   },
-  // proxy: {
-  //   '/server/api/': {
-  //     target: 'https://preview.pro.ant.design/',
-  //     changeOrigin: true,
-  //     pathRewrite: { '^/server': '' },
-  //   },
-  // },
+  //设置代理
+  proxy: {
+    '/xyl/': {
+      target: 'http://127.0.0.1:8080',
+      changeOrigin: true,
+      pathRewrite: { '^/xyl/': '' },
+    },
+  },
   ignoreMomentLocale: true,
   lessLoaderOptions: {
     javascriptEnabled: true,
