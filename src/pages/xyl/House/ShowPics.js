@@ -1,6 +1,7 @@
 import React  from 'react';
 import { Modal, Button, Carousel } from 'antd';
 
+
 class ShowPics extends React.Component{
 
   info = () => {
@@ -13,7 +14,7 @@ class ShowPics extends React.Component{
         <div style={{width:650, height: 400, lineHeight:400, textAlign:"center"}}>
           <Carousel autoplay={true}>
             {
-            this.props.pics.split(',').map((value,index) => {
+            this.state.url.split(',').map((value,index) => {
               return <div><img style={{ maxWidth:600 ,maxHeight:400, margin:"0 auto" }} src={value}/></div>
             })
           }
@@ -23,11 +24,14 @@ class ShowPics extends React.Component{
       onOk() {},
     });
   };
-
+  
   constructor(props){
     super(props);
+    //console.log(this.props.pics);
+    const url="http://127.0.0.1:8080/common/getImage?filename="+this.props.pics;
     this.state={
-      btnDisabled: this.props.pics? false: true
+      btnDisabled: this.props.pics? false: true,
+      url:url
     }
   }
 
