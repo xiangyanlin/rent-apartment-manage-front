@@ -14,7 +14,7 @@ class ShowPics extends React.Component{
         <div style={{width:650, height: 400, lineHeight:400, textAlign:"center"}}>
           <Carousel autoplay={true}>
             {
-            this.state.url.split(',').map((value,index) => {
+            this.props.pics.split(',').map((value,index) => {
               return <div><img style={{ maxWidth:600 ,maxHeight:400, margin:"0 auto" }} src={value}/></div>
             })
           }
@@ -28,10 +28,11 @@ class ShowPics extends React.Component{
   constructor(props){
     super(props);
     //console.log(this.props.pics);
-    const url="http://127.0.0.1:8080/common/getImage?filename="+this.props.pics;
+    //const urls=this.props.pics.split(',');
+    
+    //const url="http://127.0.0.1:8080/common/getImage?filename="+this.props.pics;
     this.state={
       btnDisabled: this.props.pics? false: true,
-      url:url
     }
   }
 
