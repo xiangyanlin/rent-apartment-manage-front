@@ -6,3 +6,9 @@ export async function addHouseResource(params) {
     body: params,
   });
 }
+
+export async function estateList() {
+  return request('/xyl/estate/selectAll', {
+    method: 'POST',
+  });
+}

@@ -26,20 +26,26 @@ const Search = Input.Search;
 const InputGroup = Input.Group;
 const CheckboxGroup = Checkbox.Group;
 
-const estateMap = new Map([
-  ['中远两湾城','1001|上海市,上海市,普陀区,远景路97弄'],
-  ['上海康城','1002|上海市,上海市,闵行区,莘松路958弄'],
-  ['保利西子湾','1003|上海市,上海市,松江区,广富林路1188弄'],
-  ['万科城市花园','1004|上海市,上海市,闵行区,七莘路3333弄2区-15区'],
-  ['上海阳城','1005|上海市,上海市,闵行区,罗锦路888弄']
-]);
 
 
-@connect(({ loading }) => ({
+
+@connect(
+  ({ loading,estate}) => ({
     submitting: loading.effects['form/submitRegularForm'],
+    estate,
+    loading: loading.models.estate,
 }))
 @Form.create()
 class AddResource extends PureComponent {
+
+  componentDidMount() { //当组件挂载完成后执行加载数据
+    console.log("loading.......");
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'estate/fetch',
+      // type: 'rule/fetch',
+    });
+  }
     handleSubmit = e => {
         const { dispatch, form } = this.props;
         e.preventDefault();
@@ -74,6 +80,15 @@ class AddResource extends PureComponent {
                     type: 'house/submitHouseForm',
                     payload: values,
                 });
+                this.setState({
+                  formValues: data,
+                });
+                 dispatch({
+                   type: 'estate/fetch',
+                   payload: data,
+               });
+                
+
             }
         });
     };
@@ -81,7 +96,7 @@ class AddResource extends PureComponent {
     handleSearch = (value)=>{
     let arr = new Array();
     if(value.length > 0 ){
-      estateMap.forEach((v, k) => {
+      this.props.estate.estateMap.forEach((v, k) => {
         if(k.startsWith(value)){
           arr.push(k);
         }
@@ -118,6 +133,7 @@ class AddResource extends PureComponent {
 
     render() {
         const { submitting } = this.props;
+        console.log(this.props);
         const {
             form: { getFieldDecorator, getFieldValue },
         } = this.props;
@@ -153,7 +169,7 @@ class AddResource extends PureComponent {
                               dataSource={this.state.estateDataSource}
                               placeholder="搜索楼盘"
                               onSelect={(value, option)=>{
-                                let v = estateMap.get(value);
+                                let v = this.props.estate.estateMap.get(value);
                                 this.setState({
                                   estateAddress: v.substring(v.indexOf('|')+1),
                                   estateId : v.substring(0,v.indexOf('|'))
