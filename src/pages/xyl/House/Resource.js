@@ -17,6 +17,7 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
 import styles from '../TableList.less';
 import ShowPics from "./ShowPics";
+import EditResource from "./EditResource";
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -98,7 +99,9 @@ class Resource extends PureComponent {
       title: '操作',
       render: (text, record) => (
         <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>查看</a>
+          <a onClick={() => {}}>查看</a>
+          <Divider type="vertical" />
+          <EditResource record={record} reload={this.reload.bind(this)}/>
           <Divider type="vertical" />
           <a href="">删除</a>
         </Fragment>
@@ -106,8 +109,15 @@ class Resource extends PureComponent {
     },
   ];
 
+  reload(){
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'houseResource/fetch',
+      // type: 'rule/fetch',
+    });
+  }
+
   componentDidMount() { //当组件挂载完成后执行加载数据
-    console.log("loading.......");
     const { dispatch } = this.props;
     dispatch({
       type: 'houseResource/fetch',
@@ -354,8 +364,6 @@ class Resource extends PureComponent {
       loading,
     } = this.props;
     const { selectedRows } = this.state;
-
-    console.log(this.props);
 
     return (
       <PageHeaderWrapper title="房源管理">

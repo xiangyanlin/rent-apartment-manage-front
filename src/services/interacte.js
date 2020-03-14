@@ -12,3 +12,10 @@ export async function estateList() {
     method: 'POST',
   });
 }
+
+export async function updateHouseResource(params) { 
+  return request('/xyl/houseResources/update', {
+     method: 'PUT', 
+     body: params ,
+    });
+   }
