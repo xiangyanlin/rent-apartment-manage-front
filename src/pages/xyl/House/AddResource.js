@@ -80,15 +80,7 @@ class AddResource extends PureComponent {
                     type: 'house/submitHouseForm',
                     payload: values,
                 });
-                this.setState({
-                  formValues: data,
-                });
-                 dispatch({
-                   type: 'estate/fetch',
-                   payload: data,
-               });
-                
-
+    
             }
         });
     };
