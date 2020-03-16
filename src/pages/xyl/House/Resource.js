@@ -275,7 +275,7 @@ class Resource extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 6, lg: 24, xl: 48 }}>
           <Col md={6} sm={24}>
-            <FormItem label="">{getFieldDecorator('name')(<Input placeholder="区域" />)}</FormItem>
+            <FormItem label="">{getFieldDecorator('place')(<Input placeholder="区域" />)}</FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="">
@@ -293,20 +293,20 @@ class Resource extends PureComponent {
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
-            <FormItem label="">{getFieldDecorator('name')(<Input placeholder="户型" />)}</FormItem>
+            <FormItem label="">{getFieldDecorator('houseType')(<Input placeholder="户型" />)}</FormItem>
           </Col>
         </Row>
         <Row gutter={{ md: 6, lg: 24, xl: 48 }}>
           <Col md={6} sm={24}>
             <FormItem label="">
-              {getFieldDecorator('name')(<Input placeholder="房源编号" />)}
+              {getFieldDecorator('id')(<Input placeholder="房源编号" />)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <Row>
               <Col md={10} sm={24}>
                 <FormItem label="">
-                  {getFieldDecorator('name')(<Input placeholder="价格" />)}
+                  {getFieldDecorator('minRent')(<Input placeholder="价格" />)}
                 </FormItem>
               </Col>
               <Col md={4} sm={24}>
@@ -314,16 +314,25 @@ class Resource extends PureComponent {
               </Col>
               <Col md={10} sm={24}>
                 <FormItem label="">
-                  {getFieldDecorator('name')(<Input placeholder="价格" />)}
+                  {getFieldDecorator('maxRent')(<Input placeholder="价格" />)}
                 </FormItem>
               </Col>
             </Row>
           </Col>
           <Col md={6} sm={24}>
-            <FormItem label="">{getFieldDecorator('name')(<Input placeholder="朝向" />)}</FormItem>
+            <FormItem label="">{getFieldDecorator('orientation')(<Input placeholder="朝向" />)}</FormItem>
           </Col>
           <Col md={6} sm={24}>
-            <FormItem label="">{getFieldDecorator('name')(<Input placeholder="装修" />)}</FormItem>
+            <FormItem label="">
+               {/* {getFieldDecorator('name')(<Input placeholder="装修" />)} */}
+               {getFieldDecorator('decoration')(
+                <Select placeholder="装修" style={{ width: '100%' }}>
+                  <Option value="1">精装</Option>
+                  <Option value="2">简装</Option>
+                  <Option value="3">毛坯</Option>
+                </Select>
+              )}
+              </FormItem>
           </Col>
         </Row>
         <div style={{ overflow: 'hidden' }}>
