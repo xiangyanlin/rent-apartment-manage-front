@@ -135,13 +135,13 @@ class Resource extends PureComponent {
     if (sorter.field) {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
-
+    //
     dispatch({
-      type: 'rule/fetch',
+      type: 'houseResource/fetch',
       payload: params,
     });
   };
-
+  //重置
   handleFormReset = () => {
     const { form, dispatch } = this.props;
     form.resetFields();
@@ -149,7 +149,7 @@ class Resource extends PureComponent {
       formValues: {},
     });
     dispatch({
-      type: 'rule/fetch',
+      type: 'houseResource/fetch',
       payload: {},
     });
   };
@@ -209,7 +209,8 @@ class Resource extends PureComponent {
       });
 
       dispatch({
-        type: 'rule/fetch',
+        type: 'houseResource/fetch',
+        //type: 'rule/fetch',
         payload: values,
       });
     });
