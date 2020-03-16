@@ -1,23 +1,13 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import {
-  Row,
-  Col,
-  Card,
-  Form,
-  Input,
-  Select,
-  Icon,
-  Button,
-  Divider, Carousel,
-} from 'antd';
+import { Row, Col, Card, Form, Input, Select, Icon, Button, Divider, Carousel } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
 import styles from '../TableList.less';
-import ShowPics from "./ShowPics";
-import EditResource from "./EditResource";
+import ShowPics from './ShowPics';
+import EditResource from './EditResource';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -27,11 +17,11 @@ const getValue = obj =>
     .join(',');
 
 const payType = new Map([
-  [1,'付一押一'],
-  [2,'付三押一'],
-  [3,'付六押一'],
-  [4,'年付押一'],
-  [5,'其它'],
+  [1, '付一押一'],
+  [2, '付三押一'],
+  [3, '付六押一'],
+  [4, '年付押一'],
+  [5, '其它'],
 ]);
 
 /* eslint react/no-multi-comp:0 */
@@ -62,38 +52,38 @@ class Resource extends PureComponent {
     {
       title: '图',
       dataIndex: 'pic',
-      render : (text, record, index) => {
-        return  <ShowPics pics={text}/>
-      }
+      render: (text, record, index) => {
+        return <ShowPics pics={text} />;
+      },
     },
     {
       title: '楼栋',
-      render : (text, record, index) => {
-        return record.buildingFloorNum + "栋"+record.buildingNum+"单元"+record.buildingUnit+"号"
-      }
-
+      render: (text, record, index) => {
+        return (
+          record.buildingFloorNum + '栋' + record.buildingNum + '单元' + record.buildingUnit + '号'
+        );
+      },
     },
     {
       title: '支付方式',
-      render : (text, record, index) => {
-        return payType.get(record.paymentMethod)
-      }
+      render: (text, record, index) => {
+        return payType.get(record.paymentMethod);
+      },
     },
     {
       title: '户型',
-      dataIndex: 'houseType'
-
+      dataIndex: 'houseType',
     },
     {
       title: '面积',
       dataIndex: 'useArea',
-      render : (text, record, index) => {
-        return text+"平方"
-      }
+      render: (text, record, index) => {
+        return text + '平方';
+      },
     },
     {
       title: '楼层',
-      dataIndex: 'floor'
+      dataIndex: 'floor',
     },
     {
       title: '操作',
@@ -101,15 +91,15 @@ class Resource extends PureComponent {
         <Fragment>
           <a onClick={() => {}}>查看</a>
           <Divider type="vertical" />
-          <EditResource record={record} reload={this.reload.bind(this)}/>
+          <EditResource record={record} reload={this.reload.bind(this)} />
           <Divider type="vertical" />
-          <a href="">删除</a>
+          <a onClick={() => this.delete(record.id)}>删除</a>
         </Fragment>
       ),
     },
   ];
 
-  reload(){
+  reload() {
     const { dispatch } = this.props;
     dispatch({
       type: 'houseResource/fetch',
@@ -117,7 +107,8 @@ class Resource extends PureComponent {
     });
   }
 
-  componentDidMount() { //当组件挂载完成后执行加载数据
+  componentDidMount() {
+    //当组件挂载完成后执行加载数据
     const { dispatch } = this.props;
     dispatch({
       type: 'houseResource/fetch',
@@ -224,8 +215,14 @@ class Resource extends PureComponent {
     });
   };
 
-
-
+  delete = (rowId, e) => {
+    const { dispatch } = this.props;
+    console.log(rowId);
+    dispatch({
+      type: 'house/delete',
+      payload: { id: rowId },
+    });
+  };
 
   renderSimpleForm() {
     const {
@@ -235,21 +232,21 @@ class Resource extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 5, lg: 24, xl: 48 }}>
           <Col md={4} sm={24}>
-              {getFieldDecorator('name')(<Input placeholder="区域" />)}
+            {getFieldDecorator('name')(<Input placeholder="区域" />)}
           </Col>
           <Col md={4} sm={24}>
-              {getFieldDecorator('name')(<Input placeholder="楼盘名称" />)}
+            {getFieldDecorator('name')(<Input placeholder="楼盘名称" />)}
           </Col>
           <Col md={4} sm={24}>
-              {getFieldDecorator('status')(
-                <Select placeholder="房屋类型" style={{ width: '100%' }}>
-                  <Option value="0">住宅</Option>
-                  <Option value="1">商住两用</Option>
-                </Select>
-              )}
+            {getFieldDecorator('status')(
+              <Select placeholder="房屋类型" style={{ width: '100%' }}>
+                <Option value="0">住宅</Option>
+                <Option value="1">商住两用</Option>
+              </Select>
+            )}
           </Col>
           <Col md={4} sm={24}>
-              {getFieldDecorator('name')(<Input placeholder="户型" />)}
+            {getFieldDecorator('name')(<Input placeholder="户型" />)}
           </Col>
           <Col md={8} sm={24}>
             <span className={styles.submitButtons}>
@@ -277,29 +274,25 @@ class Resource extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 6, lg: 24, xl: 48 }}>
           <Col md={6} sm={24}>
-            <FormItem label="">
-              {getFieldDecorator('name')(<Input placeholder="区域" />)}
-            </FormItem>
+            <FormItem label="">{getFieldDecorator('name')(<Input placeholder="区域" />)}</FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="">
-             {getFieldDecorator('name')(<Input placeholder="楼盘名称" />)}
+              {getFieldDecorator('name')(<Input placeholder="楼盘名称" />)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="">
               {getFieldDecorator('status')(
-                  <Select placeholder="房屋类型" style={{ width: '100%' }}>
-                    <Option value="0">住宅</Option>
-                    <Option value="1">商住两用</Option>
-                  </Select>
-                )}
+                <Select placeholder="房屋类型" style={{ width: '100%' }}>
+                  <Option value="0">住宅</Option>
+                  <Option value="1">商住两用</Option>
+                </Select>
+              )}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
-            <FormItem label="">
-             {getFieldDecorator('name')(<Input placeholder="户型" />)}
-            </FormItem>
+            <FormItem label="">{getFieldDecorator('name')(<Input placeholder="户型" />)}</FormItem>
           </Col>
         </Row>
         <Row gutter={{ md: 6, lg: 24, xl: 48 }}>
@@ -316,7 +309,7 @@ class Resource extends PureComponent {
                 </FormItem>
               </Col>
               <Col md={4} sm={24}>
-                <div style={{textAlign:'center'}}>到</div>
+                <div style={{ textAlign: 'center' }}>到</div>
               </Col>
               <Col md={10} sm={24}>
                 <FormItem label="">
@@ -326,14 +319,10 @@ class Resource extends PureComponent {
             </Row>
           </Col>
           <Col md={6} sm={24}>
-            <FormItem label="">
-            {getFieldDecorator('name')(<Input placeholder="朝向" />)}
-            </FormItem>
+            <FormItem label="">{getFieldDecorator('name')(<Input placeholder="朝向" />)}</FormItem>
           </Col>
           <Col md={6} sm={24}>
-            <FormItem label="">
-             {getFieldDecorator('name')(<Input placeholder="装修" />)}
-            </FormItem>
+            <FormItem label="">{getFieldDecorator('name')(<Input placeholder="装修" />)}</FormItem>
           </Col>
         </Row>
         <div style={{ overflow: 'hidden' }}>
@@ -370,7 +359,7 @@ class Resource extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
-            
+
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}
