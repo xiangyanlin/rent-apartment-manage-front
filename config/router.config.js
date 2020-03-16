@@ -20,7 +20,7 @@ export default [
       { path: '/', redirect: '/dashboard/analysis' },
 
       {
-        //房源管理
+        // 房源管理
         path: '/house',
         name: 'house',
         icon: 'home',
@@ -49,21 +49,21 @@ export default [
       },
 
       {
-        //房东管理
-        path: '/fangdong',
+        // 房东管理
+        path: '/owner',
         name: 'fangdong',
         icon: 'key',
         routes: [
           {
-            path: '/fangdong/list',
+            path: '/owner/list',
             name: 'list',
-            component: './xyl/FangDong/List',
+            component: './xyl/Owner/List',
           },
         ],
       },
 
       {
-        //用户管理
+        // 用户管理
         path: '/users',
         name: 'users',
         icon: 'user',
@@ -77,21 +77,21 @@ export default [
       },
 
       {
-        //合约管理
-        path: '/heyue',
+        // 合约管理
+        path: '/contract',
         name: 'heyue',
         icon: 'file-text',
         routes: [
           {
-            path: '/heyue/list',
+            path: '/contract/list',
             name: 'list',
-            component: './xyl/HeYue/List',
+            component: './xyl/Contract/List',
           },
         ],
       },
 
       {
-        //资讯管理
+        // 资讯管理
         path: '/news',
         name: 'news',
         icon: 'message',
@@ -105,7 +105,7 @@ export default [
       },
 
       {
-        //问答管理
+        // 问答管理
         path: '/qa',
         name: 'qa',
         icon: 'question-circle',
@@ -119,7 +119,7 @@ export default [
       },
 
       {
-        //财务管理
+        // 财务管理
         path: '/finance',
         name: 'finance',
         icon: 'money-collect',
@@ -138,7 +138,7 @@ export default [
       },
 
       {
-        //系统管理
+        // 系统管理
         path: '/system',
         name: 'system',
         icon: 'laptop',
