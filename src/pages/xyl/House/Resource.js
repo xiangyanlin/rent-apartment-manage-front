@@ -279,12 +279,12 @@ class Resource extends PureComponent {
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="">
-              {getFieldDecorator('name')(<Input placeholder="楼盘名称" />)}
+              {getFieldDecorator('title')(<Input placeholder="楼盘名称" />)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="">
-              {getFieldDecorator('status')(
+              {getFieldDecorator('used')(
                 <Select placeholder="房屋类型" style={{ width: '100%' }}>
                   <Option value="0">住宅</Option>
                   <Option value="1">商住两用</Option>
