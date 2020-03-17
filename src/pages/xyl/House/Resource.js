@@ -233,21 +233,26 @@ class Resource extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 5, lg: 24, xl: 48 }}>
           <Col md={4} sm={24}>
-            {getFieldDecorator('name')(<Input placeholder="区域" />)}
+          {getFieldDecorator('status')(
+                <Select placeholder="房屋状态" style={{ width: '100%' }}>
+                  <Option value="1">待租</Option>
+                  <Option value="2">租出</Option>
+                </Select>
+              )}
           </Col>
           <Col md={4} sm={24}>
-            {getFieldDecorator('name')(<Input placeholder="楼盘名称" />)}
+            {getFieldDecorator('title')(<Input placeholder="楼盘名称" />)}
           </Col>
           <Col md={4} sm={24}>
-            {getFieldDecorator('status')(
+            {getFieldDecorator('used')(
               <Select placeholder="房屋类型" style={{ width: '100%' }}>
-                <Option value="0">住宅</Option>
-                <Option value="1">商住两用</Option>
+                <Option value="1">住宅</Option>
+                <Option value="2">商住两用</Option>
               </Select>
             )}
           </Col>
           <Col md={4} sm={24}>
-            {getFieldDecorator('name')(<Input placeholder="户型" />)}
+            {getFieldDecorator('houseType')(<Input placeholder="户型" />)}
           </Col>
           <Col md={8} sm={24}>
             <span className={styles.submitButtons}>
@@ -275,7 +280,14 @@ class Resource extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 6, lg: 24, xl: 48 }}>
           <Col md={6} sm={24}>
-            <FormItem label="">{getFieldDecorator('place')(<Input placeholder="区域" />)}</FormItem>
+            <FormItem label="">
+            {getFieldDecorator('status')(
+                <Select placeholder="房屋状态" style={{ width: '100%' }}>
+                  <Option value="0">待租</Option>
+                  <Option value="1">租出</Option>
+                </Select>
+              )}
+            </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="">

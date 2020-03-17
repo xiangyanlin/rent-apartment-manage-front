@@ -105,7 +105,7 @@ class EditResource extends React.Component{
           onCancel={()=>{this.handleCancel()}}
           destroyOnClose={true}
         >
-          <div style={{ overflowY:'auto'}}>
+          <div style={{overflowY:'auto'}}>
             <Form hideRequiredMark style={{ marginTop: 8 }}>
               <FormItem {...formItemLayout} label="房源标题">
                 {getFieldDecorator('title',{initialValue:record.title  ,rules:[{ required: true, message:"此项为必填项" }]})(<Input style={{ width: '100%' }} disabled={false} />)}
