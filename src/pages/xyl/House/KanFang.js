@@ -18,9 +18,9 @@ const getValue = obj =>
     .join(',');
 
 /* eslint react/no-multi-comp:0 */
-@connect(({ rule, loading }) => ({
-  rule,
-  loading: loading.models.rule,
+@connect(({ vistRequset, loading }) => ({
+  vistRequset,
+  loading: loading.models.vistRequset,
 }))
 @Form.create()
 class KanFang extends PureComponent {
@@ -36,28 +36,28 @@ class KanFang extends PureComponent {
   columns = [
     {
       title: '编号',
-      dataIndex: 'name',
+      dataIndex: 'id',
     },
     {
       title: '租客姓名',
-      dataIndex: 'desc',
+      dataIndex: 'tenantName',
     },
     {
       title: '租客电话',
-      dataIndex: 'pic'
+      dataIndex: 'mobile'
     },
     {
       title: '项目/小区',
-      dataIndex: 'status'
+      dataIndex: 'village'
     },
     {
       title: '请求时间',
-      dataIndex: 'updatedAt',
+      dataIndex: 'reuestTime',
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
       title: '看房时间',
-      dataIndex: 'status'
+      dataIndex: 'reuestTime'
     },
     {
       title: '请求状态',
@@ -78,7 +78,7 @@ class KanFang extends PureComponent {
   componentDidMount() { //当组件挂载完成后执行加载数据
     const { dispatch } = this.props;
     dispatch({
-      type: 'rule/fetch',
+      type: 'vistRequset/fetch',
     });
   }
 
@@ -103,7 +103,7 @@ class KanFang extends PureComponent {
     }
 
     dispatch({
-      type: 'rule/fetch',
+      type: 'vistRequset/fetch',
       payload: params,
     });
   };
@@ -116,7 +116,7 @@ class KanFang extends PureComponent {
     switch (e.key) {
       case 'remove':
         dispatch({
-          type: 'rule/remove',
+          type: 'vistRequset/remove',
           payload: {
             key: selectedRows.map(row => row.key),
           },
@@ -140,7 +140,7 @@ class KanFang extends PureComponent {
 
   render() {
     const {
-      rule: { data },
+      vistRequset: { data },
       loading,
     } = this.props;
     const { selectedRows } = this.state;

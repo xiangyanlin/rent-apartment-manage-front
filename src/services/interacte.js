@@ -25,7 +25,4 @@ export async function deleteHouseResource(params) {
     method: 'post',
   });
 }
-// export const deleteHouseResource = async (params) => await ajax(
-//   '/xyl/houseResources/delete',
-//   {params},
-//   'POST')
+
