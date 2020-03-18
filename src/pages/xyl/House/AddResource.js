@@ -191,6 +191,28 @@ class AddResource extends PureComponent {
                               {getFieldDecorator('rent',{rules:[{ required: true, message:"此项为必填项" }]})(<Input style={{ width: '50%' }} addonAfter="元/月" />)}
                             </InputGroup>
                         </FormItem>
+
+                        <FormItem {...formItemLayout} label="房屋类型">
+                            <InputGroup compact>
+                              {getFieldDecorator('used',{rules:[{ required: true, message:"此项为必填项" }]})(
+                                  <Select placeholder="房屋类型" style={{ width: '100%' }}>
+                                    <Option value="1">住宅</Option>
+                                    <Option value="2">商住两用</Option>
+                                  </Select>
+                                )}
+                            </InputGroup>
+                        </FormItem>
+                        <FormItem {...formItemLayout} label="房屋状态">
+                            <InputGroup compact>
+                            {getFieldDecorator('status',{rules:[{ required: true, message:"此项为必填项" }]})(
+                                  <Select placeholder="房屋状态" style={{ width: '100%' }}>
+                                    <Option value="1" selected>待租</Option>
+                                    <Option value="2">租出</Option>
+                                  </Select>
+                                )}
+                            </InputGroup>
+                        </FormItem>
+
                         <FormItem {...formItemLayout} label="支付方式">
                           {getFieldDecorator('paymentMethod',{initialValue:'1',rules:[{ required: true, message:"此项为必填项" }]})
                           (
