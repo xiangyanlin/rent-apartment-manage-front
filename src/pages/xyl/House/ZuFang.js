@@ -18,9 +18,9 @@ const getValue = obj =>
     .join(',');
 
 /* eslint react/no-multi-comp:0 */
-@connect(({ rule, loading }) => ({
-  rule,
-  loading: loading.models.rule,
+@connect(({ zufang, loading }) => ({
+  zufang,
+  loading: loading.models.zufang,
 }))
 @Form.create()
 class ZuFang extends PureComponent {
@@ -36,40 +36,40 @@ class ZuFang extends PureComponent {
   columns = [
     {
       title: '编号',
-      dataIndex: 'name',
+      dataIndex: 'id',
+    },
+    {
+      title: '房源名称',
+      dataIndex: 'houseName',
     },
     {
       title: '租客姓名',
-      dataIndex: 'desc',
+      dataIndex: 'tenanName'
     },
     {
-      title: '租客电话',
-      dataIndex: 'pic'
+      title: '租客手机',
+      dataIndex: 'mobile'
     },
     {
-      title: '项目/小区',
-      dataIndex: 'status'
+      title: '合同起止时间',
+      dataIndex: 'time',
+      //render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
-      title: '请求时间',
-      dataIndex: 'updatedAt',
-      render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      title: '租金',
+      dataIndex: 'rent'
     },
     {
-      title: '看房时间',
-      dataIndex: 'status'
-    },
-    {
-      title: '请求状态',
-      dataIndex: 'status'
+      title: '状态',
+      dataIndex: 'state'
     },
     {
       title: '操作',
       render: (text, record) => (
         <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>查看详情</a>
+          <a onClick={() => this.handleUpdateModalVisible(true, record)}>详情</a>
           <Divider type="vertical" />
-          <a href="">订阅警报</a>
+          <a href="">关闭</a>
         </Fragment>
       ),
     },
@@ -78,7 +78,7 @@ class ZuFang extends PureComponent {
   componentDidMount() { //当组件挂载完成后执行加载数据
     const { dispatch } = this.props;
     dispatch({
-      type: 'rule/fetch',
+      type: 'zufang/fetch',
     });
   }
 
@@ -103,7 +103,7 @@ class ZuFang extends PureComponent {
     }
 
     dispatch({
-      type: 'rule/fetch',
+      type: 'zufang/fetch',
       payload: params,
     });
   };
@@ -116,7 +116,7 @@ class ZuFang extends PureComponent {
     switch (e.key) {
       case 'remove':
         dispatch({
-          type: 'rule/remove',
+          type: 'zufang/remove',
           payload: {
             key: selectedRows.map(row => row.key),
           },
@@ -140,7 +140,7 @@ class ZuFang extends PureComponent {
 
   render() {
     const {
-      rule: { data },
+      zufang: { data },
       loading,
     } = this.props;
     const { selectedRows } = this.state;
