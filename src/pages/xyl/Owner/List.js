@@ -2,6 +2,11 @@ import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
 import {
+  Row,
+  Col,
+  Input,
+  Button,
+  Icon,
   Card,
   Form,
   Select,
@@ -136,6 +141,54 @@ class ZuFang extends PureComponent {
     });
   };
 
+  handleSearch = e => {
+    e.preventDefault();
+
+    const { dispatch, form } = this.props;
+
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+
+      const values = {
+        role:3,
+        ...fieldsValue,
+        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
+      };
+
+      this.setState({
+        formValues: values,
+      });
+
+      dispatch({
+        type: 'owner/fetch',
+        payload: values,
+      });
+    });
+  };
+
+  renderSimpleForm() {
+    const {
+      form: { getFieldDecorator },
+    } = this.props;
+    return (
+      <Form onSubmit={this.handleSearch} layout="inline">
+        <Row gutter={{ md: 5, lg: 24, xl: 48 }}>
+          
+          <Col md={8} sm={48}>
+            {getFieldDecorator('keyWord')(<Input placeholder="请输入关键字 如 姓名/手机号/身份证号" />)}
+          </Col>
+          <Col md={8} sm={24}>
+            <span className={styles.submitButtons}>
+              <Button type="primary" htmlType="submit"   icon="search" >
+                搜索
+              </Button>
+            </span>
+          </Col>
+        </Row>
+      </Form>
+    );
+  }
+
   render() {
     const {
       owner: { data },
@@ -147,6 +200,8 @@ class ZuFang extends PureComponent {
       <PageHeaderWrapper title="房东列表">
         <Card bordered={false}>
           <div className={styles.tableList}>
+          <div className={styles.tableListForm}>{this.renderSimpleForm()}</div>
+
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}
