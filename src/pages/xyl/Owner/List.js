@@ -1,9 +1,165 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
+import { connect } from 'dva';
+import moment from 'moment';
+import {
+  Card,
+  Form,
+  Select,
+  Divider,
+} from 'antd';
+import StandardTable from '@/components/StandardTable';
+import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
-class List extends React.Component {
+import styles from '../TableList.less';
+
+const getValue = obj =>
+  Object.keys(obj)
+    .map(key => obj[key])
+    .join(',');
+    const params = {
+      role:3,
+    };
+
+/* eslint react/no-multi-comp:0 */
+@connect(({ owner, loading }) => ({
+  owner,
+  loading: loading.models.owner,
+}))
+@Form.create()
+class ZuFang extends PureComponent {
+  state = {
+    modalVisible: false,
+    updateModalVisible: false,
+    expandForm: false,
+    selectedRows: [],
+    formValues: {},
+    stepFormValues: {},
+  };
+
+  columns = [
+    {
+      title: '房东编号',
+      dataIndex: 'id',
+    },
+    {
+      title: '姓名',
+      dataIndex: 'name',
+    },
+    {
+      title: '性别',
+      dataIndex: 'sex'
+    },
+    {
+      title: '身份证号',
+      dataIndex: 'idCard'
+    },
+    {
+      title: '房源数量',
+      dataIndex: 'houseNum',
+    },
+    {
+      title: '是否认证',
+      dataIndex: 'identify',
+    },
+    {
+      title: '操作',
+      render: (text, record) => (
+        <Fragment>
+          <a onClick={() => this.handleUpdateModalVisible(true, record)}>查看详情</a>
+        </Fragment>
+      ),
+    },
+  ];
+
+  componentDidMount() { //当组件挂载完成后执行加载数据
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'owner/fetch',
+      payload: params,
+    });
+  }
+
+  handleStandardTableChange = (pagination, filtersArg, sorter) => {
+    const { dispatch } = this.props;
+    const { formValues } = this.state;
+
+    const filters = Object.keys(filtersArg).reduce((obj, key) => {
+      const newObj = { ...obj };
+      newObj[key] = getValue(filtersArg[key]);
+      return newObj;
+    }, {});
+
+    const params = {
+      currentPage: pagination.current,
+      pageSize: pagination.pageSize,
+      role:3,
+      ...formValues,
+      ...filters,
+    };
+    if (sorter.field) {
+      params.sorter = `${sorter.field}_${sorter.order}`;
+    }
+
+    dispatch({
+      type: 'owner/fetch',
+      payload: params,
+    });
+  };
+
+  handleMenuClick = e => {
+    const { dispatch } = this.props;
+    const { selectedRows } = this.state;
+
+    if (!selectedRows) return;
+    switch (e.key) {
+      case 'remove':
+        dispatch({
+          type: 'owner/remove',
+          payload: {
+            key: selectedRows.map(row => row.key),
+          },
+          callback: () => {
+            this.setState({
+              selectedRows: [],
+            });
+          },
+        });
+        break;
+      default:
+        break;
+    }
+  };
+
+  handleSelectRows = rows => {
+    this.setState({
+      selectedRows: rows,
+    });
+  };
+
   render() {
-    return <div>房东列表</div>;
+    const {
+      owner: { data },
+      loading,
+    } = this.props;
+    const { selectedRows } = this.state;
+
+    return (
+      <PageHeaderWrapper title="房东列表">
+        <Card bordered={false}>
+          <div className={styles.tableList}>
+            <StandardTable
+              selectedRows={selectedRows}
+              loading={loading}
+              data={data}
+              columns={this.columns}
+              onSelectRow={this.handleSelectRows}
+              onChange={this.handleStandardTableChange}
+            />
+          </div>
+        </Card>
+      </PageHeaderWrapper>
+    );
   }
 }
 
-export default List;
+export default ZuFang;
