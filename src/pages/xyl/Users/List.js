@@ -57,6 +57,9 @@ class User extends PureComponent {
     {
       title: '性别',
       dataIndex: 'sex',
+      render:(text,record,index)=>{
+        return this.convertSex(record);     
+      }
     },
     {
       title: '身份证号',
@@ -73,10 +76,16 @@ class User extends PureComponent {
     {
         title: '是否认证',
         dataIndex: 'identify',
+        render:(text,record,index)=>{
+          return this.convertIdentify(record);     
+        }
     },
     {
         title: '是否房东',
         dataIndex: 'role',
+        render:(text,record,index)=>{
+          return this.convertOwner(record);     
+        }
     },
     {
       title: '操作',
@@ -87,7 +96,37 @@ class User extends PureComponent {
       ),
     },
   ];
-
+    // 数字转文字
+  //性别
+  convertSex=(record)=>{
+    if (record.sex =='0'){
+      return "未知";
+    } 
+    else if (record.sex=='1'){
+      return "男";
+    } 
+    else if (record.sex=='2'){
+      return "女";
+    }         
+}
+//认证
+convertIdentify=(record)=>{
+  if (record.identify =='0'){
+    return "未认证";
+  } 
+  else if (record.identify=='1'){
+    return "已认证";
+  }
+}
+//是否房东
+convertOwner=(record)=>{
+  if (record.role =='3'){
+    return "是";
+  } 
+  else {
+    return "否";
+  }
+}   
   componentDidMount() { //当组件挂载完成后执行加载数据
     const { dispatch } = this.props;
     dispatch({
@@ -207,7 +246,7 @@ class User extends PureComponent {
     const { selectedRows } = this.state;
 
     return (
-      <PageHeaderWrapper title="房东列表">
+      <PageHeaderWrapper title="用户列表">
         <Card bordered={false}>
           <div className={styles.tableList}>
           <div className={styles.tableListForm}>{this.renderSimpleForm()}</div>
