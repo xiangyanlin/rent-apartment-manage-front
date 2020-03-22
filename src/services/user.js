@@ -7,3 +7,7 @@ export async function query() {
 export async function queryCurrent() {
   return request('/api/currentUser');
 }
+
+export async function queryOwnerList(params) {
+  return request(`/xyl/user/list?${stringify(params)}`);
+}

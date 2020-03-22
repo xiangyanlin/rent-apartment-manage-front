@@ -1,12 +1,14 @@
 import { routerRedux } from 'dva/router';
-import { queryOwnerList } from '@/services/owner';
+import { queryOwnerList } from '@/services/user';
 
 export default {
   namespace: 'owner',
   
   state: {
-    data:[],
-    estateMap:[],
+    data: {
+      list: [],
+      pagination: {},
+    },
   },
 
   effects: {

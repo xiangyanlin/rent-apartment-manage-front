@@ -31,7 +31,7 @@ const getValue = obj =>
   loading: loading.models.owner,
 }))
 @Form.create()
-class ZuFang extends PureComponent {
+class Owner extends PureComponent {
   state = {
     modalVisible: false,
     updateModalVisible: false,
@@ -48,11 +48,11 @@ class ZuFang extends PureComponent {
     },
     {
       title: '姓名',
-      dataIndex: 'name',
+      dataIndex: 'realName',
     },
     {
       title: '性别',
-      dataIndex: 'sex'
+      dataIndex: 'sex',
     },
     {
       title: '身份证号',
@@ -217,4 +217,4 @@ class ZuFang extends PureComponent {
   }
 }
 
-export default ZuFang;
+export default Owner;

@@ -5,8 +5,10 @@ export default {
   namespace: 'vistRequset',
   
   state: {
-    data:[],
-    estateMap:[],
+    data: {
+      list: [],
+      pagination: {},
+    },
   },
 
   effects: {

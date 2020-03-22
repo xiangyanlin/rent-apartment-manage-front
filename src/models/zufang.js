@@ -5,8 +5,10 @@ export default {
   namespace: 'zufang',
   
   state: {
-    data:[],
-    estateMap:[],
+    data: {
+      list: [],
+      pagination: {},
+    },
   },
 
   effects: {
