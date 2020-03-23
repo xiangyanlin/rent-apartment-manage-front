@@ -106,14 +106,14 @@ export default [
 
       {
         // 问答管理
-        path: '/qa',
+        path: '/question',
         name: 'qa',
         icon: 'question-circle',
         routes: [
           {
-            path: '/news/list',
+            path: '/question/list',
             name: 'list',
-            component: './xyl/News/List',
+            component: './xyl/Question/List',
           },
         ],
       },
