@@ -87,8 +87,8 @@ class Contract extends PureComponent {
       ),
     },
   ];
-    // 数字转文字
-  //性别
+    // 数字转文
+    //状态
   convertStatus=(record)=>{
     if (record.status =='1'){
       return "待签约";
@@ -202,7 +202,7 @@ class Contract extends PureComponent {
         <Row gutter={{ md: 5, lg: 24, xl: 48 }}>
           
           <Col md={8} sm={48}>
-            {getFieldDecorator('keyWord')(<Input placeholder="请输入关键字 如 姓名/手机号/身份证号" />)}
+            {getFieldDecorator('keyWord')(<Input placeholder="请输入关键字 如 物业地址/业主姓名" />)}
           </Col>
           <Col md={8} sm={24}>
             <span className={styles.submitButtons}>
