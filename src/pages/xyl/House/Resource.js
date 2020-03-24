@@ -1,7 +1,20 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Row, Col, Card, Form, Input, Select, Icon, Button, Divider, Carousel } from 'antd';
+import {
+  Row,
+  Col,
+  Card,
+  Form,
+  Input,
+  Select,
+  Icon,
+  Button,
+  Divider,
+  Carousel,
+  Popconfirm,
+  message,
+} from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
@@ -93,12 +106,43 @@ class Resource extends PureComponent {
           <Divider type="vertical" />
           <EditResource record={record} reload={this.reload.bind(this)} />
           <Divider type="vertical" />
-          <a onClick={() => this.delete(record.id)}>删除</a>
+          <Popconfirm
+            title="您确认要删除这条数据吗?"
+            onConfirm={() => {
+              this.confirm(record.id);
+            }}
+            onCancel={this.cancel}
+            okText="确认"
+            cancelText="取消"
+          >
+            <a href="#">删除</a>
+          </Popconfirm>
         </Fragment>
       ),
     },
   ];
+  //删除确认框
+  confirm = (rowId, e) => {
+    //console.log(e);
+    const { dispatch } = this.props;
+    //console.log(rowId);
+    dispatch({
+      type: 'house/delete',
+      payload: { id: rowId },
+      callback: res => {
+        console.log(res); // 请求完成后返回的结果
+        if (res.code == 200) {
+          message.success('删除成功');
+          dispatch({ type: 'houseResource/fetch' });
+        }
+      },
+    });
+  };
 
+  cancel = e => {
+    console.log(e);
+    message.error('Click on No');
+  };
   reload() {
     const { dispatch } = this.props;
     dispatch({
@@ -216,15 +260,6 @@ class Resource extends PureComponent {
     });
   };
 
-  delete = (rowId, e) => {
-    const { dispatch } = this.props;
-    console.log(rowId);
-    dispatch({
-      type: 'house/delete',
-      payload: { id: rowId },
-    });
-  };
-
   renderSimpleForm() {
     const {
       form: { getFieldDecorator },
@@ -233,12 +268,12 @@ class Resource extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 5, lg: 24, xl: 48 }}>
           <Col md={4} sm={24}>
-          {getFieldDecorator('status')(
-                <Select placeholder="房屋状态" style={{ width: '100%' }}>
-                  <Option value="1">待租</Option>
-                  <Option value="2">租出</Option>
-                </Select>
-              )}
+            {getFieldDecorator('status')(
+              <Select placeholder="房屋状态" style={{ width: '100%' }}>
+                <Option value="1">待租</Option>
+                <Option value="2">租出</Option>
+              </Select>
+            )}
           </Col>
           <Col md={4} sm={24}>
             {getFieldDecorator('title')(<Input placeholder="楼盘名称" />)}
@@ -281,7 +316,7 @@ class Resource extends PureComponent {
         <Row gutter={{ md: 6, lg: 24, xl: 48 }}>
           <Col md={6} sm={24}>
             <FormItem label="">
-            {getFieldDecorator('status')(
+              {getFieldDecorator('status')(
                 <Select placeholder="房屋状态" style={{ width: '100%' }}>
                   <Option value="0">待租</Option>
                   <Option value="1">租出</Option>
@@ -305,7 +340,9 @@ class Resource extends PureComponent {
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
-            <FormItem label="">{getFieldDecorator('houseType')(<Input placeholder="户型" />)}</FormItem>
+            <FormItem label="">
+              {getFieldDecorator('houseType')(<Input placeholder="户型" />)}
+            </FormItem>
           </Col>
         </Row>
         <Row gutter={{ md: 6, lg: 24, xl: 48 }}>
@@ -332,19 +369,21 @@ class Resource extends PureComponent {
             </Row>
           </Col>
           <Col md={6} sm={24}>
-            <FormItem label="">{getFieldDecorator('orientation')(<Input placeholder="朝向" />)}</FormItem>
+            <FormItem label="">
+              {getFieldDecorator('orientation')(<Input placeholder="朝向" />)}
+            </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="">
-               {/* {getFieldDecorator('name')(<Input placeholder="装修" />)} */}
-               {getFieldDecorator('decoration')(
+              {/* {getFieldDecorator('name')(<Input placeholder="装修" />)} */}
+              {getFieldDecorator('decoration')(
                 <Select placeholder="装修" style={{ width: '100%' }}>
                   <Option value="1">精装</Option>
                   <Option value="2">简装</Option>
                   <Option value="3">毛坯</Option>
                 </Select>
               )}
-              </FormItem>
+            </FormItem>
           </Col>
         </Row>
         <div style={{ overflow: 'hidden' }}>

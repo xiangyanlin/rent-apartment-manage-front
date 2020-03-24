@@ -1,7 +1,19 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Row, Col, Input, Button, Icon, Card, Form, Select, Divider } from 'antd';
+import {
+  Row,
+  Col,
+  Input,
+  Button,
+  Icon,
+  Card,
+  Form,
+  Select,
+  Divider,
+  Popconfirm,
+  message,
+} from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
@@ -62,11 +74,29 @@ class Question extends PureComponent {
         <Fragment>
           <a onClick={() => this.handleUpdateModalVisible(true, record)}>查看详情</a>
           <Divider type="vertical" />
-          <a onClick={() => this.delete(record.id)}>删除</a>
+          <Popconfirm
+            title="您确认要删除这条数据吗?"
+            onConfirm={this.confirm}
+            onCancel={this.cancel}
+            okText="确认"
+            cancelText="取消"
+          >
+            <a href="#">删除</a>
+          </Popconfirm>
         </Fragment>
       ),
     },
   ];
+
+  confirm = e => {
+    console.log(e);
+    message.success('Click on Yes');
+  };
+
+  cancel = e => {
+    console.log(e);
+    message.error('Click on No');
+  };
 
   componentDidMount() {
     //当组件挂载完成后执行加载数据

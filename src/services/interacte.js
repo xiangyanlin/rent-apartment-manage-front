@@ -22,7 +22,6 @@ export async function updateHouseResource(params) {
 
 export async function deleteHouseResource(params) {
   return request(`/xyl/houseResources/delete?${stringify(params)}`, {
-    method: 'post',
+    method: 'delete',
   });
 }
-

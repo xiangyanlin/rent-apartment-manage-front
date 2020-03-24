@@ -17,9 +17,13 @@ export default {
       message.success('提交成功');
     },
 
-    *delete({ payload }, { call }) {
-      yield call(deleteHouseResource, payload);
-      message.success('删除成功');
+    *delete({ payload, callback }, { call }) {
+      const response = yield call(deleteHouseResource, payload);
+      if (response.code === 200) {
+        if (callback && typeof callback == 'function') {
+          callback(response); // 返回结果
+        }
+      }
     },
   },
 
