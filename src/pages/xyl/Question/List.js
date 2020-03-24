@@ -53,6 +53,7 @@ class News extends PureComponent {
     {
       title: '发布时间',
       dataIndex: 'publishTime',
+      render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
 
     {

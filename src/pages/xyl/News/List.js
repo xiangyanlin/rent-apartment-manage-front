@@ -1,17 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import {
-  Row,
-  Col,
-  Input,
-  Button,
-  Icon,
-  Card,
-  Form,
-  Select,
-  Divider,
-} from 'antd';
+import { Row, Col, Input, Button, Icon, Card, Form, Select, Divider } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
@@ -21,9 +11,7 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-    const params = {
-
-    };
+const params = {};
 
 /* eslint react/no-multi-comp:0 */
 @connect(({ news, loading }) => ({
@@ -57,9 +45,9 @@ class News extends PureComponent {
     {
       title: '发布时间',
       dataIndex: 'publishTime',
-     
+      render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
-    
+
     {
       title: '操作',
       render: (text, record) => (
@@ -70,10 +58,9 @@ class News extends PureComponent {
       ),
     },
   ];
-    
 
- 
-  componentDidMount() { //当组件挂载完成后执行加载数据
+  componentDidMount() {
+    //当组件挂载完成后执行加载数据
     const { dispatch } = this.props;
     dispatch({
       type: 'news/fetch',
@@ -168,13 +155,12 @@ class News extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 5, lg: 24, xl: 48 }}>
-          
           <Col md={8} sm={48}>
             {getFieldDecorator('keyWord')(<Input placeholder="请输入关键字 如 资讯标题" />)}
           </Col>
           <Col md={8} sm={24}>
             <span className={styles.submitButtons}>
-              <Button type="primary" htmlType="submit"   icon="search" >
+              <Button type="primary" htmlType="submit" icon="search">
                 搜索
               </Button>
             </span>
@@ -195,7 +181,7 @@ class News extends PureComponent {
       <PageHeaderWrapper title="资讯列表">
         <Card bordered={false}>
           <div className={styles.tableList}>
-          <div className={styles.tableListForm}>{this.renderSimpleForm()}</div>
+            <div className={styles.tableListForm}>{this.renderSimpleForm()}</div>
 
             <StandardTable
               selectedRows={selectedRows}

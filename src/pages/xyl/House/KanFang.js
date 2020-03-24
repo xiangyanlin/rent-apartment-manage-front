@@ -1,12 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import {
-  Card,
-  Form,
-  Select,
-  Divider,
-} from 'antd';
+import { Card, Form, Select, Divider } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
@@ -44,11 +39,11 @@ class KanFang extends PureComponent {
     },
     {
       title: '租客电话',
-      dataIndex: 'mobile'
+      dataIndex: 'mobile',
     },
     {
       title: '项目/小区',
-      dataIndex: 'village'
+      dataIndex: 'village',
     },
     {
       title: '请求时间',
@@ -57,11 +52,12 @@ class KanFang extends PureComponent {
     },
     {
       title: '看房时间',
-      dataIndex: 'reuestTime'
+      dataIndex: 'reuestTime',
+      render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
       title: '请求状态',
-      dataIndex: 'status'
+      dataIndex: 'status',
     },
     {
       title: '操作',
@@ -75,7 +71,8 @@ class KanFang extends PureComponent {
     },
   ];
 
-  componentDidMount() { //当组件挂载完成后执行加载数据
+  componentDidMount() {
+    //当组件挂载完成后执行加载数据
     const { dispatch } = this.props;
     dispatch({
       type: 'vistRequset/fetch',
