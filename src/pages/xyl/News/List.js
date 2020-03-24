@@ -54,7 +54,7 @@ class News extends PureComponent {
         <Fragment>
           <a onClick={() => this.handleUpdateModalVisible(true, record)}>查看详情</a>
           <Divider type="vertical" />
-          <a onClick={() => this.delete(record.id)}>删除</a>
+          <a onClick={() => this.handleMenuClick}>删除</a>
         </Fragment>
       ),
     },
@@ -99,9 +99,13 @@ class News extends PureComponent {
     const { dispatch } = this.props;
     const { selectedRows } = this.state;
 
-    if (!selectedRows) return;
+    if (!selectedRows) {
+      console.log('没有被选中!');
+      return;
+    }
     switch (e.key) {
       case 'remove':
+        console.log('开始删除!');
         dispatch({
           type: 'news/remove',
           payload: {
