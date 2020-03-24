@@ -14,12 +14,12 @@ const getValue = obj =>
 const params = {};
 
 /* eslint react/no-multi-comp:0 */
-@connect(({ news, loading }) => ({
-  news,
-  loading: loading.models.news,
+@connect(({ question, loading }) => ({
+  question,
+  loading: loading.models.question,
 }))
 @Form.create()
-class News extends PureComponent {
+class Question extends PureComponent {
   state = {
     modalVisible: false,
     updateModalVisible: false,
@@ -40,15 +40,15 @@ class News extends PureComponent {
     },
     {
       title: '发布者',
-      dataIndex: 'readNum',
+      dataIndex: 'publisher',
     },
     {
       title: '阅读量',
-      dataIndex: 'publishTime',
+      dataIndex: 'readNum',
     },
     {
       title: '回复量',
-      dataIndex: 'publishTime',
+      dataIndex: 'replyNum',
     },
     {
       title: '发布时间',
@@ -61,6 +61,7 @@ class News extends PureComponent {
       render: (text, record) => (
         <Fragment>
           <a onClick={() => this.handleUpdateModalVisible(true, record)}>查看详情</a>
+          <Divider type="vertical" />
           <a onClick={() => this.delete(record.id)}>删除</a>
         </Fragment>
       ),
@@ -71,7 +72,7 @@ class News extends PureComponent {
     //当组件挂载完成后执行加载数据
     const { dispatch } = this.props;
     dispatch({
-      type: 'news/fetch',
+      type: 'question/fetch',
       payload: params,
     });
   }
@@ -97,7 +98,7 @@ class News extends PureComponent {
     }
 
     dispatch({
-      type: 'news/fetch',
+      type: 'question/fetch',
       payload: params,
     });
   };
@@ -110,7 +111,7 @@ class News extends PureComponent {
     switch (e.key) {
       case 'remove':
         dispatch({
-          type: 'news/remove',
+          type: 'question/remove',
           payload: {
             key: selectedRows.map(row => row.key),
           },
@@ -150,7 +151,7 @@ class News extends PureComponent {
       });
 
       dispatch({
-        type: 'news/fetch',
+        type: 'question/fetch',
         payload: values,
       });
     });
@@ -164,7 +165,7 @@ class News extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 5, lg: 24, xl: 48 }}>
           <Col md={8} sm={48}>
-            {getFieldDecorator('keyWord')(<Input placeholder="请输入关键字 如 资讯标题" />)}
+            {getFieldDecorator('keyWord')(<Input placeholder="请输入关键字 如 资讯标题/发布者" />)}
           </Col>
           <Col md={8} sm={24}>
             <span className={styles.submitButtons}>
@@ -180,7 +181,7 @@ class News extends PureComponent {
 
   render() {
     const {
-      news: { data },
+      question: { data },
       loading,
     } = this.props;
     const { selectedRows } = this.state;
@@ -206,4 +207,4 @@ class News extends PureComponent {
   }
 }
 
-export default News;
+export default Question;

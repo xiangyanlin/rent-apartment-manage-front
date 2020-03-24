@@ -53,6 +53,7 @@ class News extends PureComponent {
       render: (text, record) => (
         <Fragment>
           <a onClick={() => this.handleUpdateModalVisible(true, record)}>查看详情</a>
+          <Divider type="vertical" />
           <a onClick={() => this.delete(record.id)}>删除</a>
         </Fragment>
       ),
