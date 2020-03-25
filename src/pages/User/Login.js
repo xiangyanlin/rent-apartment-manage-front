@@ -21,23 +21,23 @@ class LoginPage extends Component {
   onTabChange = type => {
     this.setState({ type });
   };
-
-  onGetCaptcha = () =>
-    new Promise((resolve, reject) => {
-      this.loginForm.validateFields(['mobile'], {}, (err, values) => {
-        if (err) {
-          reject(err);
-        } else {
-          const { dispatch } = this.props;
-          dispatch({
-            type: 'login/getCaptcha',
-            payload: values.mobile,
-          })
-            .then(resolve)
-            .catch(reject);
-        }
-      });
-    });
+  //手机号码登录
+  // onGetCaptcha = () =>
+  //   new Promise((resolve, reject) => {
+  //     this.loginForm.validateFields(['mobile'], {}, (err, values) => {
+  //       if (err) {
+  //         reject(err);
+  //       } else {
+  //         const { dispatch } = this.props;
+  //         dispatch({
+  //           type: 'login/getCaptcha',
+  //           payload: values.mobile,
+  //         })
+  //           .then(resolve)
+  //           .catch(reject);
+  //       }
+  //     });
+  //   });
 
   handleSubmit = (err, values) => {
     const { type } = this.state;
@@ -88,14 +88,14 @@ class LoginPage extends Component {
               onPressEnter={() => this.loginForm.validateFields(this.handleSubmit)}
             />
           </Tab>
-          <Tab key="mobile" tab={formatMessage({ id: 'app.login.tab-login-mobile' })}>
+          {/* <Tab key="mobile" tab={formatMessage({ id: 'app.login.tab-login-mobile' })}>
             {login.status === 'error' &&
               login.type === 'mobile' &&
               !submitting &&
               this.renderMessage(formatMessage({ id: 'app.login.message-invalid-verification-code' }))}
             <Mobile name="mobile" />
             <Captcha name="captcha" countDown={120} onGetCaptcha={this.onGetCaptcha} />
-          </Tab>
+          </Tab> */}
           <div>
             <Checkbox checked={autoLogin} onChange={this.changeAutoLogin}>
               <FormattedMessage id="app.login.remember-me" />
@@ -107,13 +107,14 @@ class LoginPage extends Component {
           <Submit loading={submitting}>
             <FormattedMessage id="app.login.login" />
           </Submit>
-          <div className={styles.other}>
-            <FormattedMessage id="app.login.sign-in-with" />
+          <div>
+            {/* <FormattedMessage id="app.login.sign-in-with" /> */}
+            {/* 其他登录方式 className={styles.other}
             <Icon type="alipay-circle" className={styles.icon} theme="outlined" />
             <Icon type="taobao-circle" className={styles.icon} theme="outlined" />
-            <Icon type="weibo-circle" className={styles.icon} theme="outlined" />
+            <Icon type="weibo-circle" className={styles.icon} theme="outlined" /> */}
             <Link className={styles.register} to="/User/Register">
-              <FormattedMessage id="app.login.signup" />
+              {/* <FormattedMessage id="app.login.signup" /> */}
             </Link>
           </div>
         </Login>
