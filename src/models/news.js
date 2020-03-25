@@ -1,5 +1,5 @@
 import { routerRedux } from 'dva/router';
-import { queryInformationList } from '@/services/news';
+import { queryInformationList ,removeNews} from '@/services/news';
 
 export default {
   namespace: 'news',
@@ -18,8 +18,17 @@ export default {
           type: 'save',
           payload: response,
         });
-      }
+      },
+      *remove({ payload, callback }, { call }) {
+        const response = yield call(removeNews, payload);
+        if (response.code === 200) {
+          if (callback && typeof callback == 'function') {
+            callback(response); // 返回结果
+          }
+        }
+      },
   },
+
 
   reducers: {
     save(state, action) {

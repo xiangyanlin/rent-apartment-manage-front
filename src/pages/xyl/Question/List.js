@@ -76,7 +76,9 @@ class Question extends PureComponent {
           <Divider type="vertical" />
           <Popconfirm
             title="您确认要删除这条数据吗?"
-            onConfirm={this.confirm}
+            onConfirm={() => {
+              this.confirm(record.id);
+            }}
             onCancel={this.cancel}
             okText="确认"
             cancelText="取消"
@@ -88,9 +90,21 @@ class Question extends PureComponent {
     },
   ];
 
-  confirm = e => {
-    console.log(e);
-    message.success('Click on Yes');
+  confirm = (rowId, e) => {
+    //console.log(e);
+    const { dispatch } = this.props;
+    //console.log(rowId);
+    dispatch({
+      type: 'question/remove',
+      payload: { id: rowId },
+      callback: res => {
+        console.log(res); // 请求完成后返回的结果
+        if (res.code == 200) {
+          message.success('删除成功');
+          dispatch({ type: 'question/fetch' });
+        }
+      },
+    });
   };
 
   cancel = e => {

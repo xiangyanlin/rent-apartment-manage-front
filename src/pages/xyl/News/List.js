@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Row, Col, Input, Button, Icon, Card, Form, Select, Divider } from 'antd';
+import { Row, Col, Input, Button, Icon, Card, Form, Select, Divider,  Popconfirm,message, } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
@@ -54,12 +54,44 @@ class News extends PureComponent {
         <Fragment>
           <a onClick={() => this.handleUpdateModalVisible(true, record)}>查看详情</a>
           <Divider type="vertical" />
-          <a onClick={() => this.handleMenuClick}>删除</a>
+          <Popconfirm
+            title="您确认要删除这条数据吗?"
+            onConfirm={() => {
+              this.confirm(record.id);
+            }}
+            onCancel={this.cancel}
+            okText="确认"
+            cancelText="取消"
+          >
+            <a href="#">删除</a>
+          </Popconfirm>
         </Fragment>
       ),
     },
   ];
 
+   //删除确认框
+   confirm = (rowId, e) => {
+    //console.log(e);
+    const { dispatch } = this.props;
+    //console.log(rowId);
+    dispatch({
+      type: 'news/remove',
+      payload: { id: rowId },
+      callback: res => {
+        console.log(res); // 请求完成后返回的结果
+        if (res.code == 200) {
+          message.success('删除成功');
+          dispatch({ type: 'news/fetch' });
+        }
+      },
+    });
+  };
+
+  cancel = e => {
+    console.log(e);
+    message.error('Click on No');
+  };
   componentDidMount() {
     //当组件挂载完成后执行加载数据
     const { dispatch } = this.props;

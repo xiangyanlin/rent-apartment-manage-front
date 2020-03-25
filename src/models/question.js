@@ -1,5 +1,5 @@
 import { routerRedux } from 'dva/router';
-import { queryQWuestionsList } from '@/services/question';
+import { queryQWuestionsList,removeQuestions } from '@/services/question';
 
 export default {
   namespace: 'question',
@@ -18,6 +18,14 @@ export default {
         type: 'save',
         payload: response,
       });
+    },
+    *remove({ payload, callback }, { call }) {
+      const response = yield call(removeQuestions, payload);
+      if (response.code === 200) {
+        if (callback && typeof callback == 'function') {
+          callback(response); // 返回结果
+        }
+      }
     },
   },
 
