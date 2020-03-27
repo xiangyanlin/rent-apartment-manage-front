@@ -12,3 +12,7 @@ export async function queryCurrent() {
 export async function queryOwnerList(params) {
   return request(`/xyl/user/list?${stringify(params)}`);
 }
+
+export async function userLogin(params) {
+  return request(`/xyl/user/login?${stringify(params)}`);
+}

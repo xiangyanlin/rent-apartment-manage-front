@@ -26,6 +26,7 @@ export class LoginItem extends React.Component<LoginItemProps, any> {}
 
 export default class Login extends React.Component<LoginProps, any> {
   static Tab: typeof Tab;
+  static Form: typeof Form;
   static UserName: typeof LoginItem;
   static Password: typeof LoginItem;
   static Mobile: typeof LoginItem;
