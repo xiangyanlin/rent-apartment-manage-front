@@ -4,15 +4,15 @@ import { stringify } from 'qs';
 export async function query() {
   return request('/api/users');
 }
-
-export async function queryCurrent() {
-  return request('/api/currentUser');
+//当前用户
+export async function queryCurrent(params) {
+  return request(`/xyl/user/currentUser?${stringify(params)}`);
 }
 
 export async function queryOwnerList(params) {
   return request(`/xyl/user/list?${stringify(params)}`);
 }
-
+//用户登录
 export async function userLogin(params) {
   return request(`/xyl/user/login?${stringify(params)}`);
 }

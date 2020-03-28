@@ -16,11 +16,13 @@ export default {
         payload: response,
       });
     },
-    *fetchCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
+    //获取当前登录用户
+    *fetchCurrent({ payload }, { call, put }) {
+      const response = yield call(queryCurrent,payload);
+      //console.log(response.data)
       yield put({
         type: 'saveCurrentUser',
-        payload: response,
+        payload: response.data,
       });
     },
   },

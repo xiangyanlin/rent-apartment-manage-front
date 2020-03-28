@@ -7,6 +7,7 @@ import NoticeIcon from '../NoticeIcon';
 import HeaderSearch from '../HeaderSearch';
 import SelectLang from '../SelectLang';
 import styles from './index.less';
+import avatar from '../../assets/avatar.png';
 
 export default class GlobalHeaderRight extends PureComponent {
   getNoticeData() {
@@ -49,6 +50,7 @@ export default class GlobalHeaderRight extends PureComponent {
       onNoticeClear,
       theme,
     } = this.props;
+    console.log(currentUser.userName);
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
         <Menu.Item key="userCenter">
@@ -139,16 +141,16 @@ export default class GlobalHeaderRight extends PureComponent {
             emptyImage="https://gw.alipayobjects.com/zos/rmsportal/HsIsxMZiWKrNUavQUXqx.svg"
           />
         </NoticeIcon>
-        {currentUser.name ? (
+        {currentUser.userName ? (
           <Dropdown overlay={menu}>
             <span className={`${styles.action} ${styles.account}`}>
               <Avatar
                 size="small"
                 className={styles.avatar}
-                src={currentUser.avatar}
+                src={currentUser.avatar?currentUser.avatar:avatar}
                 alt="avatar"
               />
-              <span className={styles.name}>{currentUser.name}</span>
+              <span className={styles.name}>{currentUser.userName}</span>
             </span>
           </Dropdown>
         ) : (

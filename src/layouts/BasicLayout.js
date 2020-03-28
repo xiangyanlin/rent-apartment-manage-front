@@ -98,6 +98,9 @@ class BasicLayout extends React.PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'user/fetchCurrent',
+      payload: {
+        userName:window.localStorage.getItem("currentUser"),
+      },
     });
     dispatch({
       type: 'setting/getSetting',
