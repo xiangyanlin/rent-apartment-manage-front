@@ -79,6 +79,7 @@ export default [
       {
         // 合约管理
         path: '/contract',
+        //authority: ['admin'],
         name: 'heyue',
         icon: 'file-text',
         routes: [

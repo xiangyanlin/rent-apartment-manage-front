@@ -57,7 +57,10 @@ class LoginPage extends Component {
           ref={form => {
             this.loginForm = form;
           }}
-        >
+        > 
+        {login.status === 'error' &&
+            !submitting &&
+            this.renderMessage(formatMessage({ id: 'app.login.message-invalid-credentials' }))}
           <UserName name="userName" placeholder="admin/user" />
           <Password
             name="password"
