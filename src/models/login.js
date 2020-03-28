@@ -14,13 +14,13 @@ export default {
 
   effects: {
     *login({ payload }, { call, put }) {
-      const response = yield call(userLogin, payload);
+      const response = yield call(fakeAccountLogin, payload);
       yield put({
         type: 'changeLoginStatus',
         payload: response,
       });
       // Login successfully
-      if (response.code == 200) {
+      if (response.status === 'ok') {
         reloadAuthorized();
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();

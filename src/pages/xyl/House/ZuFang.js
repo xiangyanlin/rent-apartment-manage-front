@@ -1,12 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import {
-  Card,
-  Form,
-  Select,
-  Divider,
-} from 'antd';
+import { Card, Form, Select, Divider } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
@@ -44,24 +39,28 @@ class ZuFang extends PureComponent {
     },
     {
       title: '租客姓名',
-      dataIndex: 'tenanName'
+      dataIndex: 'tenanName',
     },
     {
       title: '租客手机',
-      dataIndex: 'mobile'
+      dataIndex: 'mobile',
     },
     {
       title: '合同起止时间',
-      dataIndex: 'time',
-      //render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      render: (text, record, index) => {
+        return record.startTime + '至' + record.endTime;
+      },
     },
     {
       title: '租金',
-      dataIndex: 'rent'
+      dataIndex: 'rent',
     },
     {
       title: '状态',
-      dataIndex: 'state'
+      dataIndex: 'status',
+      render: (text, record, index) => {
+        return this.convertStatus(record);
+      },
     },
     {
       title: '操作',
@@ -75,7 +74,18 @@ class ZuFang extends PureComponent {
     },
   ];
 
-  componentDidMount() { //当组件挂载完成后执行加载数据
+  convertStatus = record => {
+    if (record.status == '1') {
+      return '已确认';
+    } else if (record.status == '2') {
+      return '待确认';
+    } else if (record.status == '3') {
+      return '待付款';
+    }
+  };
+
+  componentDidMount() {
+    //当组件挂载完成后执行加载数据
     const { dispatch } = this.props;
     dispatch({
       type: 'zufang/fetch',

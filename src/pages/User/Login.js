@@ -29,7 +29,7 @@ class LoginPage extends Component {
         type: 'login/login',
         payload: {
           ...values,
-          type,
+          //type,
         },
       });
     }

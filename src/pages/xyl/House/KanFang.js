@@ -58,6 +58,9 @@ class KanFang extends PureComponent {
     {
       title: '请求状态',
       dataIndex: 'status',
+      render: (text, record, index) => {
+        return this.convertStatus(record);
+      },
     },
     {
       title: '操作',
@@ -70,6 +73,17 @@ class KanFang extends PureComponent {
       ),
     },
   ];
+  convertStatus = record => {
+    if (record.status == '1') {
+      return '已确认';
+    } else if (record.status == '2') {
+      return '待确认';
+    } else if (record.status == '3') {
+      return '带看房';
+    } else if (record.status == '4') {
+      return '已取消';
+    }
+  };
 
   componentDidMount() {
     //当组件挂载完成后执行加载数据
