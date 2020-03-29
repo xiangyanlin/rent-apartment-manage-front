@@ -21,6 +21,24 @@ class LoginPage extends Component {
     this.setState({ type });
   };
 
+    //手机号码登录
+  // onGetCaptcha = () =>
+  //   new Promise((resolve, reject) => {
+  //     this.loginForm.validateFields(['mobile'], {}, (err, values) => {
+  //       if (err) {
+  //         reject(err);
+  //       } else {
+  //         const { dispatch } = this.props;
+  //         dispatch({
+  //           type: 'login/getCaptcha',
+  //           payload: values.mobile,
+  //         })
+  //           .then(resolve)
+  //           .catch(reject);
+  //       }
+  //     });
+  //   });
+
   handleSubmit = (err, values) => {
     const { type } = this.state;
     if (!err) {
@@ -58,13 +76,41 @@ class LoginPage extends Component {
             this.loginForm = form;
           }}
         > 
+         {/* <Tab key="account" tab={formatMessage({ id: 'app.login.tab-login-credentials' })}>
+            {login.status === 'error' &&
+              login.type === 'account' &&
+              !submitting &&
+              this.renderMessage(formatMessage({ id: 'app.login.message-invalid-credentials' }))}
+            <UserName name="userName" placeholder="admin/user" />
+            <Password
+              name="password"
+              placeholder="888888/123456"
+              onPressEnter={() => this.loginForm.validateFields(this.handleSubmit)}
+            />
+          </Tab> */}
+          {/* <Tab key="mobile" tab={formatMessage({ id: 'app.login.tab-login-mobile' })}>
+            {login.status === 'error' &&
+              login.type === 'mobile' &&
+              !submitting &&
+              this.renderMessage(formatMessage({ id: 'app.login.message-invalid-verification-code' }))}
+            <Mobile name="mobile" />
+            <Captcha name="captcha" countDown={120} onGetCaptcha={this.onGetCaptcha} />
+          </Tab> */}
+          {/* <div>
+            <Checkbox checked={autoLogin} onChange={this.changeAutoLogin}>
+              <FormattedMessage id="app.login.remember-me" />
+            </Checkbox>
+            <a style={{ float: 'right' }} href="">
+              <FormattedMessage id="app.login.forgot-password" />
+            </a>
+          </div> */}
         {login.status === 'error' &&
             !submitting &&
             this.renderMessage(formatMessage({ id: 'app.login.message-invalid-credentials' }))}
-          <UserName name="userName" placeholder="admin/user" />
+          <UserName name="userName" placeholder="请输入用户名" />
           <Password
             name="password"
-            placeholder="888888/123456"
+            placeholder="请输入密码"
             onPressEnter={() => this.loginForm.validateFields(this.handleSubmit)}
           />
 

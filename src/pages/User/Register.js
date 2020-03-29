@@ -149,6 +149,33 @@ class Register extends Component {
       }
     }
   };
+  //校验用户名
+  checkUserName = (rule, value, callback) => {
+    const userName = value;
+    if (userName) {
+      const { dispatch } = this.props;
+      dispatch({
+        type: 'register/checkUserName',
+        payload: {
+          userName:userName,
+        },
+        callback: res => {
+          console.log(res); // 请求完成后返回的结果
+          if (res.code == 200) {
+            callback(formatMessage({ id: 'validation.userName.wrong-format' }));
+            callback('error');
+          }
+          callback();
+        },
+      });
+    }else{
+      callback(formatMessage({ id: 'validation.userName.required' }));
+      callback('error');
+      
+    }
+    
+  };
+
 
   changePrefix = value => {
     this.setState({
@@ -183,8 +210,21 @@ class Register extends Component {
           <FormattedMessage id="app.register.register" />
         </h3>
         <Form onSubmit={this.handleSubmit}>
+          {/* userName */}
+        <FormItem>
+            {getFieldDecorator('userName', {
+              rules: [
+                {
+                  required: true,
+                  validator: this.checkUserName,
+                },
+              ],
+            })(
+              <Input size="large" placeholder={formatMessage({ id: 'form.userName.placeholder' })} />
+            )}
+          </FormItem>
           <FormItem>
-            {getFieldDecorator('mail', {
+            {getFieldDecorator('email', {
               rules: [
                 {
                   required: true,
@@ -249,7 +289,7 @@ class Register extends Component {
               />
             )}
           </FormItem>
-          <FormItem>
+          <FormItem>   
             <InputGroup compact>
               <Select
                 size="large"
@@ -280,7 +320,7 @@ class Register extends Component {
               )}
             </InputGroup>
           </FormItem>
-          <FormItem>
+          {/* <FormItem>   验证码
             <Row gutter={8}>
               <Col span={16}>
                 {getFieldDecorator('captcha', {
@@ -310,7 +350,7 @@ class Register extends Component {
                 </Button>
               </Col>
             </Row>
-          </FormItem>
+          </FormItem> */}
           <FormItem>
             <Button
               size="large"

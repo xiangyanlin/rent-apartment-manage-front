@@ -16,3 +16,12 @@ export async function queryOwnerList(params) {
 export async function userLogin(params) {
   return request(`/xyl/user/login?${stringify(params)}`);
 }
+
+//用户注册
+export async function userRegister(params) {
+  return request('/xyl/user/register',{
+    method: 'POST',
+    body: params,
+  });
+}
+
