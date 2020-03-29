@@ -12,7 +12,7 @@ import { formatMessage } from 'umi/locale';
 import SiderMenu from '@/components/SiderMenu';
 import Authorized from '@/utils/Authorized';
 import SettingDrawer from '@/components/SettingDrawer';
-import logo from '../assets/logo-heima.png';
+import logo from '../assets/081-school-1.svg';
 import Footer from './Footer';
 import Header from './Header';
 import Context from './MenuContext';
@@ -99,7 +99,7 @@ class BasicLayout extends React.PureComponent {
     dispatch({
       type: 'user/fetchCurrent',
       payload: {
-        userName:window.localStorage.getItem("currentUser"),
+        userName: window.localStorage.getItem('currentUser'),
       },
     });
     dispatch({

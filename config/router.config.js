@@ -1,4 +1,66 @@
 export default [
+  //前台
+  {
+    path: '/rent',
+    component: '../layouts/BlankLayout',
+    routes: [
+      {
+        path: 'rent/list',
+        // icon: 'table',
+        name: 'list',
+        routes: [
+          {
+            path: '/list/table-list',
+            name: 'searchtable',
+            component: './List/TableList',
+          },
+          {
+            path: '/list/basic-list',
+            name: 'basiclist',
+            component: './List/BasicList',
+          },
+          {
+            path: '/list/card-list',
+            name: 'cardlist',
+            component: './List/CardList',
+          },
+          {
+            path: '/list/search',
+            name: 'searchlist',
+            component: './List/List',
+            routes: [
+              {
+                path: '/list/search',
+                redirect: '/list/search/articles',
+              },
+              {
+                path: '/list/search/articles',
+                name: 'articles',
+                component: './List/Articles',
+              },
+              //项目列表
+              {
+                path: 'list/search/projects',
+                name: 'projects',
+                component: './List/Projects',
+              },
+              {
+                path: '/list/search/applications',
+                name: 'applications',
+                component: './List/Applications',
+              },
+            ],
+          },
+        ],
+      },
+      //项目列表
+      {
+        path: 'projects',
+        name: 'projects',
+        component: './rent/Projects',
+      },
+    ],
+  },
   // user
   {
     path: '/user',
