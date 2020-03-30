@@ -2,62 +2,33 @@ export default [
   //前台
   {
     path: '/rent',
-    component: '../layouts/BlankLayout',
+    component: '../layouts/FrontLayout',
     routes: [
       {
-        path: 'rent/list',
-        // icon: 'table',
-        name: 'list',
+        path: '/rent/list/search',
+        name: 'searchlist',
+        component: './List/List',
         routes: [
           {
-            path: '/list/table-list',
-            name: 'searchtable',
-            component: './List/TableList',
+            path: '/rent/list/search',
+            redirect: '/rent/list/search/articles',
           },
           {
-            path: '/list/basic-list',
-            name: 'basiclist',
-            component: './List/BasicList',
+            path: '/rent/list/search/articles',
+            name: 'articles',
+            component: './List/Articles',
           },
           {
-            path: '/list/card-list',
-            name: 'cardlist',
-            component: './List/CardList',
+            path: '/rent/list/search/projects',
+            name: 'projects',
+            component: './List/Projects',
           },
           {
-            path: '/list/search',
-            name: 'searchlist',
-            component: './List/List',
-            routes: [
-              {
-                path: '/list/search',
-                redirect: '/list/search/articles',
-              },
-              {
-                path: '/list/search/articles',
-                name: 'articles',
-                component: './List/Articles',
-              },
-              //项目列表
-              {
-                path: 'list/search/projects',
-                name: 'projects',
-                component: './List/Projects',
-              },
-              {
-                path: '/list/search/applications',
-                name: 'applications',
-                component: './List/Applications',
-              },
-            ],
+            path: '/rent/list/search/applications',
+            name: 'applications',
+            component: './List/Applications',
           },
         ],
-      },
-      //项目列表
-      {
-        path: 'projects',
-        name: 'projects',
-        component: './rent/Projects',
       },
     ],
   },

@@ -293,8 +293,8 @@ class FrontLayout extends React.PureComponent {
   }
 }
 
-export default connect(({ global, setting }) => ({
+export default connect(({ global, frontSetting }) => ({
   collapsed: global.collapsed,
-  layout: setting.layout,
-  ...setting,
+  layout: frontSetting.layout,
+  ...frontSetting,
 }))(FrontLayout);
