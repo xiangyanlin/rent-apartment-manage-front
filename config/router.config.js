@@ -1,37 +1,4 @@
 export default [
-  //前台
-  {
-    path: '/rent',
-    component: '../layouts/FrontLayout',
-    routes: [
-      {
-        path: '/rent/list/search',
-        name: 'searchlist',
-        component: './List/List',
-        routes: [
-          {
-            path: '/rent/list/search',
-            redirect: '/rent/list/search/articles',
-          },
-          {
-            path: '/rent/list/search/articles',
-            name: 'articles',
-            component: './List/Articles',
-          },
-          {
-            path: '/rent/list/search/projects',
-            name: 'projects',
-            component: './List/Projects',
-          },
-          {
-            path: '/rent/list/search/applications',
-            name: 'applications',
-            component: './List/Applications',
-          },
-        ],
-      },
-    ],
-  },
   // user
   {
     path: '/user',
@@ -45,36 +12,36 @@ export default [
   },
   // app
   {
-    path: '/',
+    path: '/admin',
     component: '../layouts/BasicLayout',
     Routes: ['src/pages/Authorized'],
     authority: ['admin', 'user'],
     routes: [
-      { path: '/', redirect: '/dashboard/analysis' },
+      { path: '/admin', redirect: '/admin/dashboard/analysis' },
 
       {
         // 房源管理
-        path: '/house',
+        path: '/admin/house',
         name: 'house',
         icon: 'home',
         routes: [
           {
-            path: '/house/resource',
+            path: '/admin/house/resource',
             name: 'resource',
             component: './xyl/House/Resource',
           },
           {
-            path: '/house/addResource',
+            path: '/admin/house/addResource',
             name: 'addResource',
             component: './xyl/House/AddResource',
           },
           {
-            path: '/house/kanfang',
+            path: '/admin/house/kanfang',
             name: 'kanfang',
             component: './xyl/House/KanFang',
           },
           {
-            path: '/house/zufang',
+            path: '/admin/house/zufang',
             name: 'zufang',
             component: './xyl/House/ZuFang',
           },
@@ -83,12 +50,12 @@ export default [
 
       {
         // 房东管理
-        path: '/owner',
+        path: '/admin/owner',
         name: 'fangdong',
         icon: 'key',
         routes: [
           {
-            path: '/owner/list',
+            path: '/admin/owner/list',
             name: 'list',
             component: './xyl/Owner/List',
           },
@@ -97,12 +64,12 @@ export default [
 
       {
         // 用户管理
-        path: '/users',
+        path: '/admin/users',
         name: 'users',
         icon: 'user',
         routes: [
           {
-            path: '/users/list',
+            path: '/admin/users/list',
             name: 'list',
             component: './xyl/Users/List',
           },
@@ -111,13 +78,13 @@ export default [
 
       {
         // 合约管理
-        path: '/contract',
+        path: '/admin/contract',
         //authority: ['admin'],
         name: 'heyue',
         icon: 'file-text',
         routes: [
           {
-            path: '/contract/list',
+            path: '/admin/contract/list',
             name: 'list',
             component: './xyl/Contract/List',
           },
@@ -126,12 +93,12 @@ export default [
 
       {
         // 资讯管理
-        path: '/news',
+        path: '/admin/news',
         name: 'news',
         icon: 'message',
         routes: [
           {
-            path: '/news/list',
+            path: '/admin/news/list',
             name: 'list',
             component: './xyl/News/List',
           },
@@ -140,12 +107,12 @@ export default [
 
       {
         // 问答管理
-        path: '/question',
+        path: '/admin/question',
         name: 'qa',
         icon: 'question-circle',
         routes: [
           {
-            path: '/question/list',
+            path: '/admin/question/list',
             name: 'list',
             component: './xyl/Question/List',
           },
@@ -154,17 +121,17 @@ export default [
 
       {
         // 财务管理
-        path: '/finance',
+        path: '/admin/finance',
         name: 'finance',
         icon: 'money-collect',
         routes: [
           {
-            path: '/finance/bill',
+            path: '/admin/finance/bill',
             name: 'bill',
             component: './xyl/Finance/Bill',
           },
           {
-            path: '/finance/tixian',
+            path: '/admin/finance/tixian',
             name: 'tixian',
             component: './xyl/Finance/TiXian',
           },
@@ -173,22 +140,22 @@ export default [
 
       {
         // 系统管理
-        path: '/system',
+        path: '/admin/system',
         name: 'system',
         icon: 'laptop',
         routes: [
           {
-            path: '/system/interface',
+            path: '/admin/system/interface',
             name: 'interface',
             component: './xyl/System/Interface',
           },
           {
-            path: '/system/dict',
+            path: '/admin/system/dict',
             name: 'dict',
             component: './xyl/System/Dict',
           },
           {
-            path: '/system/contract',
+            path: '/admin/system/contract',
             name: 'contract',
             component: './xyl/System/Contract',
           },
@@ -196,25 +163,25 @@ export default [
       },
 
       // dashboard
-      { path: '/dashboard', redirect: '/dashboard/analysis' },
+      { path: '/admin/dashboard', redirect: '/admin/dashboard/analysis' },
       {
-        path: '/dashboard',
+        path: '/admin/dashboard',
         name: 'dashboard',
         icon: 'dashboard',
         hideChildrenInMenu: false,
         routes: [
           {
-            path: '/dashboard/analysis',
+            path: '/admin/dashboard/analysis',
             name: 'analysis',
             component: './Dashboard/Analysis',
           },
           {
-            path: '/dashboard/monitor',
+            path: '/admin/dashboard/monitor',
             name: 'monitor',
             component: './Dashboard/Monitor',
           },
           {
-            path: '/dashboard/workplace',
+            path: '/admin/dashboard/workplace',
             name: 'workplace',
             component: './Dashboard/Workplace',
           },
@@ -227,40 +194,40 @@ export default [
         name: 'form',
         routes: [
           {
-            path: '/form/basic-form',
+            path: '/admin/form/basic-form',
             name: 'basicform',
             component: './Forms/BasicForm',
           },
           {
-            path: '/form/step-form',
+            path: '/admin/form/step-form',
             name: 'stepform',
             component: './Forms/StepForm',
             hideChildrenInMenu: true,
             routes: [
               {
-                path: '/form/step-form',
+                path: '/admin/form/step-form',
                 name: 'stepform',
                 redirect: '/form/step-form/info',
               },
               {
-                path: '/form/step-form/info',
+                path: '/admin/form/step-form/info',
                 name: 'info',
                 component: './Forms/StepForm/Step1',
               },
               {
-                path: '/form/step-form/confirm',
+                path: '/admin/form/step-form/confirm',
                 name: 'confirm',
                 component: './Forms/StepForm/Step2',
               },
               {
-                path: '/form/step-form/result',
+                path: '/admin/form/step-form/result',
                 name: 'result',
                 component: './Forms/StepForm/Step3',
               },
             ],
           },
           {
-            path: '/form/advanced-form',
+            path: '/admin/form/advanced-form',
             name: 'advancedform',
             authority: ['admin'],
             component: './Forms/AdvancedForm',
@@ -269,46 +236,46 @@ export default [
       },
       // list
       {
-        path: '/list',
+        path: '/admin/list',
         icon: 'table',
         name: 'list',
         routes: [
           {
-            path: '/list/table-list',
+            path: '/admin/list/table-list',
             name: 'searchtable',
             component: './List/TableList',
           },
           {
-            path: '/list/basic-list',
+            path: '/admin/list/basic-list',
             name: 'basiclist',
             component: './List/BasicList',
           },
           {
-            path: '/list/card-list',
+            path: '/admin/list/card-list',
             name: 'cardlist',
             component: './List/CardList',
           },
           {
-            path: '/list/search',
+            path: '/admin/list/search',
             name: 'searchlist',
             component: './List/List',
             routes: [
               {
-                path: '/list/search',
-                redirect: '/list/search/articles',
+                path: '/admin/list/search',
+                redirect: '/admin/list/search/articles',
               },
               {
-                path: '/list/search/articles',
+                path: '/admin/list/search/articles',
                 name: 'articles',
                 component: './List/Articles',
               },
               {
-                path: '/list/search/projects',
+                path: '/admin/list/search/projects',
                 name: 'projects',
                 component: './List/Projects',
               },
               {
-                path: '/list/search/applications',
+                path: '/admin/list/search/applications',
                 name: 'applications',
                 component: './List/Applications',
               },
@@ -317,18 +284,18 @@ export default [
         ],
       },
       {
-        path: '/profile',
+        path: '/admin/profile',
         name: 'profile',
         icon: 'profile',
         routes: [
           // profile
           {
-            path: '/profile/basic',
+            path: '/admin/profile/basic',
             name: 'basic',
             component: './Profile/BasicProfile',
           },
           {
-            path: '/profile/advanced',
+            path: '/admin/profile/advanced',
             name: 'advanced',
             authority: ['admin'],
             component: './Profile/AdvancedProfile',
@@ -338,40 +305,40 @@ export default [
       {
         name: 'result',
         icon: 'check-circle-o',
-        path: '/result',
+        path: '/admin/result',
         routes: [
           // result
           {
-            path: '/result/success',
+            path: '/admin/result/success',
             name: 'success',
             component: './Result/Success',
           },
-          { path: '/result/fail', name: 'fail', component: './Result/Error' },
+          { path: '/admin/result/fail', name: 'fail', component: './Result/Error' },
         ],
       },
       {
         name: 'exception',
         icon: 'warning',
-        path: '/exception',
+        path: '/admin/exception',
         routes: [
           // exception
           {
-            path: '/exception/403',
+            path: '/admin/exception/403',
             name: 'not-permission',
             component: './Exception/403',
           },
           {
-            path: '/exception/404',
+            path: '/admin/exception/404',
             name: 'not-find',
             component: './Exception/404',
           },
           {
-            path: '/exception/500',
+            path: '/admin/exception/500',
             name: 'server-error',
             component: './Exception/500',
           },
           {
-            path: '/exception/trigger',
+            path: '/admin/exception/trigger',
             name: 'trigger',
             hideInMenu: true,
             component: './Exception/TriggerException',
@@ -381,54 +348,54 @@ export default [
       {
         name: 'account',
         icon: 'user',
-        path: '/account',
+        path: '/admin/account',
         routes: [
           {
-            path: '/account/center',
+            path: '/admin/account/center',
             name: 'center',
             component: './Account/Center/Center',
             routes: [
               {
-                path: '/account/center',
-                redirect: '/account/center/articles',
+                path: '/admin/account/center',
+                redirect: '/admin/account/center/articles',
               },
               {
-                path: '/account/center/articles',
+                path: '/admin/account/center/articles',
                 component: './Account/Center/Articles',
               },
               {
-                path: '/account/center/applications',
+                path: '/admin/account/center/applications',
                 component: './Account/Center/Applications',
               },
               {
-                path: '/account/center/projects',
+                path: '/admin/account/center/projects',
                 component: './Account/Center/Projects',
               },
             ],
           },
           {
-            path: '/account/settings',
+            path: '/admin/account/settings',
             name: 'settings',
             component: './Account/Settings/Info',
             routes: [
               {
-                path: '/account/settings',
-                redirect: '/account/settings/base',
+                path: '/admin/account/settings',
+                redirect: '/admin/account/settings/base',
               },
               {
-                path: '/account/settings/base',
+                path: '/admin/account/settings/base',
                 component: './Account/Settings/BaseView',
               },
               {
-                path: '/account/settings/security',
+                path: '/admin/account/settings/security',
                 component: './Account/Settings/SecurityView',
               },
               {
-                path: '/account/settings/binding',
+                path: '/admin/account/settings/binding',
                 component: './Account/Settings/BindingView',
               },
               {
-                path: '/account/settings/notification',
+                path: '/admin/account/settings/notification',
                 component: './Account/Settings/NotificationView',
               },
             ],
@@ -437,6 +404,40 @@ export default [
       },
       {
         component: '404',
+      },
+    ],
+  },
+    //前台
+  {
+    path: '/',
+    component: '../layouts/FrontLayout',
+    routes: [
+      { path: '/', redirect: '/list/search/projects' },
+      {
+        path: '/list/search',
+        name: 'searchlist',
+        component: './front/List',
+        routes: [
+          {
+            path: '/list/search',
+            redirect: '/list/search/projects',
+          },    
+          {
+            path: '/list/search/projects',
+            name: 'projects',
+            component: './front/Projects',
+          },
+          {
+            path: '/list/search/applications',
+            name: 'applications',
+            component: './front/Applications',
+          },
+          {
+            path: '/list/search/articles',
+            name: 'articles',
+            component: './front/Articles',
+          },
+        ],
       },
     ],
   },
