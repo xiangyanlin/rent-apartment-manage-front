@@ -22,9 +22,11 @@ export default class GlobalFrontHeader extends PureComponent {
     onCollapse(!collapsed);
     this.triggerResizeEvent();
   };
+
   render() {
     const {currentUser}=this.props;
     // console.log();
+
     const { collapsed, isMobile, logo } = this.props;
     return (
       <div className={styles.header}>

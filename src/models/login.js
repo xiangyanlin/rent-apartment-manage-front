@@ -45,7 +45,7 @@ export default {
     // *getCaptcha({ payload }, { call }) {
     //   yield call(getFakeCaptcha, payload);
     // },
-    //退出登录
+    //后台退出登录
     *logout(_, { put }) {
       window.localStorage.removeItem("currentUser");
       yield put({
@@ -66,6 +66,21 @@ export default {
           }),
         })
       );
+    },
+    //前台退出登录
+    *frontlogout(_, { put }) {
+      window.localStorage.removeItem("currentUser");
+      yield put({
+        type: 'changeLoginStatus',
+        payload: {
+          status: false,
+         data:{
+          currentAuthority: 'guest'
+         },
+        },
+      });
+      reloadAuthorized();
+      location.reload();
     },
   },
 

@@ -12,6 +12,8 @@ import Authorized from '@/utils/Authorized';
 const { Header } = Layout;
 
 class HeaderView extends PureComponent {
+
+
   state = {
     visible: true,
   };
@@ -67,8 +69,8 @@ class HeaderView extends PureComponent {
     }
     if (key === 'logout') {
       dispatch({
-        type: 'login/logout',
-      });
+        type: 'login/frontlogout',
+      });   
     }
   };
 
