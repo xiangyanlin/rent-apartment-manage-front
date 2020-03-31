@@ -9,15 +9,17 @@ class SearchList extends Component {
   handleTabChange = key => {
     const { match } = this.props;
     switch (key) {
-      case 'articles':
-        router.push(`${match.url}/articles`);
+      case 'projects':
+        router.push(`${match.url}/projects`);
         break;
       case 'applications':
         router.push(`${match.url}/applications`);
         break;
-      case 'projects':
-        router.push(`${match.url}/projects`);
+      case 'articles':
+        router.push(`${match.url}/articles`);
         break;
+
+
       default:
         break;
     }
@@ -31,16 +33,16 @@ class SearchList extends Component {
   render() {
     const tabList = [
       {
-        key: 'articles',
-        tab: '文章',
-      },
-      {
         key: 'projects',
         tab: '项目',
       },
       {
         key: 'applications',
         tab: '应用',
+      },
+      {
+        key: 'articles',
+        tab: '文章',
       },
     ];
 

@@ -14,7 +14,7 @@ import Authorized from '@/utils/Authorized';
 import SettingDrawer from '@/components/SettingDrawer';
 import logo from '../assets/081-school-1.svg';
 import Footer from './Footer';
-import Header from './Header';
+import Header from './FrontHeader';
 import Context from './MenuContext';
 import Exception403 from '../pages/Exception/403';
 
@@ -228,6 +228,7 @@ class FrontLayout extends React.PureComponent {
   }
 
   render() {
+    // console.log(this.props);
     const {
       navTheme,
       layout: PropsLayout,
@@ -287,7 +288,7 @@ class FrontLayout extends React.PureComponent {
             )}
           </ContainerQuery>
         </DocumentTitle>
-        {this.renderSettingDrawer()}
+        {/* {this.renderSettingDrawer()} */}
       </React.Fragment>
     );
   }
