@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Row, Col, Form, Card, Select, List ,Avatar} from 'antd';
+import { Row, Col, Form, Card, Select, List ,Pagination } from 'antd';
 
 import TagSelect from '@/components/TagSelect';
 import StandardFormRow from '@/components/StandardFormRow';
@@ -42,11 +42,39 @@ class CoverCardList extends PureComponent {
     });
   }
 
+  reload() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'houseResource/fetch',
+      // type: 'rule/fetch',
+    });
+  }
+
+  handleStandardTableChange = (page, pageSize) => {
+    const { dispatch } = this.props;
+    // console.log(page,pageSize);
+    const params = {
+      currentPage:page,
+      pageSize:pageSize,
+    };
+
+    //
+    dispatch({
+      type: 'houseResource/fetch',
+      payload: params,
+    });
+  };
+
   render() {
-     const { list} = this.props.houseResource.data;
+     const { list,pagination} = this.props.houseResource.data;
      const {  loading,form} = this.props;
      const { getFieldDecorator } = form;
      //console.log( list);
+     const paginationProps = {
+      showSizeChanger: true,
+      showQuickJumper: true,
+      ...pagination,
+    };
     const cardList = list ? (
       <List
     itemLayout="horizontal"
@@ -54,8 +82,8 @@ class CoverCardList extends PureComponent {
     renderItem={item => (
       <List.Item>
         <List.Item.Meta
-          avatar={<img alt={item.title} src={item.pic} width="147px"height="110px"/>}
-          title={<h2 style={{fontWeight:"700"}}><a style={{color:"black"}}href="#">{item.title}</a></h2>}
+          avatar={<img alt={item.title} src={item.pic?(item.pic.split(',')[0]):item.pic} width="147px"height="110px"/>}
+          title={<div style={{fontSize: "20px"}}><a style={{color:"black"}}href="#">{item.title}</a></div>}
           description={
             <div >
                <div>
@@ -81,7 +109,7 @@ class CoverCardList extends PureComponent {
     };
 
     return (
-      <div className={styles.coverCardList}>
+      <div >
         <Card bordered={false}>
           <Form layout="inline">
             <StandardFormRow title="所属类目" block style={{ paddingBottom: 11 }}>
@@ -135,8 +163,16 @@ class CoverCardList extends PureComponent {
             </StandardFormRow>
           </Form>
         </Card>
-        <div className={styles.cardList}>{cardList}</div>
+        <div className={styles.cardList}>
+          {cardList}
+          </div>
+          <div className={styles.pagination}>
+       <Pagination {...pagination} 
+                    onChange={this.handleStandardTableChange}
+        />
+        </div>
       </div>
+
     );
   }
 }
