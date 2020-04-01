@@ -1,11 +1,8 @@
 import React, { PureComponent } from 'react';
-import moment from 'moment';
 import { connect } from 'dva';
-import { Row, Col, Form, Card, Select, List } from 'antd';
+import { Row, Col, Form, Card, Select, List ,Avatar} from 'antd';
 
 import TagSelect from '@/components/TagSelect';
-import AvatarList from '@/components/AvatarList';
-import Ellipsis from '@/components/Ellipsis';
 import StandardFormRow from '@/components/StandardFormRow';
 
 import styles from './Projects.less';
@@ -48,42 +45,22 @@ class CoverCardList extends PureComponent {
      const { list} = this.props.houseResource.data;
      const {  loading,form} = this.props;
      const { getFieldDecorator } = form;
-     console.log( list);
+     //console.log( list);
     const cardList = list ? (
       <List
-        rowKey="id"
-        loading={loading}
-        grid={{ gutter: 24, xl: 4, lg: 3, md: 3, sm: 2, xs: 1 }}
-        dataSource={list}
-        renderItem={item => (
-          <List.Item>
-            <Card
-              className={styles.card}
-              hoverable
-              cover={<img alt={item.title} src={item.pic} />}
-            >
-              <Card.Meta
-                title={<a>{item.title}</a>}
-                description={<Ellipsis lines={2}>{item.subDescription}</Ellipsis>}
-              />
-              <div className={styles.cardItemContent}>
-                <span>{moment(item.updatedAt).fromNow()}</span>
-                {/* <div className={styles.avatarList}>
-                  <AvatarList size="mini">
-                    {item.members.map((member, i) => (
-                      <AvatarList.Item
-                        key={`${item.id}-avatar-${i}`}
-                        src={member.avatar}
-                        tips={member.name}
-                      />
-                    ))}
-                  </AvatarList>
-                </div> */}
-              </div>
-            </Card>
-          </List.Item>
-        )}
-      />
+    itemLayout="horizontal"
+    dataSource={list}
+    renderItem={item => (
+      <List.Item>
+        <List.Item.Meta
+           avatar={<img alt={item.title} src={item.pic} width="147px"height="110px"/>}
+          title={<a href="https://ant.design">{item.title}</a>}
+          
+        />
+         <div>{item.rent}元/月</div>
+      </List.Item>
+    )}
+  />
     ) : null;
 
     const formItemLayout = {

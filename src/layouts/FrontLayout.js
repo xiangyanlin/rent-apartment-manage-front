@@ -103,7 +103,7 @@ class FrontLayout extends React.PureComponent {
       },
     });
     dispatch({
-      type: 'setting/getSetting',
+      type: 'frontSetting/getSetting',
     });
     this.renderRef = requestAnimationFrame(() => {
       this.setState({
@@ -228,13 +228,13 @@ class FrontLayout extends React.PureComponent {
   }
 
   render() {
-    // console.log(this.props);
     const {
       navTheme,
       layout: PropsLayout,
       children,
       location: { pathname },
     } = this.props;
+    console.log(this.props);
     const { isMobile, menuData } = this.state;
     const isTop = PropsLayout === 'topmenu';
     const routerConfig = this.matchParamsPath(pathname);

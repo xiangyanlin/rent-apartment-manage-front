@@ -234,6 +234,7 @@ class BasicLayout extends React.PureComponent {
       children,
       location: { pathname },
     } = this.props;
+    console.log(this.props);
     const { isMobile, menuData } = this.state;
     const isTop = PropsLayout === 'topmenu';
     const routerConfig = this.matchParamsPath(pathname);

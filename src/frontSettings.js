@@ -6,6 +6,6 @@ module.exports = {
   fixedHeader: false,
   autoHideHeader: false,
   fixSiderbar: false,
-  collapse: true
+  // collapse: true,
 };
   
