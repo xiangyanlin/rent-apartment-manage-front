@@ -6,6 +6,7 @@ import TagSelect from '@/components/TagSelect';
 import StandardFormRow from '@/components/StandardFormRow';
 
 import styles from './Projects.less';
+import { black } from 'ansi-colors';
 
 const { Option } = Select;
 const FormItem = Form.Item;
@@ -53,11 +54,20 @@ class CoverCardList extends PureComponent {
     renderItem={item => (
       <List.Item>
         <List.Item.Meta
-           avatar={<img alt={item.title} src={item.pic} width="147px"height="110px"/>}
-          title={<a href="https://ant.design">{item.title}</a>}
-          
+          avatar={<img alt={item.title} src={item.pic} width="147px"height="110px"/>}
+          title={<h2 style={{fontWeight:"700"}}><a style={{color:"black"}}href="#">{item.title}</a></h2>}
+          description={
+            <div >
+               <div>
+                <span>{item.houseType}</span>
+                <span>{item.coveredArea}m²</span>
+              </div>
+              <span>{item.houseDesc}</span>
+            </div>
+         
+          }
         />
-         <div>{item.rent}元/月</div>
+         <div className={styles.rent}>{item.rent}元/月</div>
       </List.Item>
     )}
   />
