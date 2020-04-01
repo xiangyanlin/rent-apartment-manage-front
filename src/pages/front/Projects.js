@@ -15,9 +15,9 @@ const FormItem = Form.Item;
 
 /* eslint react/no-array-index-key: 0 */
 
-@connect(({ list, loading }) => ({
-  list,
-  loading: loading.models.list,
+@connect(({ houseResource, loading }) => ({
+  houseResource,
+  loading: loading.models.houseResource,
 }))
 @Form.create({
   onValuesChange({ dispatch }, changedValues, allValues) {
@@ -26,10 +26,10 @@ const FormItem = Form.Item;
     console.log(changedValues, allValues);
     // 模拟查询表单生效
     dispatch({
-      type: 'list/fetch',
-      payload: {
-        count: 8,
-      },
+      type: 'houseResource/fetch',
+      // payload: {
+      //   count: 8,
+      // },
     });
   },
 })
@@ -37,21 +37,18 @@ class CoverCardList extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'list/fetch',
-      payload: {
-        count: 8,
-      },
+      type: 'houseResource/fetch',
+      // payload: {
+      //   count: 8,
+      // },
     });
   }
 
   render() {
-    const {
-      list: { list = [] },
-      loading,
-      form,
-    } = this.props;
-    const { getFieldDecorator } = form;
-
+     const { list} = this.props.houseResource.data;
+     const {  loading,form} = this.props;
+     const { getFieldDecorator } = form;
+     console.log( list);
     const cardList = list ? (
       <List
         rowKey="id"
@@ -63,7 +60,7 @@ class CoverCardList extends PureComponent {
             <Card
               className={styles.card}
               hoverable
-              cover={<img alt={item.title} src={item.cover} />}
+              cover={<img alt={item.title} src={item.pic} />}
             >
               <Card.Meta
                 title={<a>{item.title}</a>}
@@ -71,7 +68,7 @@ class CoverCardList extends PureComponent {
               />
               <div className={styles.cardItemContent}>
                 <span>{moment(item.updatedAt).fromNow()}</span>
-                <div className={styles.avatarList}>
+                {/* <div className={styles.avatarList}>
                   <AvatarList size="mini">
                     {item.members.map((member, i) => (
                       <AvatarList.Item
@@ -81,7 +78,7 @@ class CoverCardList extends PureComponent {
                       />
                     ))}
                   </AvatarList>
-                </div>
+                </div> */}
               </div>
             </Card>
           </List.Item>
