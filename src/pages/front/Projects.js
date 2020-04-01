@@ -83,7 +83,7 @@ class CoverCardList extends PureComponent {
       <List.Item>
         <List.Item.Meta
           avatar={<img alt={item.title} src={item.pic?(item.pic.split(',')[0]):item.pic} width="147px"height="110px"/>}
-          title={<div style={{fontSize: "20px"}}><a style={{color:"black"}}href="#">{item.title}</a></div>}
+          title={<div style={{fontSize: "20px"}}><a style={{color:"black"}}href={"/details?id="+item.id}>{item.title}</a></div>}
           description={
             <div >
                <div>

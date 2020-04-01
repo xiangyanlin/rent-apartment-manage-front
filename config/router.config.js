@@ -439,6 +439,12 @@ export default [
           },
         ],
       },
+      {
+        path: '/details',
+        name: 'details',
+        component: './front/details/details',
+        
+      },
     ],
   },
 ];
