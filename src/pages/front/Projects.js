@@ -1,13 +1,9 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Row, Col, Form, Card, Select, List ,Pagination } from 'antd';
-
 import TagSelect from '@/components/TagSelect';
 import StandardFormRow from '@/components/StandardFormRow';
-
 import styles from './Projects.less';
-import { black } from 'ansi-colors';
-
 const { Option } = Select;
 const FormItem = Form.Item;
 
@@ -83,7 +79,7 @@ class CoverCardList extends PureComponent {
       <List.Item>
         <List.Item.Meta
           avatar={<img alt={item.title} src={item.pic?(item.pic.split(',')[0]):item.pic} width="147px"height="110px"/>}
-          title={<div style={{fontSize: "20px"}}><a style={{color:"black"}}href={"/details?id="+item.id}>{item.title}</a></div>}
+          title={<div style={{fontSize: "20px"}}><a style={{color:"black"}}href={"/details/house?id="+item.id}>{item.title}</a></div>}
           description={
             <div >
                <div>

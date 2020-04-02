@@ -35,7 +35,7 @@ export default {
         }
       }
     },
-    *queryById({ payload }, { call }) {
+    *queryById({ payload }, { call ,put}) {
       const response=yield call(queryById, payload);
       yield put({
         type: 'save',
