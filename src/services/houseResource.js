@@ -24,3 +24,8 @@ export async function addHouseResource(params) {
     body: params,
   });
 }
+
+//根据ID查询
+export async function queryById(params) {
+  return request(`/xyl/houseResources/selectOne?${stringify(params)}`);
+}

@@ -1,4 +1,4 @@
-import { queryResource,addHouseResource, updateHouseResource, deleteHouseResource } from '@/services/houseResource';
+import { queryResource,addHouseResource, updateHouseResource, deleteHouseResource,queryById } from '@/services/houseResource';
 
 export default {
   namespace: 'houseResource',
@@ -34,6 +34,13 @@ export default {
           callback(response); // 返回结果
         }
       }
+    },
+    *queryById({ payload }, { call }) {
+      const response=yield call(queryById, payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
     },
   },
 

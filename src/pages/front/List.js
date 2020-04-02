@@ -34,7 +34,7 @@ class SearchList extends Component {
     const tabList = [
       {
         key: 'projects',
-        tab: '项目',
+        tab: '出租',
       },
       {
         key: 'applications',

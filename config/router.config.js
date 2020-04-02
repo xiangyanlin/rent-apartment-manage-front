@@ -189,7 +189,7 @@ export default [
       },
       // forms
       {
-        path: '/form',
+        path: '/admin/form',
         icon: 'form',
         name: 'form',
         routes: [
@@ -207,7 +207,7 @@ export default [
               {
                 path: '/admin/form/step-form',
                 name: 'stepform',
-                redirect: '/form/step-form/info',
+                redirect: '/admin/form/step-form/info',
               },
               {
                 path: '/admin/form/step-form/info',
@@ -439,10 +439,19 @@ export default [
           },
         ],
       },
+      //详情
       {
         path: '/details',
         name: 'details',
-        component: './front/details/details',
+        component: './front/details/top',
+        routes:[
+          { path: '/details', redirect: '/details/house' },
+          {
+            path: '/details/house',
+            name: 'details',
+            component: './front/details/details',
+          }
+        ]
         
       },
     ],
