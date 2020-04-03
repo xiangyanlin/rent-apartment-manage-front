@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Row, Col, Form, Card, Select, List ,Pagination } from 'antd';
+import { Row, Col, Form, Card, Select, List, Pagination } from 'antd';
 import TagSelect from '@/components/TagSelect';
 import StandardFormRow from '@/components/StandardFormRow';
 import styles from './Projects.less';
@@ -50,8 +50,8 @@ class CoverCardList extends PureComponent {
     const { dispatch } = this.props;
     // console.log(page,pageSize);
     const params = {
-      currentPage:page,
-      pageSize:pageSize,
+      currentPage: page,
+      pageSize: pageSize,
     };
 
     //
@@ -62,39 +62,61 @@ class CoverCardList extends PureComponent {
   };
 
   render() {
-     const { list,pagination} = this.props.houseResource.data;
-     const {  loading,form} = this.props;
-     const { getFieldDecorator } = form;
-     //console.log( list);
-     const paginationProps = {
+    const { list, pagination } = this.props.houseResource.data;
+    const { loading, form } = this.props;
+    const { getFieldDecorator } = form;
+    //console.log( list);
+    const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
       ...pagination,
     };
     const cardList = list ? (
       <List
-    itemLayout="horizontal"
-    dataSource={list}
-    renderItem={item => (
-      <List.Item>
-        <List.Item.Meta
-          avatar={<img alt={item.title} src={item.pic?(item.pic.split(',')[0]):item.pic} width="147px"height="110px"/>}
-          title={<div style={{fontSize: "20px"}}><a style={{color:"black"}}href={"/details/house?id="+item.id}>{item.title}</a></div>}
-          description={
-            <div >
-               <div>
-                <span>{item.houseType}</span>
-                <span>{item.coveredArea}m²</span>
-              </div>
-              <span>{item.houseDesc}</span>
+        itemLayout="horizontal"
+        dataSource={list}
+        renderItem={item => (
+          <List.Item>
+            <List.Item.Meta
+              avatar={
+                <img
+                  alt={item.title}
+                  src={
+                    item.pic
+                      ? 'http://127.0.0.1:8080/common/getImage?filename=' + item.pic.split(',')[0]
+                      : item.pic
+                  }
+                  width="147px"
+                  height="110px"
+                />
+              }
+              title={
+                <div style={{ fontSize: '20px' }}>
+                  <a style={{ color: 'black' }} href={'/details/house?id=' + item.id}>
+                    {item.title}
+                  </a>
+                </div>
+              }
+              description={
+                <div>
+                  <div>
+                    <span>{item.houseType}</span>
+                    <span>
+                      {item.coveredArea}
+                      m²
+                    </span>
+                  </div>
+                  <span>{item.houseDesc}</span>
+                </div>
+              }
+            />
+            <div className={styles.rent}>
+              {item.rent}
+              元/月
             </div>
-         
-          }
-        />
-         <div className={styles.rent}>{item.rent}元/月</div>
-      </List.Item>
-    )}
-  />
+          </List.Item>
+        )}
+      />
     ) : null;
 
     const formItemLayout = {
@@ -105,7 +127,7 @@ class CoverCardList extends PureComponent {
     };
 
     return (
-      <div >
+      <div>
         <Card bordered={false}>
           <Form layout="inline">
             <StandardFormRow title="所属类目" block style={{ paddingBottom: 11 }}>
@@ -133,10 +155,7 @@ class CoverCardList extends PureComponent {
                 <Col lg={8} md={10} sm={10} xs={24}>
                   <FormItem {...formItemLayout} label="作者">
                     {getFieldDecorator('author', {})(
-                      <Select
-                        placeholder="不限"
-                        style={{ maxWidth: 200, width: '100%' }}
-                      >
+                      <Select placeholder="不限" style={{ maxWidth: 200, width: '100%' }}>
                         <Option value="lisa">王昭君</Option>
                       </Select>
                     )}
@@ -145,10 +164,7 @@ class CoverCardList extends PureComponent {
                 <Col lg={8} md={10} sm={10} xs={24}>
                   <FormItem {...formItemLayout} label="好评度">
                     {getFieldDecorator('rate', {})(
-                      <Select
-                        placeholder="不限"
-                        style={{ maxWidth: 200, width: '100%' }}
-                      >
+                      <Select placeholder="不限" style={{ maxWidth: 200, width: '100%' }}>
                         <Option value="good">优秀</Option>
                         <Option value="normal">普通</Option>
                       </Select>
@@ -159,16 +175,11 @@ class CoverCardList extends PureComponent {
             </StandardFormRow>
           </Form>
         </Card>
-        <div className={styles.cardList}>
-          {cardList}
-          </div>
-          <div className={styles.pagination}>
-       <Pagination {...pagination} 
-                    onChange={this.handleStandardTableChange}
-        />
+        <div className={styles.cardList}>{cardList}</div>
+        <div className={styles.pagination}>
+          <Pagination {...pagination} onChange={this.handleStandardTableChange} />
         </div>
       </div>
-
     );
   }
 }
