@@ -5,29 +5,18 @@ import { connect } from 'dva';
 import styles from './BaseView.less';
 import GeographicView from './GeographicView';
 import PhoneView from './PhoneView';
+import avatar from '../../../assets/avatar.png';
 // import { getTimeDistance } from '@/utils/utils';
 
 const FormItem = Form.Item;
 const { Option } = Select;
 
 // 头像组件 方便以后独立，增加裁剪之类的功能
-const AvatarView = ({ avatar }) => (
-  <Fragment>
-    <div className={styles.avatar_title}>
-      <FormattedMessage id="app.settings.basic.avatar" defaultMessage="Avatar" />
-    </div>
-    <div className={styles.avatar}>
-      <img src={avatar} alt="avatar" />
-    </div>
-    <Upload fileList={[]}>
-      <div className={styles.button_view}>
-        <Button icon="upload">
-          <FormattedMessage id="app.settings.basic.change-avatar" defaultMessage="Change avatar" />
-        </Button>
-      </div>
-    </Upload>
-  </Fragment>
-);
+// const AvatarView = ({ avatar }) => (
+//   <Fragment>
+
+//   </Fragment>
+// );
 
 const validatorGeographic = (rule, value, callback) => {
   const { province, city } = value;
@@ -56,6 +45,9 @@ const validatorPhone = (rule, value, callback) => {
 }))
 @Form.create()
 class BaseView extends Component {
+  state = {
+    file: {  },
+};
   componentDidMount() {
     this.setBaseInfo();
   }
@@ -74,13 +66,19 @@ class BaseView extends Component {
     if (currentUser.avatar) {
       return currentUser.avatar;
     }
-    const url = 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png';
-    return url;
+    return avatar;
   }
 
   getViewDom = ref => {
     this.view = ref;
   };
+
+  
+  handleChange = ( file) => {
+    this.setState( file );
+    this.props.handleFileList(this.state.file);
+    document.getElementById('avatar').src='src地址'+'?'+new Date().getTime();
+  }
 
   render() {
     const {
@@ -101,7 +99,7 @@ class BaseView extends Component {
               })(<Input />)}
             </FormItem>
             <FormItem label={formatMessage({ id: 'app.settings.basic.nickname' })}>
-              {getFieldDecorator('name', {
+              {getFieldDecorator('userName', {
                 rules: [
                   {
                     required: true,
@@ -110,7 +108,7 @@ class BaseView extends Component {
                 ],
               })(<Input />)}
             </FormItem>
-            <FormItem label={formatMessage({ id: 'app.settings.basic.profile' })}>
+            {/* <FormItem label={formatMessage({ id: 'app.settings.basic.profile' })}>
               {getFieldDecorator('profile', {
                 rules: [
                   {
@@ -124,8 +122,8 @@ class BaseView extends Component {
                   rows={4}
                 />
               )}
-            </FormItem>
-            <FormItem label={formatMessage({ id: 'app.settings.basic.country' })}>
+            </FormItem> */}
+            {/* <FormItem label={formatMessage({ id: 'app.settings.basic.country' })}>
               {getFieldDecorator('country', {
                 rules: [
                   {
@@ -138,8 +136,8 @@ class BaseView extends Component {
                   <Option value="China">中国</Option>
                 </Select>
               )}
-            </FormItem>
-            <FormItem label={formatMessage({ id: 'app.settings.basic.geographic' })}>
+            </FormItem> */}
+            {/* <FormItem label={formatMessage({ id: 'app.settings.basic.geographic' })}>
               {getFieldDecorator('geographic', {
                 rules: [
                   {
@@ -151,8 +149,8 @@ class BaseView extends Component {
                   },
                 ],
               })(<GeographicView />)}
-            </FormItem>
-            <FormItem label={formatMessage({ id: 'app.settings.basic.address' })}>
+            </FormItem> */}
+            {/* <FormItem label={formatMessage({ id: 'app.settings.basic.address' })}>
               {getFieldDecorator('address', {
                 rules: [
                   {
@@ -161,9 +159,9 @@ class BaseView extends Component {
                   },
                 ],
               })(<Input />)}
-            </FormItem>
+            </FormItem> */}
             <FormItem label={formatMessage({ id: 'app.settings.basic.phone' })}>
-              {getFieldDecorator('phone', {
+              {getFieldDecorator('mobile', {
                 rules: [
                   {
                     required: true,
@@ -171,7 +169,8 @@ class BaseView extends Component {
                   },
                   { validator: validatorPhone },
                 ],
-              })(<PhoneView />)}
+              })
+              (<Input />)}
             </FormItem>
             <Button type="primary">
               <FormattedMessage
@@ -181,8 +180,22 @@ class BaseView extends Component {
             </Button>
           </Form>
         </div>
+        {/* <FormItem {...formItemLayout} label="上传室内图">
+            <PicturesWall handleFileList={this.handleFileList.bind(this)}/>
+        </FormItem> */}
         <div className={styles.right}>
-          <AvatarView avatar={this.getAvatarURL()} />
+            <div className={styles.avatar}>
+              <img id="avatar" src={this.getAvatarURL()} alt="avatar" />
+            </div>
+            <Upload fileList={[]}
+                    action="/xyl/common/picUpload"
+                    onChange={this.handleChange}>
+              <div className={styles.button_view}>
+                <Button icon="upload">
+                  <FormattedMessage id="app.settings.basic.change-avatar" defaultMessage="Change avatar" />
+                </Button>
+              </div>
+            </Upload>
         </div>
       </div>
     );

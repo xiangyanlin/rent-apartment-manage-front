@@ -486,7 +486,7 @@ export default [
           {
             path: '/account/settings',
             name: 'settings',
-            component: './Account/Settings/Info',
+            component: './Account/Settings/FrontInfo',
             routes: [
               {
                 path: '/account/settings',
@@ -497,7 +497,7 @@ export default [
                 component: './Account/Settings/BaseView',
               },
               {
-                path: '/admin/account/settings/security',
+                path: '/account/settings/security',
                 component: './Account/Settings/SecurityView',
               },
               {

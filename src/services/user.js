@@ -25,3 +25,11 @@ export async function userRegister(params) {
   });
 }
 
+//修改用户信息
+export async function updateUser(params) {
+  return request('/xyl/user/update', {
+    method: 'PUT',
+    body: params,
+  });
+}
+

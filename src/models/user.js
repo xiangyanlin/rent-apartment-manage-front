@@ -1,4 +1,4 @@
-import { query as queryUsers, queryCurrent } from '@/services/user';
+import { query as queryUsers, queryCurrent,updateUser } from '@/services/user';
 
 export default {
   namespace: 'user',
@@ -24,6 +24,11 @@ export default {
         type: 'saveCurrentUser',
         payload: response.data,
       });
+    },
+    //修改用户信息
+    *updateHouseForm({ payload }, { call }) {
+      yield call(updateUser, payload);
+      message.success('提交成功');
     },
   },
 
