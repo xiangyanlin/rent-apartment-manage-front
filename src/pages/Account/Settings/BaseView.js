@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { formatMessage, FormattedMessage } from 'umi/locale';
-import { Form, Input, Upload, Select, Button } from 'antd';
+import { Form, Input, Upload, Select, Button,Radio } from 'antd';
 import { connect } from 'dva';
 import styles from './BaseView.less';
 import GeographicView from './GeographicView';
@@ -30,23 +30,25 @@ const validatorGeographic = (rule, value, callback) => {
 };
 
 const validatorPhone = (rule, value, callback) => {
-  const values = value.split('-');
-  if (!values[0]) {
+  // const values = value.split('-');
+  if (!value) {
     callback('Please input your area code!');
   }
-  if (!values[1]) {
-    callback('Please input your phone number!');
-  }
+  // if (!values[1]) {
+  //   callback('Please input your phone number!');
+  // }
   callback();
 };
 
-@connect(({ user }) => ({
-  currentUser: user.currentUser,
+@connect(({ loading,user }) => ({
+  currentUser:user.currentUser,
+  submitting: loading.effects['user/submitRegularForm'],
 }))
 @Form.create()
 class BaseView extends Component {
   state = {
     file: {  },
+ 
 };
   componentDidMount() {
     this.setBaseInfo();
@@ -64,7 +66,7 @@ class BaseView extends Component {
   getAvatarURL() {
     const { currentUser } = this.props;
     if (currentUser.avatar) {
-      return currentUser.avatar;
+      return "http://127.0.0.1:8080/common/getImage?filename="+currentUser.avatar;
     }
     return avatar;
   }
@@ -72,17 +74,53 @@ class BaseView extends Component {
   getViewDom = ref => {
     this.view = ref;
   };
+  handleFile = (obj)=>{
+    let pics= "";
+
+       if(obj.response){
+        pics =obj.response.name;
+          }
+      
+       this.setState({
+        pics : pics
+      })
+    }
 
   
   handleChange = ( file) => {
     this.setState( file );
-    this.props.handleFileList(this.state.file);
-    document.getElementById('avatar').src='src地址'+'?'+new Date().getTime();
+    this.handleFile(this.state.file);
+    console.log(this.state.pics);
+    document.getElementById('avatar').src="http://127.0.0.1:8080/common/getImage?filename="+this.state.pics;
   }
 
+  handleSubmit = e => {
+    const { dispatch, form ,currentUser} = this.props;
+    e.preventDefault();
+    form.validateFieldsAndScroll((err, values) => {
+        if (!err) {
+          if(values.facilities){
+            values.facilities = values.facilities.join(",");
+          }
+         values.id=currentUser.id;
+
+          // 处理图片
+          values.avatar = this.state.pics;
+
+          dispatch({
+                type: 'user/updateUserForm',
+                payload: values,
+            });
+
+        }
+    });
+};
+
   render() {
+    const { file } = this.state;
     const {
       form: { getFieldDecorator },
+      submitting,
     } = this.props;
     return (
       <div className={styles.baseView} ref={this.getViewDom}>
@@ -172,12 +210,34 @@ class BaseView extends Component {
               })
               (<Input />)}
             </FormItem>
-            <Button type="primary">
+            <FormItem label={formatMessage({ id: 'app.settings.basic.sex' })}>
+              {getFieldDecorator('sex')
+              (      <Radio.Group >
+                      <Radio value={0}>未知</Radio>
+                      <Radio value={1}>男</Radio>
+                      <Radio value={2}>女</Radio>
+                    </Radio.Group>)}
+            </FormItem>
+            <FormItem label={formatMessage({ id: 'app.settings.basic.profession' })}>
+              {getFieldDecorator('profession')
+              (<Input />)}
+            </FormItem>
+            <FormItem label={formatMessage({ id: 'app.settings.basic.education' })}>
+              {getFieldDecorator('education')
+              (<Input />)}
+            </FormItem>
+            {/* <FormItem >
+              {getFieldDecorator('pic')
+              (<Input  type="hidden" value={this.state.pics}/>)}
+            </FormItem> */}
+            <FormItem style={{ marginTop: 32 }}>
+            <Button type="primary" htmlType="submit" loading={submitting}>
               <FormattedMessage
                 id="app.settings.basic.update"
                 defaultMessage="Update Information"
               />
             </Button>
+            </FormItem>
           </Form>
         </div>
         {/* <FormItem {...formItemLayout} label="上传室内图">
@@ -187,7 +247,7 @@ class BaseView extends Component {
             <div className={styles.avatar}>
               <img id="avatar" src={this.getAvatarURL()} alt="avatar" />
             </div>
-            <Upload fileList={[]}
+            <Upload file={file}
                     action="/xyl/common/picUpload"
                     onChange={this.handleChange}>
               <div className={styles.button_view}>

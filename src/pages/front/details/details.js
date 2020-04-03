@@ -94,7 +94,7 @@ class Details extends PureComponent {
                 <span
                   style={{
                     fontSize: '40px',
-                    fontWight: '700',
+                    fontWeight: '700',
                     marginRight: '4px',
                     lineHeight: '56px',
                   }}

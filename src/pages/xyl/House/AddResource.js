@@ -28,7 +28,6 @@ const CheckboxGroup = Checkbox.Group;
 
 
 
-
 @connect(
   ({ loading,estate}) => ({
     submitting: loading.effects['form/submitRegularForm'],

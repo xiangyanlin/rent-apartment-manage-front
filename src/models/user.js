@@ -26,7 +26,7 @@ export default {
       });
     },
     //修改用户信息
-    *updateHouseForm({ payload }, { call }) {
+    *updateUserForm({ payload }, { call }) {
       yield call(updateUser, payload);
       message.success('提交成功');
     },
