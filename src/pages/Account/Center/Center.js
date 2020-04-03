@@ -5,7 +5,7 @@ import router from 'umi/router';
 import { Card, Row, Col, Icon, Avatar, Tag, Divider, Spin, Input } from 'antd';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import styles from './Center.less';
-
+import avatar from '../../../assets/avatar.png';
 @connect(({ loading, user, project }) => ({
   listLoading: loading.effects['list/fetch'],
   currentUser: user.currentUser,
@@ -24,6 +24,9 @@ class Center extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'user/fetchCurrent',
+      payload: {
+        userName: window.localStorage.getItem('currentUser'),
+      },
     });
     dispatch({
       type: 'list/fetch',
@@ -127,11 +130,11 @@ class Center extends PureComponent {
               {currentUser && Object.keys(currentUser).length ? (
                 <div>
                   <div className={styles.avatarHolder}>
-                    <img alt="" src={currentUser.avatar} />
-                    <div className={styles.name}>{currentUser.name}</div>
+                    <img alt="" src={currentUser.avatar?currentUser.avatar:avatar} />
+                    <div className={styles.name}>{currentUser.userName}</div>
                     <div>{currentUser.signature}</div>
                   </div>
-                  <div className={styles.detail}>
+                  {/* <div className={styles.detail}>
                     <p>
                       <i className={styles.title} />
                       {currentUser.title}
@@ -145,9 +148,9 @@ class Center extends PureComponent {
                       {currentUser.geographic.province.label}
                       {currentUser.geographic.city.label}
                     </p>
-                  </div>
+                  </div> */}
                   <Divider dashed />
-                  <div className={styles.tags}>
+                  {/* <div className={styles.tags}>
                     <div className={styles.tagsTitle}>标签</div>
                     {currentUser.tags.concat(newTags).map(item => (
                       <Tag key={item.key}>{item.label}</Tag>
@@ -172,9 +175,9 @@ class Center extends PureComponent {
                         <Icon type="plus" />
                       </Tag>
                     )}
-                  </div>
+                  </div> */}
                   <Divider style={{ marginTop: 16 }} dashed />
-                  <div className={styles.team}>
+                  {/* <div className={styles.team}>
                     <div className={styles.teamTitle}>团队</div>
                     <Spin spinning={projectLoading}>
                       <Row gutter={36}>
@@ -188,7 +191,7 @@ class Center extends PureComponent {
                         ))}
                       </Row>
                     </Spin>
-                  </div>
+                  </div> */}
                 </div>
               ) : (
                 'loading...'
