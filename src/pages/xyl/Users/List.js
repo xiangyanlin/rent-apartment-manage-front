@@ -72,6 +72,9 @@ class User extends PureComponent {
     {
       title: '学历',
       dataIndex: 'education',
+      render:(text,record,index)=>{
+        return this.convertEaducation(record);     
+      }
     },
     {
         title: '是否认证',
@@ -125,6 +128,24 @@ convertOwner=(record)=>{
   } 
   else {
     return "否";
+  }
+} 
+//学历
+convertEaducation=(record)=>{
+  if (record.education =='1'){
+    return "专科以下";
+  } 
+  else if (record.education =='2'){
+    return "专科";
+  }
+  else if (record.education =='3'){
+    return "本科";
+  }
+  else if (record.education =='4'){
+    return "研究生";
+  }
+  else if (record.education =='5'){
+    return "研究生以上";
   }
 }   
   componentDidMount() { //当组件挂载完成后执行加载数据

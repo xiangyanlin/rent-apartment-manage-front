@@ -213,9 +213,9 @@ class BaseView extends Component {
             <FormItem label={formatMessage({ id: 'app.settings.basic.sex' })}>
               {getFieldDecorator('sex')
               (      <Radio.Group >
-                      <Radio value={0}>未知</Radio>
-                      <Radio value={1}>男</Radio>
-                      <Radio value={2}>女</Radio>
+                      <Radio value={"0"}>未知</Radio>
+                      <Radio value={"1"}>男</Radio>
+                      <Radio value={"2"}>女</Radio>
                     </Radio.Group>)}
             </FormItem>
             <FormItem label={formatMessage({ id: 'app.settings.basic.profession' })}>
@@ -224,7 +224,13 @@ class BaseView extends Component {
             </FormItem>
             <FormItem label={formatMessage({ id: 'app.settings.basic.education' })}>
               {getFieldDecorator('education')
-              (<Input />)}
+              (<Select  defaultValue="3" style={{ width: 120 }} >
+                <Option value="1">专科以下</Option>
+                <Option value="2">专科</Option>
+                <Option value="3">本科</Option>
+                <Option value="4">研究生</Option>
+                <Option value="5">研究生以上</Option>
+              </Select>)}
             </FormItem>
             {/* <FormItem >
               {getFieldDecorator('pic')

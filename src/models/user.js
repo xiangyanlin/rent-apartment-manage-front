@@ -1,5 +1,5 @@
 import { query as queryUsers, queryCurrent,updateUser } from '@/services/user';
-
+import { message } from 'antd';
 export default {
   namespace: 'user',
 
@@ -28,7 +28,7 @@ export default {
     //修改用户信息
     *updateUserForm({ payload }, { call }) {
       yield call(updateUser, payload);
-      message.success('提交成功');
+      message.success('修改成功');
     },
   },
 
