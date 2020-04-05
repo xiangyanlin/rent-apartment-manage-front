@@ -408,7 +408,7 @@ export default [
       },
     ],
   },
-    //前台
+  //前台
   {
     path: '/',
     component: '../layouts/FrontLayout',
@@ -417,26 +417,26 @@ export default [
       {
         path: '/list/search',
         name: 'searchlist',
-        component: './front/List',
+        component: './front/list/List',
         routes: [
           {
             path: '/list/search',
             redirect: '/list/search/projects',
-          },    
+          },
           {
             path: '/list/search/projects',
             name: 'projects',
-            component: './front/Projects',
+            component: './front/list/Projects',
           },
           {
             path: '/list/search/applications',
             name: 'applications',
-            component: './front/Applications',
+            component: './front/list/Applications',
           },
           {
             path: '/list/search/articles',
             name: 'articles',
-            component: './front/Articles',
+            component: './front/list/Articles',
           },
         ],
       },
@@ -445,14 +445,14 @@ export default [
         path: '/details',
         name: 'details',
         component: './front/details/top',
-        routes:[
+        routes: [
           { path: '/details', redirect: '/details/house' },
           {
             path: '/details/house',
             name: 'details',
             component: './front/details/details',
-          }
-        ]   
+          },
+        ],
       },
       //个人中心
       {

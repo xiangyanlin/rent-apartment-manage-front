@@ -19,16 +19,15 @@ class SearchList extends Component {
         router.push(`${match.url}/articles`);
         break;
 
-
       default:
         break;
     }
-  }
+  };
 
-  handleFormSubmit = (value) => {
+  handleFormSubmit = value => {
     // eslint-disable-next-line
     console.log(value);
-  }
+  };
 
   render() {
     const tabList = [
