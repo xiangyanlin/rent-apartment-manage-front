@@ -409,11 +409,17 @@ export default [
     ],
   },
   //前台
+  { 
+    path: '/home',
+    name: 'home',
+    component: './front/home',
+  },
   {
     path: '/',
     component: '../layouts/FrontLayout',
     routes: [
-      { path: '/', redirect: '/list/search/projects' },
+       { path: '/', redirect: '/home' },
+     
       {
         path: '/list/search',
         name: 'searchlist',

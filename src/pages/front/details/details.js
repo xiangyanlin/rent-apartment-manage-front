@@ -125,7 +125,7 @@ class Details extends PureComponent {
         </div>
         <Divider />
         <div className={styles.info}>
-          <h3 style={{ fontSize: '24px', fontWight: '700' }}>房屋信息</h3>
+          <h3 style={{ fontSize: '24px',fontWeight: '700' }}>房屋信息</h3>
           <div>
             <span style={{ fontSize: '18px', color: 'rgba(48,48,51,.6)' }}>基本信息</span>
             <div style={{ margin: '20px', float: 'center', fontSize: '17px' }}>
