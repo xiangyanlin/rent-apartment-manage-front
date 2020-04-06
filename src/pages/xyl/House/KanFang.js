@@ -35,7 +35,7 @@ class KanFang extends PureComponent {
     },
     {
       title: '租客姓名',
-      dataIndex: 'tenantName',
+      dataIndex: 'tenant_name',
     },
     {
       title: '租客电话',
@@ -43,7 +43,7 @@ class KanFang extends PureComponent {
     },
     {
       title: '项目/小区',
-      dataIndex: 'village',
+      dataIndex: 'estateName',
     },
     {
       title: '请求时间',
@@ -89,7 +89,7 @@ class KanFang extends PureComponent {
     //当组件挂载完成后执行加载数据
     const { dispatch } = this.props;
     dispatch({
-      type: 'vistRequset/fetch',
+      type: 'vistRequset/requestList',
     });
   }
 

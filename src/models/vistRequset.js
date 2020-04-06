@@ -1,5 +1,5 @@
 import { routerRedux } from 'dva/router';
-import { queryVistRequest ,addVistRequest} from '@/services/vistRequest';
+import { queryVistRequest ,queryRequestList,addVistRequest} from '@/services/vistRequest';
 import { message } from 'antd';
 export default {
   namespace: 'vistRequset',
@@ -14,6 +14,13 @@ export default {
   effects: {
     *fetch({ payload }, { call, put }) {
         const response = yield call(queryVistRequest, payload);
+        yield put({
+          type: 'save',
+          payload: response,
+        });
+      },
+      *requestList({ payload }, { call, put }) {
+        const response = yield call(queryRequestList, payload);
         yield put({
           type: 'save',
           payload: response,
