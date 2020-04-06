@@ -1,6 +1,6 @@
 import { routerRedux } from 'dva/router';
-import { queryVistRequest } from '@/services/vistRequest';
-
+import { queryVistRequest ,addVistRequest} from '@/services/vistRequest';
+import { message } from 'antd';
 export default {
   namespace: 'vistRequset',
   
@@ -18,7 +18,11 @@ export default {
           type: 'save',
           payload: response,
         });
-      }
+      },
+      *submitVistForm({ payload }, { call }) {
+        yield call(addVistRequest, payload);
+        message.success('提交成功');
+      },
   },
 
   reducers: {

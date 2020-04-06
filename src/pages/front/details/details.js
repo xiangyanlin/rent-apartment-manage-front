@@ -3,10 +3,11 @@ import { connect } from 'dva';
 import { Button, Carousel, Divider, Checkbox, Row, Col } from 'antd';
 import moment from 'moment';
 import styles from './Details.less';
-
+import OrderVist from './OrderVist';
 const CheckboxGroup = Checkbox.Group;
 
-@connect(({ houseResource, loading }) => ({
+@connect(({user, houseResource, loading }) => ({
+  currentUser:user.currentUser,
   houseResource,
   loading: loading.models.houseResource,
 }))
@@ -57,11 +58,10 @@ class Details extends PureComponent {
             <p>{data.title}</p>
           </div>
           <div className={styles.subtitle}>
+          
             <span>
               维护时间：
-              {moment(new Date())
-                .subtract(1, 'days')
-                .format('YYYY-MM-DD')}
+              <span>{moment(data.updated).format('YYYY-MM-DD HH:mm:ss')}</span>
             </span>
             <span className={styles.number}>官方投诉电话：13627441292</span>
 
@@ -118,8 +118,13 @@ class Details extends PureComponent {
                   <span>{data.orientation}</span>
                 </p>
               </div>
-              <Divider>text</Divider>
-              <div>3</div>
+              <Divider></Divider>
+              <div>
+                <span>看房时间&nbsp;:&nbsp;{this.coverTime(data.time)}</span>
+                  <div>
+                  <OrderVist  data={data} />
+                  </div>
+              </div>
             </div>
           </div>
         </div>

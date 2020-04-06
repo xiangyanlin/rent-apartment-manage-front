@@ -30,7 +30,7 @@ const CheckboxGroup = Checkbox.Group;
 
 @connect(
   ({ loading,estate}) => ({
-    submitting: loading.effects['form/submitRegularForm'],
+    submitting: loading.effects['form/submitHouseForm'],
     estate,
     loading: loading.models.estate,
 }))
