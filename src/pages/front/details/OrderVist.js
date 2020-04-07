@@ -1,7 +1,7 @@
 import React from 'react';
 import {Checkbox, Form, Input, Modal,DatePicker } from "antd";
 import {connect} from "dva";
-import moment from 'moment';
+import LoginModal from "../LoginModal";
 
 const FormItem = Form.Item;
 const InputGroup = Input.Group;
@@ -32,9 +32,25 @@ class OrderVist extends React.Component{
 
     this.state={
       visible:false,
-      pics:new Set()
+      pics:new Set(),
+      login:false,
     };
 
+  }
+  isLogin=()=>{
+    const userName=window.localStorage.getItem("currentUser");
+    //console.log(userName);
+    if(userName==null){
+      this.showLoginModal();
+    }else{
+      this.showModal();
+    }
+  }
+
+  showLoginModal=()=>{
+      this.setState({
+        login: true
+      });
   }
 
   showModal = () => {
@@ -49,11 +65,18 @@ class OrderVist extends React.Component{
     });
   };
 
+  handleCancelLogin = () => {
+    this.setState({
+      login: false,
+    });
+  };
+
 
 handleSave = () => {
 
   const { dispatch, form, currentUser,data} = this.props;
   form.validateFieldsAndScroll((err, values) => {
+    console.log(values);
     //
     if (!err) {
 
@@ -75,21 +98,7 @@ handleSave = () => {
 
 };
 
-  handleFileList = (obj)=>{
-    let pics = new Set();
-    obj.forEach((v, k) => {
-      if(v.response){
-        pics.add(v.response.name);
-      }
-      if(v.url){
-        pics.add(v.url);
-      }
-    });
 
-    this.setState({
-      pics : pics
-    })
-  }
 
   render(){
 
@@ -100,7 +109,8 @@ handleSave = () => {
 
     return (
       <React.Fragment>
-        <a onClick={() => {this.showModal()}}>预约看房</a>
+        <a onClick={() => {this.isLogin()}}>预约看房</a>
+        <LoginModal handleCancelLogin={this.handleCancelLogin}visible={this.state.login}/>
         <Modal
           title={'填写信息'}
           width={640}
@@ -123,11 +133,13 @@ handleSave = () => {
               </FormItem> */}
               <FormItem {...formItemLayout} label="看房时间">
                 <InputGroup compact>
-                  {getFieldDecorator('vistTime',{rules:[{ required: true, message:"此项为必填项" }]})(<DatePicker showTime  />)}
+                  {getFieldDecorator('vistTime',{rules:[{ required: true, message:"此项为必填项" }]})
+                  (<DatePicker showTime  />)}
                 </InputGroup>
               </FormItem>
               <FormItem {...formItemLayout} label="备注信息">
-                {getFieldDecorator('remark')(<TextArea placeholder="请输入备注信息" autosize={{ minRows: 4, maxRows: 10 }} />)}
+                {getFieldDecorator('remark')
+                (<TextArea placeholder="请输入备注信息"  />)}
               </FormItem>
             </Form>
           </div>

@@ -46,7 +46,7 @@ class Details extends PureComponent {
   };
 
   render() {
-    //console.log(this.props.location.query);
+    //console.log(this.props.houseResource);
     const { loading } = this.props;
     const { data } = this.props.houseResource;
     //console.log(pic);
@@ -54,7 +54,6 @@ class Details extends PureComponent {
       <div>
         <div>
           <div className={styles.title}>
-            {' '}
             <p>{data.title}</p>
           </div>
           <div className={styles.subtitle}>
@@ -121,7 +120,7 @@ class Details extends PureComponent {
               <Divider></Divider>
               <div>
                 <span>看房时间&nbsp;:&nbsp;{this.coverTime(data.time)}</span>
-                  <div>
+                  <div style={{marginTop:"8px"}}>
                   <OrderVist  data={data} />
                   </div>
               </div>
@@ -186,7 +185,7 @@ class Details extends PureComponent {
                   { label: '车位/车库', value: '8' },
                   { label: '地下室/储藏室', value: '9' },
                 ]}
-                value={data.facilities}
+                value={data.facilities?data.facilities.split(','):data.facilities}
                 disabled
               />
             </div>

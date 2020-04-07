@@ -41,6 +41,19 @@ export default {
         yield put(routerRedux.replace(redirect || '/'));
       }
     },
+    //弹框登录
+    *frontLogin({ payload }, { call, put }) {
+      const response = yield call(userLogin, payload);
+      yield put({
+        type: 'changeLoginStatus',
+        payload: response,
+      });
+      // Login successfully
+      if (response.data.status === 'ok') {
+        window.localStorage.setItem("currentUser",response.data.currentUser);
+        reloadAuthorized();
+      }
+    },
     //手机号码登录
     // *getCaptcha({ payload }, { call }) {
     //   yield call(getFakeCaptcha, payload);
