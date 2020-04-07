@@ -5,6 +5,8 @@ import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 import { reloadAuthorized } from '@/utils/Authorized';
 import { userLogin } from '@/services/user';
+
+
 export default {
   namespace: 'login',
 
@@ -23,22 +25,31 @@ export default {
       if (response.data.status === 'ok') {
         window.localStorage.setItem("currentUser",response.data.currentUser);
         reloadAuthorized();
-        const urlParams = new URL(window.location.href);
-        const params = getPageQuery();
-        let { redirect } = params;
-        if (redirect) {
-          const redirectUrlParams = new URL(redirect);
-          if (redirectUrlParams.origin === urlParams.origin) {
-            redirect = redirect.substr(urlParams.origin.length);
-            if (redirect.startsWith('/#')) {
-              redirect = redirect.substr(2);
+        const p=window.localStorage.getItem("antd-pro-authority");
+        const au=JSON.parse(p);
+        if (au.length==1&&au[0]=="admin")
+        {
+          window.location.href="/admin";
+        }else{
+          const urlParams = new URL(window.location.href);
+          const params = getPageQuery();
+          let { redirect } = params;
+          if (redirect) {
+            const redirectUrlParams = new URL(redirect);
+            if (redirectUrlParams.origin === urlParams.origin) {
+              redirect = redirect.substr(urlParams.origin.length);
+              if (redirect.startsWith('/#')) {
+                redirect = redirect.substr(2);
+              }
+            } else {
+              window.location.href = redirect;
+              return;
             }
-          } else {
-            window.location.href = redirect;
-            return;
           }
+          yield put(routerRedux.replace(redirect || '/'));
         }
-        yield put(routerRedux.replace(redirect || '/'));
+        
+       
       }
     },
     //弹框登录
