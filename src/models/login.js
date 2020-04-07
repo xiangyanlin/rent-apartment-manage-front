@@ -42,7 +42,7 @@ export default {
       }
     },
     //弹框登录
-    *frontLogin({ payload }, { call, put }) {
+    *frontLogin({ payload ,callback}, { call, put }) {
       const response = yield call(userLogin, payload);
       yield put({
         type: 'changeLoginStatus',
@@ -52,6 +52,9 @@ export default {
       if (response.data.status === 'ok') {
         window.localStorage.setItem("currentUser",response.data.currentUser);
         reloadAuthorized();
+        if (callback && typeof callback == 'function') {
+          callback(response); // 返回结果
+        }
       }
     },
     //手机号码登录

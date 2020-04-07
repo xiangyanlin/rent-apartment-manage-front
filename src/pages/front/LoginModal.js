@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Button, Carousel, Form, Input } from 'antd';
+import { Modal, Button, Carousel, Form, Input,message } from 'antd';
 import { connect } from "dva";
 import { formatMessage, FormattedMessage } from 'umi/locale';
 
@@ -39,8 +39,7 @@ class LoginModal extends React.Component {
   handleSubmit = e => {
     const { dispatch, form } = this.props;
     e.preventDefault();
-    console.log(this)
-    this.setState({ visible: false })
+  
     form.validateFieldsAndScroll((err, values) => {
         if (!err) {
           
@@ -49,15 +48,17 @@ class LoginModal extends React.Component {
             payload: {
               ...values,
             },
-            callback: () => {
-              this.setState({
-                visible: false,
-              });
+            callback: res => {
+              console.log(res); // 请求完成后返回的结果
+              if (res.code == 200) {
+                message.success('登录成功');
+                window.location.reload();
+              }
             },
           });
         }
     });
-    
+    this.setState({ visible: false })
 };
 
   handleCancel = () => {
@@ -98,7 +99,7 @@ class LoginModal extends React.Component {
                   (<Input />)}
               </FormItem>
               <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
-                  <Button type="primary" htmlType="submit" loading={submitting}>
+                  <Button type="primary" htmlType="submit" loading={submitting} block>
                       <FormattedMessage id="app.login.login" /> 
                   </Button>
               </FormItem>

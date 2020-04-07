@@ -16,7 +16,6 @@ export default {
       yield call(updateHouseResource, payload);
       message.success('提交成功');
     },
-
     *delete({ payload, callback }, { call }) {
       const response = yield call(deleteHouseResource, payload);
       if (response.code === 200) {

@@ -47,12 +47,12 @@ class KanFang extends PureComponent {
     },
     {
       title: '请求时间',
-      dataIndex: 'reuestTime',
+      dataIndex: 'requestTime',
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
       title: '看房时间',
-      dataIndex: 'reuestTime',
+      dataIndex: 'vistTime',
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
