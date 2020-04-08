@@ -66,7 +66,7 @@ class PasswordView extends Component {
       callback();
     }
   };
-  
+
   checkPassword = (rule, value, callback) => {
     const { visible, confirmDirty } = this.state;
     if (!value) {
@@ -96,6 +96,15 @@ class PasswordView extends Component {
     }
   };
 
+  checkOld = (rule, value, callback) => {
+    const { form ,currentUser} = this.props;
+    if (value && value !== currentUser.password) {
+      callback(formatMessage({ id: 'validation.password.old' }));
+    } else {
+      callback();
+    }
+  };
+
   renderPasswordProgress = () => {
     const { form } = this.props;
     const value = form.getFieldValue('password');
@@ -113,6 +122,30 @@ class PasswordView extends Component {
     ) : null;
   };
 
+  
+  handleSubmit = e => {
+    e.preventDefault();
+    const { form, dispatch,currentUser } = this.props;
+    form.validateFields({ force: true }, (err, values) => {
+      if (!err) {
+        //const { prefix } = this.state;
+        values.id=currentUser.id;
+        dispatch({
+          type: 'user/updateUserForm',
+          payload: {
+            ...values,
+          },
+          callback: res => {
+            if (res.code == 200) {
+              window.localStorage.removeItem("currentUser");
+              window.location.href="/user/login";
+            }
+          },
+        });
+      }
+    });
+  };
+
   render() {
     const { form, submitting ,currentUser} = this.props;
     const { getFieldDecorator } = form;
@@ -125,15 +158,17 @@ class PasswordView extends Component {
       <Form onSubmit={this.handleSubmit}>
         {/* userName */}
       <FormItem label="旧密码">
-          {getFieldDecorator('userName', {
+          {getFieldDecorator('old', {
             rules: [
               {
                 required: true,
-                validator: this.checkUserName,
+                validator: this.checkOld,
               },
             ],
           })(
-            <Input size="large" placeholder={formatMessage({ id: 'form.oldPassword.placeholder' })} />
+            <Input size="large"
+                  type="password"
+                  placeholder={formatMessage({ id: 'form.oldPassword.placeholder' })} />
           )}
         </FormItem>
         <FormItem  label="新密码">
@@ -155,7 +190,7 @@ class PasswordView extends Component {
             {getFieldDecorator('password', {
               rules: [
                 {
-                  // required: true,
+                   required: true,
                   validator: this.checkPassword,
                   // message: formatMessage({ id: 'validation.password.required' }),
                 },

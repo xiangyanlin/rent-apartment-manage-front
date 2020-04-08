@@ -9,6 +9,7 @@ export default {
   'validation.email.wrong-format': '邮箱地址格式错误！',
   'validation.password.required': '请输入密码！',
   'validation.password.twice': '两次输入的密码不匹配!',
+  'validation.password.old': '该用户名与密码不符!',
   'validation.password.strength.msg': '请至少输入 6 个字符。请不要使用容易被猜到的密码。',
   'validation.password.strength.strong': '强度：强',
   'validation.password.strength.medium': '强度：中',

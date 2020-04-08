@@ -25,10 +25,17 @@ export default {
         payload: response.data,
       });
     },
+    
     //修改用户信息
-    *updateUserForm({ payload }, { call }) {
-      yield call(updateUser, payload);
-      message.success('修改成功');
+    *updateUserForm({ payload,callback }, { call }) {
+      const response=yield call(updateUser, payload);
+      if (response.code == 200) {
+        message.success('修改成功');
+        if (callback && typeof callback == 'function') {
+          callback(response); // 返回结果
+        }
+      }
+     
     },
   },
 
