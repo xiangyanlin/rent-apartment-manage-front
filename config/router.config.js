@@ -504,7 +504,7 @@ export default [
               },
               {
                 path: '/account/settings/security',
-                component: './Account/Settings/SecurityView',
+                component: './Account/Settings/FrontSecurityView',
               },
               {
                 path: '/account/settings/password',
