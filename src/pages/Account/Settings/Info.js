@@ -12,6 +12,7 @@ const { Item } = Menu;
   currentUser: user.currentUser,
 }))
 class Info extends Component {
+  
   constructor(props) {
     super(props);
     const { match, location } = props;
