@@ -392,8 +392,8 @@ export default [
                 component: './Account/Settings/SecurityView',
               },
               {
-                path: '/admin/account/settings/binding',
-                component: './Account/Settings/BindingView',
+                path: '/admin/account/settings/password',
+                component: './Account/Settings/PasswordView',
               },
               {
                 path: '/admin/account/settings/notification',
@@ -507,8 +507,8 @@ export default [
                 component: './Account/Settings/SecurityView',
               },
               {
-                path: '/account/settings/binding',
-                component: './Account/Settings/BindingView',
+                path: '/account/settings/password',
+                component: './Account/Settings/PasswordView',
               },
               {
                 path: '/account/settings/notification',

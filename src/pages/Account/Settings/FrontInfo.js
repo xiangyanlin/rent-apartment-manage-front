@@ -20,8 +20,8 @@ class Info extends Component {
       security: (
         <FormattedMessage id="app.settings.menuMap.security" defaultMessage="Security Settings" />
       ),
-      binding: (
-        <FormattedMessage id="app.settings.menuMap.binding" defaultMessage="Account Binding" />
+      password: (
+        <FormattedMessage id="app.settings.menuMap.password" defaultMessage="Account Binding" />
       ),
       notification: (
         <FormattedMessage

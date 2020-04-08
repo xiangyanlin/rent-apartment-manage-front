@@ -42,7 +42,7 @@ const validatorPhone = (rule, value, callback) => {
 
 @connect(({ loading,user }) => ({
   currentUser:user.currentUser,
-  submitting: loading.effects['user/submitRegularForm'],
+  submitting: loading.effects['user/updateUserForm'],
 }))
 @Form.create()
 class BaseView extends Component {
