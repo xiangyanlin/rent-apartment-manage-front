@@ -171,7 +171,7 @@ class PasswordView extends Component {
                   placeholder={formatMessage({ id: 'form.oldPassword.placeholder' })} />
           )}
         </FormItem>
-        <FormItem  label="新密码">
+        <FormItem  help={help} label="新密码">
           <Popover
             getPopupContainer={node => node.parentNode}
             content={
