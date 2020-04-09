@@ -23,9 +23,9 @@ class Info extends Component {
       password: (
         <FormattedMessage id="app.settings.menuMap.password" defaultMessage="Account Password" />
       ),
-      notification: (
+      certification: (
         <FormattedMessage
-          id="app.settings.menuMap.notification"
+          id="app.settings.menuMap.certification"
           defaultMessage="New Message Notification"
         />
       ),

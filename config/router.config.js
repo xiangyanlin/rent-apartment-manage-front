@@ -396,8 +396,8 @@ export default [
                 component: './Account/Settings/PasswordView',
               },
               {
-                path: '/admin/account/settings/notification',
-                component: './Account/Settings/NotificationView',
+                path: '/admin/account/settings/certification',
+                component: './Account/Settings/CertificationView',
               },
             ],
           },
@@ -511,8 +511,8 @@ export default [
                 component: './Account/Settings/PasswordView',
               },
               {
-                path: '/account/settings/notification',
-                component: './Account/Settings/NotificationView',
+                path: '/account/settings/certification',
+                component: './Account/Settings/CertificationView',
               },
             ],
           },
