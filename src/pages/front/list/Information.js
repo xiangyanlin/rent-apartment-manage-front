@@ -7,7 +7,7 @@ import StandardFormRow from '@/components/StandardFormRow';
 
 import { formatWan } from '@/utils/utils';
 
-import styles from './Applications.less';
+import styles from './Information.less';
 
 const { Option } = Select;
 const FormItem = Form.Item;

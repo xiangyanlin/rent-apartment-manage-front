@@ -435,9 +435,9 @@ export default [
             component: './front/list/Projects',
           },
           {
-            path: '/list/search/applications',
-            name: 'applications',
-            component: './front/list/Applications',
+            path: '/list/search/information',
+            name: 'information',
+            component: './front/list/Information',
           },
           {
             path: '/list/search/articles',

@@ -12,8 +12,8 @@ class SearchList extends Component {
       case 'projects':
         router.push(`${match.url}/projects`);
         break;
-      case 'applications':
-        router.push(`${match.url}/applications`);
+      case 'information':
+        router.push(`${match.url}/information`);
         break;
       case 'articles':
         router.push(`${match.url}/articles`);
@@ -36,8 +36,8 @@ class SearchList extends Component {
         tab: '出租',
       },
       {
-        key: 'applications',
-        tab: '应用',
+        key: 'information',
+        tab: '资讯',
       },
       {
         key: 'articles',

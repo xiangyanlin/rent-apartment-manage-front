@@ -124,6 +124,7 @@ export default {
   'menu.details.details': '房源详情',
   'menu.details': '详情',
   'menu.searchlist.applications': '搜索列表（应用）',
+  'menu.searchlist.information': '资讯',
   'menu.profile': '详情页',
   'menu.profile.basic': '基础详情页',
   'menu.profile.advanced': '高级详情页',
