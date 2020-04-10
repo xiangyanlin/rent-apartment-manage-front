@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
-import {Input, Form, Card, Select, List, Tag, Icon,  Comment, Tooltip } from 'antd';
+import {Comment,Input, Form, Card, Select, List, Tag, Icon, Tooltip } from 'antd';
 
 import TagSelect from '@/components/TagSelect';
 import StandardFormRow from '@/components/StandardFormRow';
