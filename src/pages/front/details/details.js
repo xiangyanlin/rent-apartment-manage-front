@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Button, Carousel, Divider, Checkbox, Row, Col } from 'antd';
+import { Button, Carousel, Divider, Checkbox, Row, Col ,Card} from 'antd';
 import moment from 'moment';
 import styles from './Details.less';
 import OrderVist from './OrderVist';
@@ -51,6 +51,11 @@ class Details extends PureComponent {
     const { data } = this.props.houseResource;
     //console.log(pic);
     return (
+      <Card
+        style={{ marginTop: 24 }}
+        bordered={false}
+        bodyStyle={{ padding: '8px 32px 32px 32px' }}
+      >
       <div>
         <div>
           <div className={styles.title}>
@@ -192,6 +197,7 @@ class Details extends PureComponent {
           </div>
         </div>
       </div>
+      </Card>
     );
   }
 }

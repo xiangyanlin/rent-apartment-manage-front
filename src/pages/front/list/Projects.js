@@ -334,7 +334,12 @@ class CoverCardList extends PureComponent {
           </Form>
           <div className={styles.tableListForm}>{this.renderForm()}</div>
         </Card>
+        <Card style={{marginTop:"5px"}}
+              className={styles.card}
+              hoverable
+            >
         <div className={styles.cardList}>{cardList}</div>
+        </Card>
         <div className={styles.pagination}>
           <Pagination {...pagination} onChange={this.handleStandardTableChange} />
         </div>
