@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { formatMessage, FormattedMessage } from 'umi/locale';
-import { Form, Input, Upload, Select, Button,Radio } from 'antd';
+import { Form, Input, Upload, Select, Button,Radio ,Avatar } from 'antd';
 import { connect } from 'dva';
 import styles from './BaseView.less';
 import GeographicView from './GeographicView';
@@ -251,7 +251,7 @@ class BaseView extends Component {
         </FormItem> */}
         <div className={styles.right}>
             <div className={styles.avatar}>
-              <img id="avatar" src={this.getAvatarURL()} alt="avatar" />
+              <Avatar size={130} id="avatar" src={this.getAvatarURL()} alt="avatar" />
             </div>
             <Upload file={file}
                     action="/xyl/common/picUpload"
