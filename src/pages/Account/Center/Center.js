@@ -42,11 +42,11 @@ class Center extends PureComponent {
   onTabChange = key => {
     const { match } = this.props;
     switch (key) {
-      case 'articles':
-        router.push(`${match.url}/articles`);
+      case 'myHouse':
+        router.push(`${match.url}/myHouse`);
         break;
-      case 'applications':
-        router.push(`${match.url}/applications`);
+      case 'myRequest':
+        router.push(`${match.url}/myRequest`);
         break;
       case 'projects':
         router.push(`${match.url}/projects`);
@@ -97,18 +97,18 @@ class Center extends PureComponent {
 
     const operationTabList = [
       {
-        key: 'articles',
+        key: 'myHouse',
         tab: (
           <span>
-            文章 <span style={{ fontSize: 14 }}>(8)</span>
+            我的房源 <span style={{ fontSize: 14 }}></span>
           </span>
         ),
       },
       {
-        key: 'applications',
+        key: 'myRequest',
         tab: (
           <span>
-            应用 <span style={{ fontSize: 14 }}>(8)</span>
+            看房请求 <span style={{ fontSize: 14 }}></span>
           </span>
         ),
       },
@@ -116,7 +116,15 @@ class Center extends PureComponent {
         key: 'projects',
         tab: (
           <span>
-            项目 <span style={{ fontSize: 14 }}>(8)</span>
+            发布房源 <span style={{ fontSize: 14 }}></span>
+          </span>
+        ),
+      },
+      {
+        key: 'projects',
+        tab: (
+          <span>
+            新增楼盘 <span style={{ fontSize: 14 }}></span>
           </span>
         ),
       },
@@ -199,16 +207,18 @@ class Center extends PureComponent {
             </Card>
           </Col>
           <Col lg={17} md={24}>
+            {currentUser.role!="2"?
             <Card
-              className={styles.tabsCard}
-              bordered={false}
-              tabList={operationTabList}
-              activeTabKey={location.pathname.replace(`${match.path}/`, '')}
-              onTabChange={this.onTabChange}
-              loading={listLoading}
-            >
-              {children}
-            </Card>
+            className={styles.tabsCard}
+            bordered={false}
+            tabList={operationTabList}
+            activeTabKey={location.pathname.replace(`${match.path}/`, '')}
+            onTabChange={this.onTabChange}
+            loading={listLoading}
+          >
+            {children}
+          </Card>
+          :<div>成为房东</div>}
           </Col>
         </Row>
       </GridContent>

@@ -358,15 +358,15 @@ export default [
             routes: [
               {
                 path: '/admin/account/center',
-                redirect: '/admin/account/center/articles',
+                redirect: '/admin/account/center/myHouse',
               },
               {
-                path: '/admin/account/center/articles',
-                component: './Account/Center/Articles',
+                path: '/admin/account/center/myHouse',
+                component: './Account/Center/MyHouse',
               },
               {
-                path: '/admin/account/center/applications',
-                component: './Account/Center/Applications',
+                path: '/admin/account/center/myRequest',
+                component: './Account/Center/MyRequest',
               },
               {
                 path: '/admin/account/center/projects',
@@ -473,15 +473,15 @@ export default [
             routes: [
               {
                 path: '/account/center',
-                redirect: '/account/center/articles',
+                redirect: '/account/center/myHouse',
               },
               {
-                path: '/account/center/articles',
-                component: './Account/Center/Articles',
+                path: '/account/center/myHouse',
+                component: './Account/Center/MyHouse',
               },
               {
-                path: '/account/center/applications',
-                component: './Account/Center/Applications',
+                path: '/account/center/myRequest',
+                component: './Account/Center/MyRequest',
               },
               {
                 path: '/account/center/projects',
