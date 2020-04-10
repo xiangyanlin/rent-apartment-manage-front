@@ -1,7 +1,7 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent ,Fragment} from 'react';
 import numeral from 'numeral';
 import { connect } from 'dva';
-import {Input,Button, Form, Card, Select, Icon, Avatar, List, Tooltip, Dropdown, Menu } from 'antd';
+import {Input,Button, Form, Card, Select, Icon, Avatar, List, Dropdown, Menu } from 'antd';
 import { formatWan } from '@/utils/utils';
 import styles from './Information.less';
 
@@ -40,51 +40,78 @@ class FilterCardList extends PureComponent {
 
   render() {
     const { list, pagination } = this.props.news.data;
+    const {    loading,   form, } = this.props;
+    const { getFieldDecorator } = form;
     
-
     return (
       <div className={styles.filterCardList}>
-       <List
-        itemLayout="vertical"
-        size="large"
-        pagination={{
-          onChange: page => {
-            console.log(page);
-          },
-          pageSize: 3,
-        }}
-        dataSource={list}
-        footer={
-          <div>
-            {/* <b>ant design</b>  */}
-            租房管理系统
-          </div>
-        }
-        renderItem={item => (
-          <List.Item
-            key={item.title}
-            // actions={[
-            //   <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />,
-            //   <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />,
-            //   <IconText icon={MessageOutlined} text="2" key="list-vertical-message" />,
-            // ]}
-            extra={
-              <img
-                width={272}
-                alt="logo"
-                src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
-              />
-            }
-          >
-            <List.Item.Meta
-              // avatar={<Avatar src={item.avatar} />}
-              title={<a href={item.href}>{item.title}</a>}
-              // description={item.description}
+                <Card bordered={false} style={{marginBottom:"5px"}}>
+          <Form layout="inline">
+          <FormItem>
+          {getFieldDecorator('keyWord')(
+            <div style={{ textAlign: 'center' }}>
+            <Input.Search
+              placeholder="请输入"
+              enterButton="搜索"
+              size="large"
+              onSearch={this.handleFormSubmit}
+              style={{ width: 522 }}
             />
-            {item.content}
-          </List.Item>
-        )}
-      />
+          </div>
+            )}
+          </FormItem>
+          </Form>
+        </Card>
+        <Card
+                hoverable
+                bodyStyle={{ paddingBottom: 20 }}
+              >
+        <List
+            itemLayout="vertical"
+            size="large"
+            pagination={{
+              onChange: page => {
+                console.log(page);
+              },
+              pageSize: 3,
+            }}
+            dataSource={list}
+            footer={
+              <div>
+                {/* <b>ant design</b>  */}
+                租房管理系统
+              </div>
+            }
+            renderItem={item => (
+        
+              <List.Item
+                key={item.title}
+                // actions={[
+                //   <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />,
+                //   <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />,
+                //   <IconText icon={MessageOutlined} text="2" key="list-vertical-message" />,
+                // ]}
+                extra={
+                  <img
+                    width={272}
+                    alt="logo"
+                    src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
+                  />
+                }
+              >
+
+                <List.Item.Meta
+                  // avatar={<Avatar src={item.avatar} />}
+                  title={<a href={item.href}>{item.title}</a>}
+                  // description={item.description}
+                />
+                {item.content}
+                
+              </List.Item>
+              
+            )}
+          />
+           </Card>
       </div>
     );
   }
