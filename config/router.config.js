@@ -369,8 +369,12 @@ export default [
                 component: './Account/Center/MyRequest',
               },
               {
-                path: '/admin/account/center/projects',
-                component: './Account/Center/Projects',
+                path: '/admin/account/center/addResource',
+                component: './Account/Center/AddResource',
+              },
+              {
+                path: '/admin/account/center/addEstate',
+                component: './Account/Center/AddEstate',
               },
             ],
           },
@@ -484,8 +488,12 @@ export default [
                 component: './Account/Center/MyRequest',
               },
               {
-                path: '/account/center/projects',
-                component: './Account/Center/Projects',
+                path: '/account/center/addResource',
+                component: './Account/Center/AddResource',
+              },
+              {
+                path: '/account/center/addEstate',
+                component: './Account/Center/AddEstate',
               },
             ],
           },

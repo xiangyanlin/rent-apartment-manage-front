@@ -48,8 +48,11 @@ class Center extends PureComponent {
       case 'myRequest':
         router.push(`${match.url}/myRequest`);
         break;
-      case 'projects':
-        router.push(`${match.url}/projects`);
+      case 'addResource':
+        router.push(`${match.url}/addResource`);
+        break;
+      case 'addEstate':
+        router.push(`${match.url}/addEstate`);
         break;
       default:
         break;
@@ -113,7 +116,7 @@ class Center extends PureComponent {
         ),
       },
       {
-        key: 'projects',
+        key: 'addResource',
         tab: (
           <span>
             发布房源 <span style={{ fontSize: 14 }}></span>
@@ -121,7 +124,7 @@ class Center extends PureComponent {
         ),
       },
       {
-        key: 'projects',
+        key: 'addEstate',
         tab: (
           <span>
             新增楼盘 <span style={{ fontSize: 14 }}></span>
