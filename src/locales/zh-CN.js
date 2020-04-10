@@ -120,6 +120,7 @@ export default {
   'menu.list.searchlist.projects': '搜索列表（项目）',
   'menu.list.searchlist.applications': '搜索列表（应用）',
   'menu.searchlist.articles': '搜索列表（文章）',
+  'menu.searchlist.question': '问答',
   'menu.searchlist.projects': '租房列表',
   'menu.details.details': '房源详情',
   'menu.details': '详情',

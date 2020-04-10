@@ -15,8 +15,8 @@ class SearchList extends Component {
       case 'information':
         router.push(`${match.url}/information`);
         break;
-      case 'articles':
-        router.push(`${match.url}/articles`);
+      case 'question':
+        router.push(`${match.url}/question`);
         break;
 
       default:
@@ -40,8 +40,8 @@ class SearchList extends Component {
         tab: '资讯',
       },
       {
-        key: 'articles',
-        tab: '文章',
+        key: 'question',
+        tab: '问答',
       },
     ];
 

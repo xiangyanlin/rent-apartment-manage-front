@@ -224,7 +224,7 @@ class BaseView extends Component {
             </FormItem>
             <FormItem label={formatMessage({ id: 'app.settings.basic.education' })}>
               {getFieldDecorator('education')
-              (<Select  defaultValue="3" style={{ width: 120 }} >
+              (<Select  style={{ width: 120 }} >
                 <Option value="1">专科以下</Option>
                 <Option value="2">专科</Option>
                 <Option value="3">本科</Option>

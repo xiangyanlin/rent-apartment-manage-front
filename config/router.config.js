@@ -440,9 +440,9 @@ export default [
             component: './front/list/Information',
           },
           {
-            path: '/list/search/articles',
-            name: 'articles',
-            component: './front/list/Articles',
+            path: '/list/search/question',
+            name: 'question',
+            component: './front/list/Question',
           },
         ],
       },
