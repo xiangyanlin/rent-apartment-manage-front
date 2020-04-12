@@ -83,6 +83,7 @@ handleSave = () => {
       values.tenantName=currentUser.realName;
       values.mobile=currentUser.mobile;
       values.estateId=data.estateId;
+      values.ownerId=data.ownerId;
       values.requestTime= new Date();
       values.status="2";
       dispatch({
