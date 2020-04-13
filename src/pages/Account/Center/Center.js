@@ -85,6 +85,35 @@ class Center extends PureComponent {
     });
   };
 
+    // 数字转文字
+  //性别
+  convertSex=(sex)=>{
+    if (sex =='0'){
+      return "未知";
+    } 
+    else if (sex=='1'){
+      return "男";
+    } 
+    else if (sex=='2'){
+      return "女";
+    }  
+  }  
+  covertProfession=(profession)=>{
+    if (profession =='1'){
+      return "大专以下";
+    } 
+    else if (profession=='2'){
+      return "大专";
+    } 
+    else if (profession=='3'){
+      return "本科";
+    }  else if (profession=='4'){
+      return "研究生";
+    } else if (profession=='5'){
+      return "研究生以上";
+    } 
+  }
+
   render() {
     const { newTags, inputVisible, inputValue } = this.state;
     const {
@@ -145,64 +174,49 @@ class Center extends PureComponent {
                     <div className={styles.name}>{currentUser.userName}</div>
                     <div>{currentUser.signature}</div>
                   </div>
-                  {/* <div className={styles.detail}>
+                  <div >
                     <p>
-                      <i className={styles.title} />
-                      {currentUser.title}
+                      <Icon type="message" />
+                      基本信息
                     </p>
                     <p>
-                      <i className={styles.group} />
-                      {currentUser.group}
+                      <Icon type="usergroup-delete" />
+                       性别：{this.convertSex(currentUser.sex)}
                     </p>
                     <p>
-                      <i className={styles.address} />
-                      {currentUser.geographic.province.label}
-                      {currentUser.geographic.city.label}
+                      <Icon type="bulb" />
+                      学历：{this.covertProfession(currentUser.education)}
+                      </p>
+                      <p>
+                      <Icon type="robot" />
+                      职业：{currentUser.profession}
                     </p>
-                  </div> */}
+                  </div>
                   <Divider dashed />
-                  {/* <div className={styles.tags}>
-                    <div className={styles.tagsTitle}>标签</div>
-                    {currentUser.tags.concat(newTags).map(item => (
-                      <Tag key={item.key}>{item.label}</Tag>
-                    ))}
-                    {inputVisible && (
-                      <Input
-                        ref={this.saveInputRef}
-                        type="text"
-                        size="small"
-                        style={{ width: 78 }}
-                        value={inputValue}
-                        onChange={this.handleInputChange}
-                        onBlur={this.handleInputConfirm}
-                        onPressEnter={this.handleInputConfirm}
-                      />
-                    )}
-                    {!inputVisible && (
-                      <Tag
-                        onClick={this.showInput}
-                        style={{ background: '#fff', borderStyle: 'dashed' }}
-                      >
-                        <Icon type="plus" />
-                      </Tag>
-                    )}
-                  </div> */}
+                  <div className={styles.tags}>
+                    <div className={styles.tagsTitle}>
+                    <Icon type="safety" />
+                      安全信息
+                    </div>
+                    
+                    <p>
+                    <Icon type="notification" />
+                       邮箱：{currentUser.email}
+                    </p>
+                    <p>
+                    <Icon type="mobile" />
+                      手机：{currentUser.mobile}
+                      </p>
+                      <p>
+                      <Icon type="barcode" />
+                      真名：{currentUser.realName}
+                    </p>
+                  </div>
                   <Divider style={{ marginTop: 16 }} dashed />
-                  {/* <div className={styles.team}>
-                    <div className={styles.teamTitle}>团队</div>
-                    <Spin spinning={projectLoading}>
-                      <Row gutter={36}>
-                        {notice.map(item => (
-                          <Col key={item.id} lg={24} xl={12}>
-                            <Link to={item.href}>
-                              <Avatar size="small" src={item.logo} />
-                              {item.member}
-                            </Link>
-                          </Col>
-                        ))}
-                      </Row>
-                    </Spin>
-                  </div> */}
+                  <div className={styles.team}>
+                    <div className={styles.teamTitle}>可在个人设置出修改个人信息</div>
+                    
+                  </div>
                 </div>
               ) : (
                 'loading...'

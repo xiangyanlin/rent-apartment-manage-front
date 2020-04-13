@@ -64,9 +64,9 @@ class Center extends PureComponent {
       title: '操作',
       render: (text, record) => (
         <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>查看详情</a>
+          <a onClick={() => this.handleUpdateModalVisible(true, record)}>同意看房</a>
           <Divider type="vertical" />
-          <a href="">订阅警报</a>
+          <a href="">拒绝看房</a>
         </Fragment>
       ),
     },
