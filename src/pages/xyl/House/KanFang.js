@@ -82,6 +82,8 @@ class KanFang extends PureComponent {
       return '带看房';
     } else if (record.status == '4') {
       return '已取消';
+    }else if (record.status == '5') {
+      return '已拒绝';
     }
   };
 

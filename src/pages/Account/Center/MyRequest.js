@@ -1,7 +1,7 @@
 import React, { PureComponent ,Fragment} from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Card, Form, Select, Divider } from 'antd';
+import { Card, Form, Select, Divider ,message} from 'antd';
 import StandardTable from '@/components/StandardTable';
 import styles from '../../xyl/TableList.less';
 
@@ -14,6 +14,7 @@ const getValue = obj =>
   currentUser:user.currentUser,
   vistRequset,
   loading: loading.models.vistRequset,
+  submitting: loading.effects['vistRequset/updateVistRequestForm'],
 }))
 @Form.create()
 class Center extends PureComponent {
@@ -45,12 +46,12 @@ class Center extends PureComponent {
     },
     {
       title: '请求时间',
-      dataIndex: 'requestTime',
+      dataIndex: 'request_time',
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
       title: '看房时间',
-      dataIndex: 'vistTime',
+      dataIndex: 'vist_time',
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
@@ -63,11 +64,13 @@ class Center extends PureComponent {
     {
       title: '操作',
       render: (text, record) => (
+        record.status=="2"?
         <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>同意看房</a>
+          <a onClick={() => this.handleAgree(record.id)}>同意看房</a>
           <Divider type="vertical" />
-          <a href="">拒绝看房</a>
+          <a onClick={() => this.handleRefuse(record.id)}>拒绝看房</a>
         </Fragment>
+        :<span>无</span>
       ),
     },
   ];
@@ -77,14 +80,23 @@ class Center extends PureComponent {
     } else if (record.status == '2') {
       return '待确认';
     } else if (record.status == '3') {
-      return '带看房';
+      return '待看房';
     } else if (record.status == '4') {
       return '已取消';
+    }else if (record.status == '5') {
+      return '已拒绝';
     }
   };
 
   componentDidMount() {
     //当组件挂载完成后执行加载数据
+    const { currentUser,dispatch } = this.props;
+    dispatch({
+      type: 'vistRequset/requestList',
+      payload:{  ownerId:currentUser.id,}
+    });
+  }
+  reload() {
     const { currentUser,dispatch } = this.props;
     dispatch({
       type: 'vistRequset/requestList',
@@ -117,7 +129,7 @@ class Center extends PureComponent {
       type: 'vistRequset/fetch',
       payload: params,
     });
-  };
+  }
 
   handleMenuClick = e => {
     const { currentUser,dispatch } = this.props;
@@ -150,13 +162,74 @@ class Center extends PureComponent {
       selectedRows: rows,
     });
   };
+
+  handleAgree = (rowId) => {
+    const { dispatch } = this.props;
+    const values={};
+    values.id=rowId;
+    // 待看房
+    values.status = "3";
+
+    dispatch({
+          type: 'vistRequset/updateVistRequestForm',
+          payload: values,
+          callback: res => {
+            console.log(res); // 请求完成后返回的结果
+            if (res.code == 200) {
+              message.success('已同意看房');
+              this.reload();
+            }
+          },
+      });
+};
+  handleRefuse= (rowId) => {
+    const { dispatch } = this.props;
+    const values={};
+    values.id=rowId;
+    // 已拒绝
+    values.status = "5";
+
+    dispatch({
+          type: 'vistRequset/updateVistRequestForm',
+          payload: values,
+          callback: res => {
+            console.log(res); // 请求完成后返回的结果
+            if (res.code == 200) {
+              message.success('已同意看房');
+              this.reload();
+            }
+          },
+      });
+  };
+
+
+handleAgree = (rowId) => {
+  const { dispatch } = this.props;
+  const values={};
+  values.id=rowId;
+  // 待看房
+  values.status = "3";
+
+  dispatch({
+        type: 'vistRequset/updateVistRequestForm',
+        payload: values,
+        callback: res => {
+          console.log(res); // 请求完成后返回的结果
+          if (res.code == 200) {
+            message.success('已同意看房');
+            this.reload();
+          }
+        },
+    });
+    
+};
   render() {
     const {
       vistRequset: { data },
       loading,
     } = this.props;
     const { selectedRows } = this.state;
-
+    
     return (
       <div>
         <Card bordered={false}>

@@ -15,3 +15,10 @@ export async function addVistRequest(params) {
     body: params,
   });
 }
+//修改
+export async function updateVistRequest(params) {
+  return request('/xyl/vistRequest/update', {
+    method: 'PUT',
+    body: params,
+  });
+}
