@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import {Form,Input,DatePicker,Select,Button,Card,InputNumber,Radio,Icon,Tooltip,Checkbox,AutoComplete} from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
+import GeographicView from '@/components/GeographicView';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -12,6 +13,16 @@ const Search = Input.Search;
 const InputGroup = Input.Group;
 const CheckboxGroup = Checkbox.Group;
 
+const validatorGeographic = (rule, value, callback) => {
+  const { province, city } = value;
+  if (!province.key) {
+    callback('Please input your province!');
+  }
+  if (!city.key) {
+    callback('Please input your city!');
+  }
+  callback();
+};
 
 
 @connect(
@@ -21,7 +32,7 @@ const CheckboxGroup = Checkbox.Group;
 }))
 @Form.create()
 class AddEstate extends PureComponent {
-
+  state = { mode: 'year'};
   componentDidMount() { //当组件挂载完成后执行加载数据
     console.log("loading.......");
     const { dispatch } = this.props;
@@ -35,22 +46,10 @@ class AddEstate extends PureComponent {
         e.preventDefault();
         form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-              if(values.facilities){
-                values.facilities = values.facilities.join(",");
-              }
-              if(values.floor_1 && values.floor_2){
-                values.floor = values.floor_1 + "/" + values.floor_2;
-
-              }
-
-              // 楼盘id
-              values.estateId =  this.state.estateId;
-
-              // 处理图片
-              values.pic = [...this.state.pics].join(',');
-
+             values.created=new Date();
+             values.updated=new Date();
               dispatch({
-                    type: 'house/submitHouseForm',
+                    type: 'estate/submitEstateForm',
                     payload: values,
                 });
     
@@ -136,80 +135,65 @@ class AddEstate extends PureComponent {
                                  (<Input style={{ width: '100%' }} 
                                   />)}
                         </FormItem>
-                        <FormItem {...formItemLayout} label="楼盘名称">
-                        {getFieldDecorator('name',
+                        <FormItem  {...formItemLayout} label={formatMessage({ id: 'app.settings.basic.geographic' })}>
+                          {getFieldDecorator('geographic', {
+                            rules: [
+                              {
+                                required: true,
+                                message: formatMessage({ id: 'app.settings.basic.geographic-message' }, {}),
+                              },
+                              {
+                                validator: validatorGeographic,
+                              },
+                            ],
+                          })(<GeographicView />)}
+                        </FormItem>
+                        <FormItem {...formItemLayout} label="具体地址">
+                        {getFieldDecorator('address',
                             {rules:[{
                                  required: true, message:"此项为必填项" 
                                  }]})
                                  (<Input style={{ width: '100%' }} 
                                   />)}
                         </FormItem>
-                        <FormItem {...formItemLayout} label="楼盘名称">
-                        {getFieldDecorator('name',
+                        <FormItem {...formItemLayout} label="建筑年代">
+                        {getFieldDecorator('year',
+                            {rules:[{
+                                 required: true, message:"此项为必填项" 
+                                 }]})
+                                 (<DatePicker mode='year' placeholder='请选择年份'/>
+                                 )}
+                        </FormItem>
+                        <FormItem {...formItemLayout} label="建筑类型">
+                        {getFieldDecorator('type',
+                            {rules:[{
+                                 required: true, message:"此项为必填项" 
+                                 }]})
+                                 (
+                                  <Select  style={{ width: 120 }} >
+                                    <Option value="1">塔楼</Option>
+                                    <Option value="2">板楼</Option>
+                                  </Select>
+                                 )}
+                        </FormItem>
+                        <FormItem {...formItemLayout} label="物业费">
+                        {getFieldDecorator('propertyCost',
+                            {rules:[{
+                                 required: true, message:"此项为必填项" 
+                                 }]})
+                                 (<Input style={{ width: '30%' }} addonAfter="元/平" />
+                                 )}
+                        </FormItem>
+                        <FormItem {...formItemLayout} label="物业公司">
+                        {getFieldDecorator('propertyCompany',
                             {rules:[{
                                  required: true, message:"此项为必填项" 
                                  }]})
                                  (<Input style={{ width: '100%' }} 
                                   />)}
                         </FormItem>
-                        <FormItem {...formItemLayout} label="楼盘名称">
-                        {getFieldDecorator('name',
-                            {rules:[{
-                                 required: true, message:"此项为必填项" 
-                                 }]})
-                                 (<Input style={{ width: '100%' }} 
-                                  />)}
-                        </FormItem>
-                        <FormItem {...formItemLayout} label="楼盘名称">
-                        {getFieldDecorator('name',
-                            {rules:[{
-                                 required: true, message:"此项为必填项" 
-                                 }]})
-                                 (<Input style={{ width: '100%' }} 
-                                  />)}
-                        </FormItem>
-                        <FormItem {...formItemLayout} label="楼盘名称">
-                        {getFieldDecorator('name',
-                            {rules:[{
-                                 required: true, message:"此项为必填项" 
-                                 }]})
-                                 (<Input style={{ width: '100%' }} 
-                                  />)}
-                        </FormItem>
-                        <FormItem {...formItemLayout} label="楼盘名称">
-                        {getFieldDecorator('name',
-                            {rules:[{
-                                 required: true, message:"此项为必填项" 
-                                 }]})
-                                 (<Input style={{ width: '100%' }} 
-                                  />)}
-                        </FormItem>
-                        <FormItem {...formItemLayout} label="楼盘名称">
-                        {getFieldDecorator('name',
-                            {rules:[{
-                                 required: true, message:"此项为必填项" 
-                                 }]})
-                                 (<Input style={{ width: '100%' }} 
-                                  />)}
-                        </FormItem>
-                        <FormItem {...formItemLayout} label="楼盘名称">
-                        {getFieldDecorator('name',
-                            {rules:[{
-                                 required: true, message:"此项为必填项" 
-                                 }]})
-                                 (<Input style={{ width: '100%' }} 
-                                  />)}
-                        </FormItem>
-                        <FormItem {...formItemLayout} label="楼盘名称">
-                        {getFieldDecorator('name',
-                            {rules:[{
-                                 required: true, message:"此项为必填项" 
-                                 }]})
-                                 (<Input style={{ width: '100%' }} 
-                                  />)}
-                        </FormItem>
-                        <FormItem {...formItemLayout} label="楼盘名称">
-                        {getFieldDecorator('name',
+                        <FormItem {...formItemLayout} label="开发商">
+                        {getFieldDecorator('developers',
                             {rules:[{
                                  required: true, message:"此项为必填项" 
                                  }]})

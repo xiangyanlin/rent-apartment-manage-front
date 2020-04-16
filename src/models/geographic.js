@@ -1,4 +1,4 @@
-import { queryProvince, queryCity } from '@/services/geographic';
+import { queryProvince, queryCity,queryArea } from '@/services/geographic';
 
 export default {
   namespace: 'geographic',
@@ -6,6 +6,7 @@ export default {
   state: {
     province: [],
     city: [],
+    area:[],
     isLoading: false,
   },
 
@@ -40,6 +41,22 @@ export default {
         payload: false,
       });
     },
+    *fetchArea({ payload }, { call, put }) {
+      yield put({
+        type: 'changeLoading',
+        payload: true,
+      });
+      const response = yield call(queryArea, payload);
+      yield put({
+        type: 'setArea',
+        payload: response,
+      });
+      console.log(response)
+      yield put({
+        type: 'changeLoading',
+        payload: false,
+      });
+    },
   },
 
   reducers: {
@@ -53,6 +70,12 @@ export default {
       return {
         ...state,
         city: action.payload,
+      };
+    },
+    setArea(state, action) {
+      return {
+        ...state,
+        area: action.payload,
       };
     },
     changeLoading(state, action) {
