@@ -80,6 +80,7 @@ export default {
   'menu.house.zufang': '租房管理',
   'menu.house.resource': '房源管理',
   'menu.house.addResource': '新增房源',
+  'menu.house.addEstate': '新增楼盘',
   'menu.fangdong': '房东管理',
   'menu.fangdong.list': '房东列表',
   'menu.users': '用户管理',

@@ -7,11 +7,7 @@ export async function addHouseResource(params) {
   });
 }
 
-export async function estateList() {
-  return request('/xyl/estate/selectAll', {
-    method: 'POST',
-  });
-}
+
 
 export async function updateHouseResource(params) {
   return request('/xyl/houseResources/update', {

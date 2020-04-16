@@ -18,7 +18,31 @@ export default [
     authority: ['admin'],
     routes: [
       { path: '/admin', redirect: '/admin/dashboard/analysis' },
-
+      // dashboard
+      { path: '/admin/dashboard', redirect: '/admin/dashboard/analysis' },
+      {
+        path: '/admin/dashboard',
+        name: 'dashboard',
+        icon: 'dashboard',
+        hideChildrenInMenu: false,
+        routes: [
+          {
+            path: '/admin/dashboard/analysis',
+            name: 'analysis',
+            component: './Dashboard/Analysis',
+          },
+          {
+            path: '/admin/dashboard/monitor',
+            name: 'monitor',
+            component: './Dashboard/Monitor',
+          },
+          {
+            path: '/admin/dashboard/workplace',
+            name: 'workplace',
+            component: './Dashboard/Workplace',
+          },
+        ],
+      },
       {
         // 房源管理
         path: '/admin/house',
@@ -34,6 +58,11 @@ export default [
             path: '/admin/house/addResource',
             name: 'addResource',
             component: './xyl/House/AddResource',
+          },
+          {
+            path: '/admin/house/addEstate',
+            name: 'addEstate',
+            component: './xyl/House/addEstate',
           },
           {
             path: '/admin/house/kanfang',
@@ -162,127 +191,103 @@ export default [
         ],
       },
 
-      // dashboard
-      { path: '/admin/dashboard', redirect: '/admin/dashboard/analysis' },
-      {
-        path: '/admin/dashboard',
-        name: 'dashboard',
-        icon: 'dashboard',
-        hideChildrenInMenu: false,
-        routes: [
-          {
-            path: '/admin/dashboard/analysis',
-            name: 'analysis',
-            component: './Dashboard/Analysis',
-          },
-          {
-            path: '/admin/dashboard/monitor',
-            name: 'monitor',
-            component: './Dashboard/Monitor',
-          },
-          {
-            path: '/admin/dashboard/workplace',
-            name: 'workplace',
-            component: './Dashboard/Workplace',
-          },
-        ],
-      },
-      // forms
-      {
-        path: '/admin/form',
-        icon: 'form',
-        name: 'form',
-        routes: [
-          {
-            path: '/admin/form/basic-form',
-            name: 'basicform',
-            component: './Forms/BasicForm',
-          },
-          {
-            path: '/admin/form/step-form',
-            name: 'stepform',
-            component: './Forms/StepForm',
-            hideChildrenInMenu: true,
-            routes: [
-              {
-                path: '/admin/form/step-form',
-                name: 'stepform',
-                redirect: '/admin/form/step-form/info',
-              },
-              {
-                path: '/admin/form/step-form/info',
-                name: 'info',
-                component: './Forms/StepForm/Step1',
-              },
-              {
-                path: '/admin/form/step-form/confirm',
-                name: 'confirm',
-                component: './Forms/StepForm/Step2',
-              },
-              {
-                path: '/admin/form/step-form/result',
-                name: 'result',
-                component: './Forms/StepForm/Step3',
-              },
-            ],
-          },
-          {
-            path: '/admin/form/advanced-form',
-            name: 'advancedform',
-            authority: ['admin'],
-            component: './Forms/AdvancedForm',
-          },
-        ],
-      },
-      // list
-      {
-        path: '/admin/list',
-        icon: 'table',
-        name: 'list',
-        routes: [
-          {
-            path: '/admin/list/table-list',
-            name: 'searchtable',
-            component: './List/TableList',
-          },
-          {
-            path: '/admin/list/basic-list',
-            name: 'basiclist',
-            component: './List/BasicList',
-          },
-          {
-            path: '/admin/list/card-list',
-            name: 'cardlist',
-            component: './List/CardList',
-          },
-          {
-            path: '/admin/list/search',
-            name: 'searchlist',
-            component: './List/List',
-            routes: [
-              {
-                path: '/admin/list/search',
-                redirect: '/admin/list/search/articles',
-              },
-              {
-                path: '/admin/list/search/articles',
-                name: 'articles',
-                component: './List/Articles',
-              },
-              {
-                path: '/admin/list/search/projects',
-                name: 'projects',
-                component: './List/Projects',
-              },
-              {
-                path: '/admin/list/search/applications',
-                name: 'applications',
-                component: './List/Applications',
-              },
-            ],
-          },
-        ],
-      },
+      
+      // // forms
+      // {
+      //   path: '/admin/form',
+      //   icon: 'form',
+      //   name: 'form',
+      //   routes: [
+      //     {
+      //       path: '/admin/form/basic-form',
+      //       name: 'basicform',
+      //       component: './Forms/BasicForm',
+      //     },
+      //     {
+      //       path: '/admin/form/step-form',
+      //       name: 'stepform',
+      //       component: './Forms/StepForm',
+      //       hideChildrenInMenu: true,
+      //       routes: [
+      //         {
+      //           path: '/admin/form/step-form',
+      //           name: 'stepform',
+      //           redirect: '/admin/form/step-form/info',
+      //         },
+      //         {
+      //           path: '/admin/form/step-form/info',
+      //           name: 'info',
+      //           component: './Forms/StepForm/Step1',
+      //         },
+      //         {
+      //           path: '/admin/form/step-form/confirm',
+      //           name: 'confirm',
+      //           component: './Forms/StepForm/Step2',
+      //         },
+      //         {
+      //           path: '/admin/form/step-form/result',
+      //           name: 'result',
+      //           component: './Forms/StepForm/Step3',
+      //         },
+      //       ],
+      //     },
+      //     {
+      //       path: '/admin/form/advanced-form',
+      //       name: 'advancedform',
+      //       authority: ['admin'],
+      //       component: './Forms/AdvancedForm',
+      //     },
+      //   ],
+      // },
+      // // list
+      // {
+      //   path: '/admin/list',
+      //   icon: 'table',
+      //   name: 'list',
+      //   routes: [
+      //     {
+      //       path: '/admin/list/table-list',
+      //       name: 'searchtable',
+      //       component: './List/TableList',
+      //     },
+      //     {
+      //       path: '/admin/list/basic-list',
+      //       name: 'basiclist',
+      //       component: './List/BasicList',
+      //     },
+      //     {
+      //       path: '/admin/list/card-list',
+      //       name: 'cardlist',
+      //       component: './List/CardList',
+      //     },
+      //     {
+      //       path: '/admin/list/search',
+      //       name: 'searchlist',
+      //       component: './List/List',
+      //       routes: [
+      //         {
+      //           path: '/admin/list/search',
+      //           redirect: '/admin/list/search/articles',
+      //         },
+      //         {
+      //           path: '/admin/list/search/articles',
+      //           name: 'articles',
+      //           component: './List/Articles',
+      //         },
+      //         {
+      //           path: '/admin/list/search/projects',
+      //           name: 'projects',
+      //           component: './List/Projects',
+      //         },
+      //         {
+      //           path: '/admin/list/search/applications',
+      //           name: 'applications',
+      //           component: './List/Applications',
+      //         },
+      //       ],
+      //     },
+      //   ],
+      // },
       {
         path: '/admin/profile',
         name: 'profile',

@@ -1,5 +1,5 @@
 import { routerRedux } from 'dva/router';
-import { estateList } from '@/services/interacte';
+import { estateList ,addEstate} from '@/services/estate';
 
 export default {
   namespace: 'estate',
@@ -16,7 +16,10 @@ export default {
           type: 'save',
           payload: response,
         });
-      }
+      },
+      *submitEstateForm({ payload }, { call }) {
+        yield call(addEstate, payload);
+      },
   },
 
   reducers: {
