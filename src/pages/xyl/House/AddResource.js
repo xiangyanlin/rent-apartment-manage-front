@@ -17,6 +17,7 @@ import {
 } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import PicturesWall from '../Utils/PicturesWall';
+import { relativeTimeThreshold } from 'moment';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -36,7 +37,7 @@ const CheckboxGroup = Checkbox.Group;
 }))
 @Form.create()
 class AddResource extends PureComponent {
-
+  state={display:"none"}
   componentDidMount() { //当组件挂载完成后执行加载数据
     console.log("loading.......");
     const { dispatch } = this.props;
@@ -154,7 +155,12 @@ class AddResource extends PureComponent {
             <PageHeaderWrapper>
                 <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }}>
                     <Card bordered={false} title="房源信息">
-                        <FormItem {...formItemLayout} label="楼盘名称">
+                        <FormItem {...formItemLayout} label="楼盘名称" extra={
+                          <span style={{float:"right"}}>
+                              没有你所在的楼盘？
+                              <a href="/admin/house/addEstate">去新增</a>
+                          </span>
+                        }>
                             <AutoComplete
                               style={{ width: '100%' }}
                               dataSource={this.state.estateDataSource}
@@ -301,7 +307,7 @@ class AddResource extends PureComponent {
                         <FormItem {...formItemLayout} label="房源描述">
                           {getFieldDecorator('houseDesc')
                           (
-                            <TextArea placeholder="请输入备注信息" autosize={{ minRows: 2, maxRows: 10}} />
+                            <TextArea placeholder="请输入备注信息" autoSize={{ minRows: 4, maxRows: 10}} />
                           )}
                             <span>请勿填写联系方式或与房源无关信息以及图片、链接或名牌、优秀、顶级、全网首发、零距离、回报率等词汇。</span>
                         </FormItem>

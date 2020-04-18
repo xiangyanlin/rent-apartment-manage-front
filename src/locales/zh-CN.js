@@ -231,7 +231,7 @@ export default {
   'app.settings.basic.profile-placeholder': '个人简介',
   'app.settings.basic.country': '国家/地区',
   'app.settings.basic.country-message': '请输入您的国家或地区!',
-  'app.settings.basic.geographic': '所在省市',
+  'app.settings.basic.geographic': '所在省市区',
   'app.settings.basic.geographic-message': '请输入您的所在省市!',
   'app.settings.basic.address': '街道地址',
   'app.settings.basic.address-message': '请输入您的街道地址!',

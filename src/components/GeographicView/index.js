@@ -36,6 +36,12 @@ class GeographicView extends PureComponent {
         payload: value.province.key,
       });
     }
+    if (!props.value && !!value && !!value.city) {
+      dispatch({
+        type: 'geographic/fetchArea',
+        payload: value.city.key,
+      });
+    }
   }
 
   getProvinceOption() {
@@ -81,10 +87,15 @@ class GeographicView extends PureComponent {
   };
 
   selectCityItem = item => {
-    const { value, onChange } = this.props;
+    const { dispatch,value, onChange } = this.props;
+    dispatch({
+      type: 'geographic/fetchArea',
+      payload: item.key,
+    });
     onChange({
       province: value.province,
       city: item,
+      area:nullSlectItem,
     });
   };
 
@@ -103,12 +114,14 @@ class GeographicView extends PureComponent {
       return {
         province: nullSlectItem,
         city: nullSlectItem,
+        area: nullSlectItem,
       };
     }
-    const { province, city } = value;
+    const { province, city,area } = value;
     return {
       province: province || nullSlectItem,
       city: city || nullSlectItem,
+      area: area || nullSlectItem,
     };
   }
 

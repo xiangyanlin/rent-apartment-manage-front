@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
-import {Form,Input,DatePicker,Select,Button,Card,InputNumber,Radio,Icon,Tooltip,Checkbox,AutoComplete} from 'antd';
+import {Form,Input,DatePicker,Select,Button,Card,InputNumber,Radio,Icon,Tooltip,Checkbox,message} from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import GeographicView from '@/components/GeographicView';
 
@@ -14,15 +14,23 @@ const InputGroup = Input.Group;
 const CheckboxGroup = Checkbox.Group;
 
 const validatorGeographic = (rule, value, callback) => {
-  const { province, city } = value;
+  const { province, city ,area} = value;
   if (!province.key) {
     callback('Please input your province!');
   }
   if (!city.key) {
     callback('Please input your city!');
   }
+  if (!area.key) {
+    callback('Please input your area!');
+  }
   callback();
 };
+
+const children = [];
+for (let i = 1990; i <=2020; i++) {
+  children.push(<Option key={ i}>{""+i}</Option>);
+}
 
 
 @connect(
@@ -46,13 +54,22 @@ class AddEstate extends PureComponent {
         e.preventDefault();
         form.validateFieldsAndScroll((err, values) => {
             if (!err) {
+            values.province=values.geographic.province.label;
+            values.city=values.geographic.city.label;
+            values.area=values.geographic.area.label;
              values.created=new Date();
              values.updated=new Date();
               dispatch({
                     type: 'estate/submitEstateForm',
                     payload: values,
+                    callback: res => {
+                      console.log(res); // 请求完成后返回的结果
+                      if (res.code == 200) {
+                        message.success('提交成功');
+                      }
+                    },
                 });
-    
+              console.log(values);
             }
         });
     };
@@ -95,9 +112,10 @@ class AddEstate extends PureComponent {
       }
     }
 
+
+
     render() {
         const { submitting } = this.props;
-        console.log(this.props);
         const {
             form: { getFieldDecorator, getFieldValue },
         } = this.props;
@@ -161,7 +179,10 @@ class AddEstate extends PureComponent {
                             {rules:[{
                                  required: true, message:"此项为必填项" 
                                  }]})
-                                 (<DatePicker mode='year' placeholder='请选择年份'/>
+                                 (
+                                  <Select  style={{ width: '40%' }} placeholder="请选择年份" >
+                                    {children}
+                                  </Select>
                                  )}
                         </FormItem>
                         <FormItem {...formItemLayout} label="建筑类型">

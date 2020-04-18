@@ -17,8 +17,13 @@ export default {
           payload: response,
         });
       },
-      *submitEstateForm({ payload }, { call }) {
-        yield call(addEstate, payload);
+      *submitEstateForm({ payload,callback }, { call }) {
+        const response=yield call(addEstate, payload);
+        if (response.code === 200) {
+          if (callback && typeof callback == 'function') {
+            callback(response); // 返回结果
+          }
+        }
       },
   },
 
