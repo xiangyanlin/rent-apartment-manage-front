@@ -140,7 +140,11 @@ class AddResource extends PureComponent {
             <div>
                 <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }}>
                     <Card bordered={false} title="房源信息">
-                        <FormItem {...formItemLayout} label="楼盘名称">
+                        <FormItem {...formItemLayout} label="楼盘名称" extra={
+                          <span style={{float:"right"}}>
+                              没有你所在的楼盘？
+                              <a href="/account/center/addEstate">去新增</a>
+                          </span>}>
                             <AutoComplete
                               style={{ width: '100%' }}
                               dataSource={this.state.estateDataSource}

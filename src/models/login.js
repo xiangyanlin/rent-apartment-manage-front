@@ -109,6 +109,14 @@ export default {
       reloadAuthorized();
       location.reload();
     },
+    //首页设置访客
+    *setGuest(_, { put }) {
+      const userName=window.localStorage.getItem("currentUser");
+        if(userName==null){
+          setAuthority({currentAuthority: 'guest'});
+        }
+      
+      }
   },
 
   reducers: {

@@ -10,12 +10,16 @@ import house from '../../assets/house-things-1.png'
     currentUserLoading: loading.effects['user/fetchCurrent'],
   }))
 class Home extends PureComponent {
+
   componentDidMount() {
     const { dispatch } = this.props;
     const { query } = this.props.location;
     dispatch({
       type: 'houseResource/queryById',
       payload: query,
+    });
+    dispatch({
+      type: 'login/setGuest',
     });
   }
 
