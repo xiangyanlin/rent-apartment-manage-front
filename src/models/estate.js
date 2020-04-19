@@ -1,6 +1,6 @@
 import { routerRedux } from 'dva/router';
-import { estateList ,addEstate} from '@/services/estate';
-
+import { estateList ,queryEstate,addEstate,updateEstate,deleteEstate} from '@/services/estate';
+import {message} from "antd";
 export default {
   namespace: 'estate',
   
@@ -17,8 +17,28 @@ export default {
           payload: response,
         });
       },
+      *list({ payload }, { call, put }) {
+        const response = yield call(queryEstate, payload);
+        yield put({
+          type: 'save',
+          payload: response,
+        });
+      },
       *submitEstateForm({ payload,callback }, { call }) {
         const response=yield call(addEstate, payload);
+        if (response.code === 200) {
+          if (callback && typeof callback == 'function') {
+            callback(response); // 返回结果
+          }
+        }
+      },
+      *updateEstateForm({ payload }, { call }) {
+        yield call(updateEstate, payload);
+        message.success('提交成功');
+      },
+  
+      *delete({ payload, callback }, { call }) {
+        const response = yield call(deleteEstate, payload);
         if (response.code === 200) {
           if (callback && typeof callback == 'function') {
             callback(response); // 返回结果

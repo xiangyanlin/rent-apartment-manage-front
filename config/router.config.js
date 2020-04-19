@@ -55,6 +55,11 @@ export default [
             component: './xyl/House/Resource',
           },
           {
+            path: '/admin/house/estate',
+            name: 'estate',
+            component: './xyl/House/Estate',
+          },
+          {
             path: '/admin/house/addResource',
             name: 'addResource',
             component: './xyl/House/AddResource',

@@ -79,6 +79,7 @@ export default {
   'menu.house.kanfang': '看房请求',
   'menu.house.zufang': '租房管理',
   'menu.house.resource': '房源管理',
+  'menu.house.estate': '楼盘管理',
   'menu.house.addResource': '新增房源',
   'menu.house.addEstate': '新增楼盘',
   'menu.fangdong': '房东管理',
