@@ -96,6 +96,7 @@ export default {
   'menu.finance.tixian': '提现审核',
   'menu.system': '系统管理',
   'menu.system.interface': '房源接口',
+  'menu.system.authority': '权限设置',
   'menu.system.dict': '字典配置',
   'menu.system.contract': '合同模板',
 

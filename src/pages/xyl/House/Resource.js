@@ -102,8 +102,8 @@ class Resource extends PureComponent {
       title: '操作',
       render: (text, record) => (
         <Fragment>
-          <a onClick={() => {}}>查看</a>
-          <Divider type="vertical" />
+          {/* <a onClick={() => {}}>查看</a>
+          <Divider type="vertical" /> */}
           <EditResource record={record} reload={this.reload.bind(this)} />
           <Divider type="vertical" />
           <Popconfirm
@@ -408,6 +408,10 @@ class Resource extends PureComponent {
     return expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
   }
 
+  handleOnClick=e=>{
+     return this.props.history.push("/admin/house/addResource")
+  }
+
   render() {
     const {
       houseResource: { data },
@@ -420,7 +424,7 @@ class Resource extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
-
+            <Button type="primary" icon="plus" onClick={this.handleOnClick}>新增</Button>
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}

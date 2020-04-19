@@ -148,24 +148,24 @@ export default [
         ],
       },
 
-      {
-        // 财务管理
-        path: '/admin/finance',
-        name: 'finance',
-        icon: 'money-collect',
-        routes: [
-          {
-            path: '/admin/finance/bill',
-            name: 'bill',
-            component: './xyl/Finance/Bill',
-          },
-          {
-            path: '/admin/finance/tixian',
-            name: 'tixian',
-            component: './xyl/Finance/TiXian',
-          },
-        ],
-      },
+      // {
+      //   // 财务管理
+      //   path: '/admin/finance',
+      //   name: 'finance',
+      //   icon: 'money-collect',
+      //   routes: [
+      //     {
+      //       path: '/admin/finance/bill',
+      //       name: 'bill',
+      //       component: './xyl/Finance/Bill',
+      //     },
+      //     {
+      //       path: '/admin/finance/tixian',
+      //       name: 'tixian',
+      //       component: './xyl/Finance/TiXian',
+      //     },
+      //   ],
+      // },
 
       {
         // 系统管理
@@ -174,9 +174,9 @@ export default [
         icon: 'laptop',
         routes: [
           {
-            path: '/admin/system/interface',
-            name: 'interface',
-            component: './xyl/System/Interface',
+            path: '/admin/system/authority',
+            name: 'authority',
+            component: './xyl/System/Authority',
           },
           {
             path: '/admin/system/dict',
@@ -288,39 +288,39 @@ export default [
       //     },
       //   ],
       // },
-      {
-        path: '/admin/profile',
-        name: 'profile',
-        icon: 'profile',
-        routes: [
-          // profile
-          {
-            path: '/admin/profile/basic',
-            name: 'basic',
-            component: './Profile/BasicProfile',
-          },
-          {
-            path: '/admin/profile/advanced',
-            name: 'advanced',
-            authority: ['admin'],
-            component: './Profile/AdvancedProfile',
-          },
-        ],
-      },
-      {
-        name: 'result',
-        icon: 'check-circle-o',
-        path: '/admin/result',
-        routes: [
-          // result
-          {
-            path: '/admin/result/success',
-            name: 'success',
-            component: './Result/Success',
-          },
-          { path: '/admin/result/fail', name: 'fail', component: './Result/Error' },
-        ],
-      },
+      // {
+      //   path: '/admin/profile',
+      //   name: 'profile',
+      //   icon: 'profile',
+      //   routes: [
+      //     // profile
+      //     {
+      //       path: '/admin/profile/basic',
+      //       name: 'basic',
+      //       component: './Profile/BasicProfile',
+      //     },
+      //     {
+      //       path: '/admin/profile/advanced',
+      //       name: 'advanced',
+      //       authority: ['admin'],
+      //       component: './Profile/AdvancedProfile',
+      //     },
+      //   ],
+      // },
+      // {
+      //   name: 'result',
+      //   icon: 'check-circle-o',
+      //   path: '/admin/result',
+      //   routes: [
+      //     // result
+      //     {
+      //       path: '/admin/result/success',
+      //       name: 'success',
+      //       component: './Result/Success',
+      //     },
+      //     { path: '/admin/result/fail', name: 'fail', component: './Result/Error' },
+      //   ],
+      // },
       {
         name: 'exception',
         icon: 'warning',
