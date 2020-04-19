@@ -6,6 +6,7 @@ import { Card, Row, Col, Icon, Avatar, Tag, Divider, Spin, Input } from 'antd';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import styles from './Center.less';
 import avatar from '../../../assets/avatar.png';
+import Redirect from 'umi/redirect';
 @connect(({ loading, user, project }) => ({
   listLoading: loading.effects['list/fetch'],
   currentUser: user.currentUser,
@@ -45,14 +46,25 @@ class Center extends PureComponent {
       case 'myHouse':
         router.push(`${match.url}/myHouse`);
         break;
-      case 'myRequest':
-        router.push(`${match.url}/myRequest`);
+      case 'MyObtainRequest':
+        router.push(`${match.url}/MyObtainRequest`);
         break;
       case 'addResource':
         router.push(`${match.url}/addResource`);
         break;
       case 'addEstate':
         router.push(`${match.url}/addEstate`);
+        break;
+      default:
+        break;
+    }
+  };
+
+  onChange = key => {
+    const { match } = this.props;
+    switch (key) {
+      case 'MyRequest':
+        router.push(`${match.url}/MyRequest`);
         break;
       default:
         break;
@@ -115,6 +127,10 @@ class Center extends PureComponent {
   }
 
   render() {
+    const userName=window.localStorage.getItem("currentUser");
+    if(userName==null){
+      return <Redirect to='/user/login' />
+    }
     const { newTags, inputVisible, inputValue } = this.state;
     const {
       listLoading,
@@ -137,10 +153,10 @@ class Center extends PureComponent {
         ),
       },
       {
-        key: 'myRequest',
+        key: 'MyObtainRequest',
         tab: (
           <span>
-            看房请求 <span style={{ fontSize: 14 }}></span>
+            所收看房请求 <span style={{ fontSize: 14 }}></span>
           </span>
         ),
       },
@@ -160,6 +176,17 @@ class Center extends PureComponent {
           </span>
         ),
       },
+    ];
+
+    const operationTenant = [
+      {
+        key: 'MyRequest',
+        tab: (
+          <span>
+            我的看房请求 <span style={{ fontSize: 14 }}></span>
+          </span>
+        ),
+      }  
     ];
 
     return (
@@ -235,7 +262,16 @@ class Center extends PureComponent {
           >
             {children}
           </Card>
-          :<div>成为房东</div>}
+          :
+          <Card
+            className={styles.tabsCard}
+            bordered={false}
+            tabList={operationTenant}
+            activeTabKey={location.pathname.replace(`${match.path}/`, '')}
+            onTabChange={this.onChange}
+            loading={listLoading}
+          >{children}
+          </Card>}
           </Col>
         </Row>
       </GridContent>

@@ -63,17 +63,36 @@ class Center extends PureComponent {
     },
     {
       title: '操作',
-      render: (text, record) => (
-        record.status=="2"?
-        <Fragment>
-          <a onClick={() => this.handleAgree(record.id)}>同意看房</a>
-          <Divider type="vertical" />
-          <a onClick={() => this.handleRefuse(record.id)}>拒绝看房</a>
-        </Fragment>
-        :<span>无</span>
-      ),
+      render: (text, record) => {
+        return this.operation(record);
+      },
     },
   ];
+
+  operation=(record)=>{
+    if (record.status == '2') {
+        return (
+        <Fragment>
+            <a onClick={() => this.handleCancel(record.id)}>取消看房</a>
+        </Fragment>
+        );
+      } else if (record.status == '3') {
+        return (
+            <Fragment>
+            <a onClick={() => this.handleCancel(record.id)}>取消看房</a>
+            <Divider type="vertical" />
+            <a onClick={() => this.handleFinish(record.id)}>完成看房</a>
+          </Fragment>
+        );
+      }else{
+          return(
+            <span>无</span>
+          )
+      }
+  }
+
+
+  
   convertStatus = record => {
     if (record.status == '1') {
       return '已确认';
@@ -93,14 +112,14 @@ class Center extends PureComponent {
     const { currentUser,dispatch } = this.props;
     dispatch({
       type: 'vistRequset/requestList',
-      payload:{  ownerId:currentUser.id,}
+      payload:{  tenantId:currentUser.id,}
     });
   }
   reload() {
     const { currentUser,dispatch } = this.props;
     dispatch({
       type: 'vistRequset/requestList',
-      payload:{  ownerId:currentUser.id,}
+      payload:{  tenantId:currentUser.id,}
     });
   }
 
@@ -117,7 +136,7 @@ class Center extends PureComponent {
     const params = {
       currentPage: pagination.current,
       pageSize: pagination.pageSize,
-      ownerId:currentUser.id,
+      tenantId:currentUser.id,
       ...formValues,
       ...filters,
     };
@@ -142,7 +161,7 @@ class Center extends PureComponent {
           type: 'vistRequset/remove',
           payload: {
             key: selectedRows.map(row => row.key),
-            ownerId:currentUser.id,
+            tenantId:currentUser.id,
 
           },
           callback: () => {
@@ -163,12 +182,12 @@ class Center extends PureComponent {
     });
   };
 
-  handleAgree = (rowId) => {
+  handleCancel = (rowId) => {
     const { dispatch } = this.props;
     const values={};
     values.id=rowId;
-    // 待看房
-    values.status = "3";
+    // 已取消
+    values.status = "4";
 
     dispatch({
           type: 'vistRequset/updateVistRequestForm',
@@ -176,18 +195,18 @@ class Center extends PureComponent {
           callback: res => {
             console.log(res); // 请求完成后返回的结果
             if (res.code == 200) {
-              message.success('已同意看房');
+              message.success('已取消看房');
               this.reload();
             }
           },
       });
 };
-  handleRefuse= (rowId) => {
+    handleFinish= (rowId) => {
     const { dispatch } = this.props;
     const values={};
     values.id=rowId;
     // 已拒绝
-    values.status = "5";
+    values.status = "1";
 
     dispatch({
           type: 'vistRequset/updateVistRequestForm',
@@ -195,7 +214,7 @@ class Center extends PureComponent {
           callback: res => {
             console.log(res); // 请求完成后返回的结果
             if (res.code == 200) {
-              message.success('已同意看房');
+              message.success('已确认看房');
               this.reload();
             }
           },

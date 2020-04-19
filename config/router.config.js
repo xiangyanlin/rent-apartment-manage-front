@@ -363,14 +363,18 @@ export default [
             routes: [
               {
                 path: '/admin/account/center',
-                redirect: '/admin/account/center/myHouse',
+                redirect: '/admin/account/center/MyRequest',
               },
               {
                 path: '/admin/account/center/myHouse',
                 component: './Account/Center/MyHouse',
               },
               {
-                path: '/admin/account/center/myRequest',
+                path: '/admin/account/center/MyObtainRequest',
+                component: './Account/Center/MyObtainRequest',
+              },
+              {
+                path: '/admin/account/center/MyRequest',
                 component: './Account/Center/MyRequest',
               },
               {
@@ -482,14 +486,18 @@ export default [
             routes: [
               {
                 path: '/account/center',
-                redirect: '/account/center/myHouse',
+                redirect: '/account/center/MyRequest',
               },
               {
                 path: '/account/center/myHouse',
                 component: './Account/Center/MyHouse',
               },
               {
-                path: '/account/center/myRequest',
+                path: '/account/center/MyObtainRequest',
+                component: './Account/Center/MyObtainRequest',
+              },
+              {
+                path: '/account/center/MyRequest',
                 component: './Account/Center/MyRequest',
               },
               {

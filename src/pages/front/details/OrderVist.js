@@ -80,8 +80,7 @@ handleSave = () => {
     //
     if (!err) {
 
-      values.tenantName=currentUser.realName;
-      values.mobile=currentUser.mobile;
+      values.tenantId=currentUser.id;
       values.estateId=data.estateId;
       values.ownerId=data.ownerId;
       values.requestTime= new Date();

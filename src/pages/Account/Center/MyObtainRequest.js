@@ -1,24 +1,23 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent ,Fragment} from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Card, Form, Select, Divider } from 'antd';
+import { Card, Form, Select, Divider ,message} from 'antd';
 import StandardTable from '@/components/StandardTable';
-import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-
-import styles from '../TableList.less';
+import styles from '../../xyl/TableList.less';
 
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
 
-/* eslint react/no-multi-comp:0 */
-@connect(({ vistRequset, loading }) => ({
+@connect(({ user,vistRequset, loading }) => ({
+  currentUser:user.currentUser,
   vistRequset,
   loading: loading.models.vistRequset,
+  submitting: loading.effects['vistRequset/updateVistRequestForm'],
 }))
 @Form.create()
-class KanFang extends PureComponent {
+class Center extends PureComponent {
   state = {
     modalVisible: false,
     updateModalVisible: false,
@@ -35,7 +34,7 @@ class KanFang extends PureComponent {
     },
     {
       title: '租客姓名',
-      dataIndex: 'tenantName',
+      dataIndex: 'tenant_name',
     },
     {
       title: '租客电话',
@@ -47,12 +46,12 @@ class KanFang extends PureComponent {
     },
     {
       title: '请求时间',
-      dataIndex: 'requestTime',
+      dataIndex: 'request_time',
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
       title: '看房时间',
-      dataIndex: 'vistTime',
+      dataIndex: 'vist_time',
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
@@ -65,11 +64,13 @@ class KanFang extends PureComponent {
     {
       title: '操作',
       render: (text, record) => (
+        record.status=="2"?
         <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>查看详情</a>
+          <a onClick={() => this.handleAgree(record.id)}>同意看房</a>
           <Divider type="vertical" />
-          <a href="">订阅警报</a>
+          <a onClick={() => this.handleRefuse(record.id)}>拒绝看房</a>
         </Fragment>
+        :<span>无</span>
       ),
     },
   ];
@@ -79,7 +80,7 @@ class KanFang extends PureComponent {
     } else if (record.status == '2') {
       return '待确认';
     } else if (record.status == '3') {
-      return '带看房';
+      return '待看房';
     } else if (record.status == '4') {
       return '已取消';
     }else if (record.status == '5') {
@@ -89,14 +90,22 @@ class KanFang extends PureComponent {
 
   componentDidMount() {
     //当组件挂载完成后执行加载数据
-    const { dispatch } = this.props;
+    const { currentUser,dispatch } = this.props;
     dispatch({
       type: 'vistRequset/requestList',
+      payload:{  ownerId:currentUser.id,}
+    });
+  }
+  reload() {
+    const { currentUser,dispatch } = this.props;
+    dispatch({
+      type: 'vistRequset/requestList',
+      payload:{  ownerId:currentUser.id,}
     });
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    const { dispatch } = this.props;
+    const { currentUser,dispatch } = this.props;
     const { formValues } = this.state;
 
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
@@ -108,6 +117,7 @@ class KanFang extends PureComponent {
     const params = {
       currentPage: pagination.current,
       pageSize: pagination.pageSize,
+      ownerId:currentUser.id,
       ...formValues,
       ...filters,
     };
@@ -119,10 +129,10 @@ class KanFang extends PureComponent {
       type: 'vistRequset/fetch',
       payload: params,
     });
-  };
+  }
 
   handleMenuClick = e => {
-    const { dispatch } = this.props;
+    const { currentUser,dispatch } = this.props;
     const { selectedRows } = this.state;
 
     if (!selectedRows) return;
@@ -132,6 +142,8 @@ class KanFang extends PureComponent {
           type: 'vistRequset/remove',
           payload: {
             key: selectedRows.map(row => row.key),
+            ownerId:currentUser.id,
+
           },
           callback: () => {
             this.setState({
@@ -151,15 +163,75 @@ class KanFang extends PureComponent {
     });
   };
 
+  handleAgree = (rowId) => {
+    const { dispatch } = this.props;
+    const values={};
+    values.id=rowId;
+    // 待看房
+    values.status = "3";
+
+    dispatch({
+          type: 'vistRequset/updateVistRequestForm',
+          payload: values,
+          callback: res => {
+            console.log(res); // 请求完成后返回的结果
+            if (res.code == 200) {
+              message.success('已同意看房');
+              this.reload();
+            }
+          },
+      });
+};
+  handleRefuse= (rowId) => {
+    const { dispatch } = this.props;
+    const values={};
+    values.id=rowId;
+    // 已拒绝
+    values.status = "5";
+
+    dispatch({
+          type: 'vistRequset/updateVistRequestForm',
+          payload: values,
+          callback: res => {
+            console.log(res); // 请求完成后返回的结果
+            if (res.code == 200) {
+              message.success('已同意看房');
+              this.reload();
+            }
+          },
+      });
+  };
+
+
+handleAgree = (rowId) => {
+  const { dispatch } = this.props;
+  const values={};
+  values.id=rowId;
+  // 待看房
+  values.status = "3";
+
+  dispatch({
+        type: 'vistRequset/updateVistRequestForm',
+        payload: values,
+        callback: res => {
+          console.log(res); // 请求完成后返回的结果
+          if (res.code == 200) {
+            message.success('已同意看房');
+            this.reload();
+          }
+        },
+    });
+    
+};
   render() {
     const {
       vistRequset: { data },
       loading,
     } = this.props;
     const { selectedRows } = this.state;
-
+    
     return (
-      <PageHeaderWrapper title="看房请求">
+      <div>
         <Card bordered={false}>
           <div className={styles.tableList}>
             <StandardTable
@@ -172,9 +244,9 @@ class KanFang extends PureComponent {
             />
           </div>
         </Card>
-      </PageHeaderWrapper>
+      </div>
     );
   }
 }
 
-export default KanFang;
+export default Center;
