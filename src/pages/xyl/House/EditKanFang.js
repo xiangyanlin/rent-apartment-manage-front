@@ -1,25 +1,15 @@
 import React from 'react';
-import {Checkbox, Form, Input, Modal,Select,Button,Card,message} from "antd";
+import {Checkbox, Form, Input, Modal,Select,Button,Card,message,DatePicker} from "antd";
 import {connect} from "dva";
 import { formatMessage, FormattedMessage } from 'umi/locale';
+import moment from 'moment';
+
 const FormItem = Form.Item;
 const { Option } = Select;
 const InputGroup = Input.Group;
 const CheckboxGroup = Checkbox.Group;
-const validatorGeographic = (rule, value, callback) => {
-    const { province, city ,area} = value;
-    if (!province.key) {
-      callback('Please input your province!');
-    }
-    if (!city.key) {
-      callback('Please input your city!');
-    }
-    if (!area.key) {
-      callback('Please input your area!');
-    }
-    callback();
-  };
-  
+const { TextArea } = Input;
+
   const children = [];
   for (let i = 1990; i <=2020; i++) {
     children.push(<Option key={ i}>{""+i}</Option>);
@@ -39,7 +29,7 @@ const formItemLayout = {
 
 @connect()
 @Form.create()
-class EditEstate extends React.Component{
+class EditKanFang extends React.Component{
 
   constructor(props){
     super(props);
@@ -75,7 +65,7 @@ class EditEstate extends React.Component{
         values.id = record.id;
 
         dispatch({
-          type: 'estate/updateEstateForm',
+          type: 'vist/updateVistRequestForm',
           payload: values,
         });
 
@@ -125,70 +115,50 @@ class EditEstate extends React.Component{
         >
           <div style={{overflow:'auto'}}>
             <Form hideRequiredMark style={{ marginTop: 8 }}>
-              <FormItem {...formItemLayout} label="楼盘名称">
-                {getFieldDecorator('name',{initialValue:record.name  ,rules:[{ required: true, message:"此项为必填项" }]})(<Input style={{ width: '100%' }} disabled />)}
+              <FormItem {...formItemLayout} label="租客姓名">
+                {getFieldDecorator('tenantName',{initialValue:record.tenantName  ,rules:[{ required: true, message:"此项为必填项" }]})(<Input style={{ width: '100%' }} disabled />)}
             </FormItem>
-                <FormItem {...formItemLayout} label="所在地址" >
-                {getFieldDecorator('address',
-                    { initialValue:record.province+record.city+record.area+record.address ,
+                <FormItem {...formItemLayout} label="租客电话" >
+                {getFieldDecorator('mobile',
+                    { initialValue:record.mobile,
                         rules:[{
                             required: true, message:"此项为必填项" 
                             }]})
                             (<Input style={{ width: '100%' }} disabled
                             />)}
                 </FormItem>
-                <FormItem {...formItemLayout} label="建筑年代">
-                {getFieldDecorator('year',
-                    {initialValue:record.year ,
+                <FormItem {...formItemLayout} label="请求时间">
+                {getFieldDecorator('request_time',
+                    {initialValue:moment(record.request_time),
                         rules:[{
                             required: true, message:"此项为必填项" 
                             }]})
                             (
-                            <Select  style={{ width: '40%' }} placeholder="请选择年份" >
-                            {children}
-                            </Select>
+                                <DatePicker   disabled/>
                             )}
                 </FormItem>
-                <FormItem {...formItemLayout} label="建筑类型">
-                {getFieldDecorator('type',
-                    {initialValue:record.type ,
+                <FormItem {...formItemLayout} label="看房时间">
+                {getFieldDecorator('vist_time',
+                    {initialValue:moment(record.vist_time) ,
                         rules:[{
                             required: true, message:"此项为必填项" 
                             }]})
                             (
-                            <Select  style={{ width: 120 }} >
-                            <Option value="1">塔楼</Option>
-                            <Option value="2">板楼</Option>
-                            </Select>
+                                <DatePicker  />
                             )}
                 </FormItem>
-                <FormItem {...formItemLayout} label="物业费">
-                {getFieldDecorator('propertyCost',
-                    {initialValue:record.propertyCost ,
+                <FormItem {...formItemLayout} label="备注信息">
+                {getFieldDecorator('remark',
+                    {initialValue:record.remark ,
                         rules:[{
                             required: true, message:"此项为必填项" 
                             }]})
-                            (<Input style={{ width: '30%' }} addonAfter="元/平" />
+                            (<TextArea
+                                autoSize={{ minRows: 2, maxRows: 6 }}
+                              />
                             )}
                 </FormItem>
-                <FormItem {...formItemLayout} label="物业公司">
-                {getFieldDecorator('propertyCompany',
-                    {initialValue:record.propertyCompany ,
-                        rules:[{
-                            required: true, message:"此项为必填项" 
-                            }]})
-                            (<Input style={{ width: '100%' }} 
-                            />)}
-                </FormItem>
-                <FormItem {...formItemLayout} label="开发商">
-                {getFieldDecorator('developers',
-                    {initialValue:record.developers ,
-                        rules:[{
-                            required: true, message:"此项为必填项" 
-                            }]})
-                            (<Input style={{ width: '100%' }} 
-                            />)}
-                </FormItem>
+
             </Form>
           </div>
 
@@ -199,4 +169,4 @@ class EditEstate extends React.Component{
 
 }
 
-export default EditEstate;
+export default EditKanFang;

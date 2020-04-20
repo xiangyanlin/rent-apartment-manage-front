@@ -1,10 +1,10 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Card, Form, Select, Divider } from 'antd';
+import { Card, Form, Select, Divider ,  Popconfirm,message,Button} from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-
+import EditKanFang from './EditKanFang';
 import styles from '../TableList.less';
 
 const getValue = obj =>
@@ -65,14 +65,43 @@ class KanFang extends PureComponent {
     {
       title: '操作',
       render: (text, record) => (
-        <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>查看详情</a>
-          <Divider type="vertical" />
-          <a href="">订阅警报</a>
-        </Fragment>
+      <Fragment>
+        <EditKanFang record={record} reload={this.reload.bind(this)} />
+        <Divider type="vertical" />
+        <Popconfirm
+          title="您确认要删除这条数据吗?"
+          onConfirm={() => {
+            this.confirm(record.id);
+          }}
+          onCancel={this.cancel}
+          okText="确认"
+          cancelText="取消"
+        >
+          <a href="#">删除</a>
+        </Popconfirm>
+      </Fragment>
       ),
     },
   ];
+
+   //删除确认框
+   confirm = (rowId, e) => {
+    //console.log(e);
+    const { dispatch } = this.props;
+    //console.log(rowId);
+    dispatch({
+      type: 'vistRequset/delete',
+      payload: { id: rowId },
+      callback: res => {
+        console.log(res); // 请求完成后返回的结果
+        if (res.code == 200) {
+          message.success('删除成功');
+          dispatch({ type: 'vistRequset/requestList' });
+        }
+      },
+    });
+  };
+
   convertStatus = record => {
     if (record.status == '1') {
       return '已确认';
@@ -94,7 +123,12 @@ class KanFang extends PureComponent {
       type: 'vistRequset/requestList',
     });
   }
-
+  reload() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'vistRequset/requestList',
+    });
+  }
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch } = this.props;
     const { formValues } = this.state;
@@ -162,6 +196,7 @@ class KanFang extends PureComponent {
       <PageHeaderWrapper title="看房请求">
         <Card bordered={false}>
           <div className={styles.tableList}>
+          {/* <Button type="primary" icon="plus" onClick={this.handleOnClick}>新增</Button> */}
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}

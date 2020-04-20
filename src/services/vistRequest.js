@@ -22,3 +22,9 @@ export async function updateVistRequest(params) {
     body: params,
   });
 }
+//删除
+export async function deleteVistRequest(params) {
+  return request(`/xyl/vistRequest/delete?${stringify(params)}`, {
+    method: 'delete',
+  });
+}

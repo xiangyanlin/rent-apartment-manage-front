@@ -424,7 +424,7 @@ class Resource extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
-            <Button type="primary" icon="plus" onClick={this.handleOnClick}>新增</Button>
+           <Button type="primary" icon="plus" onClick={this.handleOnClick}>新增</Button>
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}
