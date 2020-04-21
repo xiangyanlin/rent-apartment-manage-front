@@ -229,7 +229,7 @@ class Question extends PureComponent {
       loading,
     } = this.props;
     const { selectedRows } = this.state;
-
+    console.log(this.props);
     return (
       <PageHeaderWrapper title="问答列表">
         <Card bordered={false}>

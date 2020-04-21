@@ -6,8 +6,11 @@ export default {
   namespace: 'dict',
   
   state: {
-    data:[],
-    estateMap:[],
+    data:{
+      list: [],
+      pagination: {},
+    },
+    type:{},
   },
 
   effects: {
@@ -15,7 +18,7 @@ export default {
       *dictTypeAll({ payload }, { call, put }) {
         const response = yield call(queryDictTypeAll, payload);
         yield put({
-          type: 'save',
+          type: 'saveType',
           payload: response,
         });
       },
@@ -73,13 +76,19 @@ export default {
 
   reducers: {
     save(state, action) {
-      const map=new Map(action.payload.data);
         return {
           ...state,
           data: action.payload,
-          estateMap:map,
           //length:data.length(),
         };
       },
+      saveType(state, action) {
+          return {
+            ...state,
+            type: action.payload,
+            //length:data.length(),
+          };
+        },
     },
+    
 };

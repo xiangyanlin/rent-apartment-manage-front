@@ -1,7 +1,12 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent,Fragment } from 'react';
 import { connect } from 'dva';
 import { Card, Form, Select, Divider ,  Popconfirm,message,Button,Row,Col,Tree } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
+import StandardTable from '@/components/StandardTable';
+import moment from 'moment';
+import dictStyle from './Dict.less'
+import styles from '../TableList.less';
+
 
 const { TreeNode } = Tree;
 @connect(({ dict, loading }) => ({
@@ -9,29 +14,267 @@ const { TreeNode } = Tree;
     loading: loading.models.dict,
   }))
 @Form.create()
-class Dict extends React.Component{
+class Dict extends PureComponent{
+    state = {
+        modalVisible: false,
+        updateModalVisible: false,
+        expandForm: false,
+        selectedRows: [],
+        formValues: {},
+        stepFormValues: {},
+        selectNodeId:{}
+      };
+    
+      columns = [
+        {
+          title: '字典编号',
+          dataIndex: 'id',
+        },
+        {
+          title: '类型编号',
+          dataIndex: 'dictTypeId',
+        },
+        {
+          title: '字典名',
+          dataIndex: 'name',
+        },
+        {
+          title: '字典值',
+          dataIndex: 'value',
+        },
+        {
+          title: '是否默认',
+          dataIndex: 'isDefault',
+        //   render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+        },
+    
+        {
+          title: '操作',
+          render: (text, record) => (
+            <Fragment>
+              <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
+              <Divider type="vertical" />
+              <Popconfirm
+                title="您确认要删除这条数据吗?"
+                onConfirm={() => {
+                  this.confirm(record.id);
+                }}
+                onCancel={this.cancel}
+                okText="确认"
+                cancelText="取消"
+              >
+                <a href="#">删除</a>
+              </Popconfirm>
+            </Fragment>
+          ),
+        },
+      ];
+    
+      confirm = (rowId, e) => {
+        //console.log(e);
+        const { dispatch } = this.props;
+        //console.log(rowId);
+        dispatch({
+          type: 'dict/deleteDict',
+          payload: { id: rowId },
+          callback: res => {
+            console.log(res); // 请求完成后返回的结果
+            if (res.code == 200) {
+              message.success('删除成功');
+              dispatch({ type: 'dict/dictList' });
+            }
+          },
+        });
+      };
+    
+      cancel = e => {
+        console.log(e);
+        message.error('Click on No');
+      };
+    
+      componentDidMount() {
+        //当组件挂载完成后执行加载数据
+        const { dispatch } = this.props;
+        dispatch({
+          type: 'dict/dictTypeAll',
+        });
+        dispatch({
+            type: 'dict/dictList',
+          });
+      }
+    
+      handleStandardTableChange = (pagination, filtersArg, sorter) => {
+        const { dispatch } = this.props;
+        const { formValues } = this.state;
+    
+        const filters = Object.keys(filtersArg).reduce((obj, key) => {
+          const newObj = { ...obj };
+          newObj[key] = getValue(filtersArg[key]);
+          return newObj;
+        }, {});
+    
+        const params = {
+          currentPage: pagination.current,
+          pageSize: pagination.pageSize,
+          ...formValues,
+          ...filters,
+        };
+        if (sorter.field) {
+          params.sorter = `${sorter.field}_${sorter.order}`;
+        }
+    
+        dispatch({
+          type: 'question/fetch',
+          payload: params,
+        });
+      };
+    
+      handleMenuClick = e => {
+        const { dispatch } = this.props;
+        const { selectedRows } = this.state;
+    
+        if (!selectedRows) return;
+        switch (e.key) {
+          case 'remove':
+            dispatch({
+              type: 'question/remove',
+              payload: {
+                key: selectedRows.map(row => row.key),
+              },
+              callback: () => {
+                this.setState({
+                  selectedRows: [],
+                });
+              },
+            });
+            break;
+          default:
+            break;
+        }
+      };
+    
+      handleSelectRows = rows => {
+        this.setState({
+          selectedRows: rows,
+        });
+      };
+    
+      handleSearch = e => {
+        e.preventDefault();
+    
+        const { dispatch, form } = this.props;
+    
+        form.validateFields((err, fieldsValue) => {
+          if (err) return;
+    
+          const values = {
+            ...fieldsValue,
+            updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
+          };
+    
+          this.setState({
+            formValues: values,
+          });
+    
+          dispatch({
+            type: 'question/fetch',
+            payload: values,
+          });
+        });
+      };
+    
+      renderSimpleForm() {
+        const {
+          form: { getFieldDecorator },
+        } = this.props;
+        return (
+          <Form onSubmit={this.handleSearch} layout="inline">
+            <Row gutter={{ md: 5, lg: 24, xl: 48 }}>
+              <Col md={8} sm={48}>
+                {getFieldDecorator('keyWord')(<Input placeholder="请输入关键字 如 资讯标题/发布者" />)}
+              </Col>
+              <Col md={8} sm={24}>
+                <span className={styles.submitButtons}>
+                  <Button type="primary" htmlType="submit" icon="search">
+                    搜索
+                  </Button>
+                </span>
+              </Col>
+            </Row>
+          </Form>
+        );
+      }
+
+
     render(){
+       
+        const { type}=this.props.dict;
+        console.log(this.props);
+        const {
+            loading,
+            dict: { data }
+            } = this.props;
+          const { selectedRows } = this.state;
+        const children = [];
+       // console.log(type.data)
+        const arr=type.data
+        arr?arr.forEach((item,index,array)=>{
+            //console.log(item)
+            children.push( <TreeNode title={item.dictTypeName} key={item.id} />);
+        }):arr
+
         return (
             <PageHeaderWrapper title="字典管理">
                 <Card>
                 <Row gutter={16}> 
-                    <Col  span={6}>
+                    <Col  span={8}>
+                        <div className={dictStyle.line}>
+                            <Row>
+                                <Col span={7} >
+                                  <span>字典类型</span>
+                                </Col>
+                                <Col span={17} className={dictStyle.right}>
+                                    <Button type="link" icon="plus">新增</Button>
+                                    <Button type="link" icon="edit">编辑</Button>
+                                    <Button type="link" icon="delete">删除</Button>
+                                </Col>
+                            </Row>
+                        </div>
                         <Tree
                             checkable
-                            defaultExpandedKeys={['0-0-0', '0-0-1']}
-                            defaultSelectedKeys={['0-0-0', '0-0-1']}
-                            defaultCheckedKeys={['0-0-0', '0-0-1']}
+                            defaultExpandAll
+                            // defaultExpandedKeys={['0-0-0', '0-0-1']}
+                            // defaultSelectedKeys={['0-0-0', '0-0-1']}
+                            // defaultCheckedKeys={['0-0-0', '0-0-1']}
                             // onSelect={this.onSelect}
                             // onCheck={this.onCheck}
                         >
-                            <TreeNode title="字典类型树" key="0-0">
-                                <TreeNode title="parent 1-0" key="0-0-0" />
-                                <TreeNode title="parent 1-1" key="0-0-1"/>
+                            <TreeNode title="字典类型树" key="0" >
+                                {children}
                             </TreeNode>
                         </Tree>
                     </Col>
-                    <Col  span={18}>
-                        <div>字典列表</div>
+                    <Col  span={16}>
+                        <div className={dictStyle.line}>
+                            <Row>
+                                <Col span={7}>
+                                  <span>字典</span>
+                                </Col>
+                                <Col span={17} className={dictStyle.right}>
+                                    <Button type="link" icon="plus">新增</Button>
+                                </Col>
+                            </Row>
+                        </div>
+                        <div className={styles.tableList}>
+                            <StandardTable
+                            selectedRows={selectedRows}
+                            loading={loading}
+                            data={data}
+                            columns={this.columns}
+                            onSelectRow={this.handleSelectRows}
+                            onChange={this.handleStandardTableChange}
+                            />
+                        </div>
                     </Col>
                 </Row>
                 </Card>
