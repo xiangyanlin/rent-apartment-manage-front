@@ -29,7 +29,7 @@ const formItemLayout = {
 
 @connect()
 @Form.create()
-class EditKanFang extends React.Component{
+class EditDict extends React.Component{
 
   constructor(props){
     super(props);
@@ -169,4 +169,4 @@ class EditKanFang extends React.Component{
 
 }
 
-export default EditKanFang;
+export default EditDict;

@@ -10,10 +10,7 @@ const InputGroup = Input.Group;
 const CheckboxGroup = Checkbox.Group;
 const { TextArea } = Input;
 
-  const children = [];
-  for (let i = 1990; i <=2020; i++) {
-    children.push(<Option key={ i}>{""+i}</Option>);
-  }
+
 
 const formItemLayout = {
   labelCol: {
@@ -29,7 +26,7 @@ const formItemLayout = {
 
 @connect()
 @Form.create()
-class EditKanFang extends React.Component{
+class AddDictType extends React.Component{
 
   constructor(props){
     super(props);
@@ -41,7 +38,7 @@ class EditKanFang extends React.Component{
 
   }
 
-  showModal = () => {
+  showModal = (event) => {
     this.setState({
       visible: true
     });
@@ -55,23 +52,17 @@ class EditKanFang extends React.Component{
 
   handleSave = () => {
 
-    const { dispatch, form, record } = this.props;
+    const { dispatch, form } = this.props;
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        if(this.state.pics.size > 0){
-          values.pic = [...this.state.pics].join(',');
-        }
-        // 房源id
-        values.id = record.id;
-
         dispatch({
-          type: 'vist/updateVistRequestForm',
+          type: 'dict/submitDictTypeForm',
           payload: values,
         });
 
         setTimeout(()=>{
           this.handleCancel();
-          this.props.reload();
+          this.props.reloadDictType();
         },500)
 
       }
@@ -79,34 +70,21 @@ class EditKanFang extends React.Component{
 
   };
 
-  handleFileList = (obj)=>{
-    let pics = new Set();
-    obj.forEach((v, k) => {
-      if(v.response){
-        pics.add(v.response.name);
-      }
-      if(v.url){
-        pics.add(v.url);
-      }
-    });
 
-    this.setState({
-      pics : pics
-    })
-  }
 
   render(){
 
-    const record = this.props.record;
+   
     const {
       form: { getFieldDecorator }
     } = this.props;
 
     return (
       <React.Fragment>
-        <a onClick={() => {this.showModal()}}>编辑</a>
+        {/* <a onClick={() => {this.showModal()}}>编辑</a> */}
+        <Button type="link" icon="plus" onClick={() => {this.showModal()}}>新增</Button>
         <Modal
-          title={'编辑'}
+          title={'新增字典类型'}
           width={640}
           visible={this.state.visible}
           onOk={()=>{this.handleSave()}}
@@ -115,44 +93,12 @@ class EditKanFang extends React.Component{
         >
           <div style={{overflow:'auto'}}>
             <Form hideRequiredMark style={{ marginTop: 8 }}>
-              <FormItem {...formItemLayout} label="租客姓名">
-                {getFieldDecorator('tenantName',{initialValue:record.tenantName  ,rules:[{ required: true, message:"此项为必填项" }]})(<Input style={{ width: '100%' }} disabled />)}
-            </FormItem>
-                <FormItem {...formItemLayout} label="租客电话" >
-                {getFieldDecorator('mobile',
-                    { initialValue:record.mobile,
-                        rules:[{
-                            required: true, message:"此项为必填项" 
-                            }]})
-                            (<Input style={{ width: '100%' }} disabled
-                            />)}
-                </FormItem>
-                <FormItem {...formItemLayout} label="请求时间">
-                {getFieldDecorator('request_time',
-                    {initialValue:moment(record.request_time),
-                        rules:[{
-                            required: true, message:"此项为必填项" 
-                            }]})
-                            (
-                                <DatePicker   disabled/>
-                            )}
-                </FormItem>
-                <FormItem {...formItemLayout} label="看房时间">
-                {getFieldDecorator('vist_time',
-                    {initialValue:moment(record.vist_time) ,
-                        rules:[{
-                            required: true, message:"此项为必填项" 
-                            }]})
-                            (
-                                <DatePicker  />
-                            )}
-                </FormItem>
-                <FormItem {...formItemLayout} label="备注信息">
-                {getFieldDecorator('remark',
-                    {initialValue:record.remark ,
-                        rules:[{
-                            required: true, message:"此项为必填项" 
-                            }]})
+              <FormItem {...formItemLayout} label="字典类型名">
+                {getFieldDecorator('dictTypeName',{ rules:[{ required: true, message:"此项为必填项" }]})
+                (<Input style={{ width: '100%' }}  />)}
+              </FormItem>
+                <FormItem {...formItemLayout} label="字典类型描述">
+                {getFieldDecorator('dictTypeDesc')
                             (<TextArea
                                 autoSize={{ minRows: 2, maxRows: 6 }}
                               />
@@ -169,4 +115,4 @@ class EditKanFang extends React.Component{
 
 }
 
-export default EditKanFang;
+export default AddDictType;

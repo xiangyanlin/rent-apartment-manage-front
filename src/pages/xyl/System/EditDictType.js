@@ -27,7 +27,10 @@ const formItemLayout = {
   },
 };
 
-@connect()
+@connect(({ dict, loading }) => ({
+  dict,
+  loading: loading.models.dict,
+}))
 @Form.create()
 class EdictDictType extends React.Component{
 
@@ -36,15 +39,37 @@ class EdictDictType extends React.Component{
 
     this.state={
       visible:false,
-      pics:new Set()
+      dictTypeId:{},
     };
 
   }
 
-  showModal = () => {
-    this.setState({
-      visible: true
-    });
+  getDictType=(id)=>{
+      const {dispatch}=this.props;
+      
+      dispatch({
+        type: 'dict/dictTypeOne',
+        payload: {id:id},
+      });
+  }
+  componentWillUpdate(nextProps, nextState) {
+    this.props = nextProps
+  }
+  showModal = (checkNodeIds) => {
+    if(Array.isArray(checkNodeIds)){
+      if(checkNodeIds.length===1){
+        this.setState({
+          visible: true,
+          dictTypeId:checkNodeIds[0]
+        });
+        this.getDictType(checkNodeIds[0]);
+      }else{
+        message.error("请选择一个类型编辑！");
+      }
+    }else{
+      message.error("请选择需要编辑的类型！");
+    }
+    
   };
 
   handleCancel = () => {
@@ -55,23 +80,19 @@ class EdictDictType extends React.Component{
 
   handleSave = () => {
 
-    const { dispatch, form, record } = this.props;
+    const { dispatch, form } = this.props;
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        if(this.state.pics.size > 0){
-          values.pic = [...this.state.pics].join(',');
-        }
-        // 房源id
-        values.id = record.id;
+        values.id = this.state.dictTypeId;
 
         dispatch({
-          type: 'vist/updateVistRequestForm',
+          type: 'dict/updateDictTypeForm',
           payload: values,
         });
 
         setTimeout(()=>{
           this.handleCancel();
-          this.props.reload();
+          this.props.reloadDictType();
         },500)
 
       }
@@ -96,15 +117,17 @@ class EdictDictType extends React.Component{
   }
 
   render(){
-
-    const record = this.props.record;
+    
+    const {loading,checkNodeIds} = this.props;
+    const {type}=this.props.dict;
     const {
       form: { getFieldDecorator }
     } = this.props;
 
     return (
       <React.Fragment>
-        <a onClick={() => {this.showModal()}}>编辑</a>
+        {/* <a onClick={() => {this.showModal()}}>编辑</a> */}
+        <Button type="link" icon="edit" onClick={() => {this.showModal(checkNodeIds)}}>编辑</Button>
         <Modal
           title={'编辑'}
           width={640}
@@ -115,44 +138,15 @@ class EdictDictType extends React.Component{
         >
           <div style={{overflow:'auto'}}>
             <Form hideRequiredMark style={{ marginTop: 8 }}>
-              <FormItem {...formItemLayout} label="租客姓名">
-                {getFieldDecorator('tenantName',{initialValue:record.tenantName  ,rules:[{ required: true, message:"此项为必填项" }]})(<Input style={{ width: '100%' }} disabled />)}
+              <FormItem {...formItemLayout} label="字典类型名">
+                {getFieldDecorator('dictTypeName',{
+                   initialValue:type.dictTypeName  ,
+                  rules:[{ required: true, message:"此项为必填项" }]})(<Input style={{ width: '100%' }}  />)}
             </FormItem>
-                <FormItem {...formItemLayout} label="租客电话" >
-                {getFieldDecorator('mobile',
-                    { initialValue:record.mobile,
-                        rules:[{
-                            required: true, message:"此项为必填项" 
-                            }]})
-                            (<Input style={{ width: '100%' }} disabled
-                            />)}
-                </FormItem>
-                <FormItem {...formItemLayout} label="请求时间">
-                {getFieldDecorator('request_time',
-                    {initialValue:moment(record.request_time),
-                        rules:[{
-                            required: true, message:"此项为必填项" 
-                            }]})
-                            (
-                                <DatePicker   disabled/>
-                            )}
-                </FormItem>
-                <FormItem {...formItemLayout} label="看房时间">
-                {getFieldDecorator('vist_time',
-                    {initialValue:moment(record.vist_time) ,
-                        rules:[{
-                            required: true, message:"此项为必填项" 
-                            }]})
-                            (
-                                <DatePicker  />
-                            )}
-                </FormItem>
-                <FormItem {...formItemLayout} label="备注信息">
-                {getFieldDecorator('remark',
-                    {initialValue:record.remark ,
-                        rules:[{
-                            required: true, message:"此项为必填项" 
-                            }]})
+                <FormItem {...formItemLayout} label="字典类型描述">
+                {getFieldDecorator('dictTypeDesc'
+                ,{initialValue:type.dictTypeDesc }
+                )
                             (<TextArea
                                 autoSize={{ minRows: 2, maxRows: 6 }}
                               />

@@ -12,6 +12,11 @@ import { stringify } from 'qs';
 export async function queryDictTypeAll(params) {
   return request(`/xyl/dictType/selectAll?${stringify(params)}`);
 }
+
+//通过id获取
+export async function getDictTypeById(params) {
+  return request(`/xyl/dictType/selectOne?${stringify(params)}`);
+}
 //修改
 export async function updateDictType(params) {
   return request('/xyl/dictType/update', {

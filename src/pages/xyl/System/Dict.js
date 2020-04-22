@@ -6,8 +6,8 @@ import StandardTable from '@/components/StandardTable';
 import moment from 'moment';
 import dictStyle from './Dict.less'
 import styles from '../TableList.less';
-
-
+import AddDictType from './AddDictType'
+import EditDictType from './EditDictType'
 const { TreeNode } = Tree;
 @connect(({ dict, loading }) => ({
     dict,
@@ -22,7 +22,8 @@ class Dict extends PureComponent{
         selectedRows: [],
         formValues: {},
         stepFormValues: {},
-        selectNodeId:{}
+        selectNodeId:{},
+        checkNodeIds:[]
       };
     
       columns = [
@@ -102,6 +103,20 @@ class Dict extends PureComponent{
             type: 'dict/dictList',
           });
       }
+      reloadDictType() {
+        const { dispatch } = this.props;
+        dispatch({
+          type: 'dict/dictTypeAll',
+        });
+      }
+
+      reloadDict(id) {
+        const { dispatch } = this.props;
+        dispatch({
+          type: 'dict/dictList',
+          payload:{dictTypeId:id}
+        });
+      }
     
       handleStandardTableChange = (pagination, filtersArg, sorter) => {
         const { dispatch } = this.props;
@@ -124,34 +139,12 @@ class Dict extends PureComponent{
         }
     
         dispatch({
-          type: 'question/fetch',
+          type: 'dict/dictList',
           payload: params,
         });
       };
     
-      handleMenuClick = e => {
-        const { dispatch } = this.props;
-        const { selectedRows } = this.state;
-    
-        if (!selectedRows) return;
-        switch (e.key) {
-          case 'remove':
-            dispatch({
-              type: 'question/remove',
-              payload: {
-                key: selectedRows.map(row => row.key),
-              },
-              callback: () => {
-                this.setState({
-                  selectedRows: [],
-                });
-              },
-            });
-            break;
-          default:
-            break;
-        }
-      };
+
     
       handleSelectRows = rows => {
         this.setState({
@@ -204,20 +197,49 @@ class Dict extends PureComponent{
           </Form>
         );
       }
-
-
+      //树节点点击
+      onSelect = (selectedKeys, info) => {
+        this.setState({selectNodeId:selectedKeys[0]})
+        this.reloadDict(selectedKeys[0]);
+      };
+      //树节点选中
+      onCheck = (checkedKeys, info) => {
+        this.setState({checkNodeIds:checkedKeys})
+      };
+      //删除树节点
+      delDictType=(checkNodeIds)=>{
+        const {dispatch}=this.props;
+        if(Array.isArray(checkNodeIds)){
+          if(checkNodeIds.length===1){
+            dispatch({
+              type: 'dict/deleteDictType',
+              payload: { id: checkNodeIds[0] },
+              callback: res => {
+                console.log(res); // 请求完成后返回的结果
+                if (res.code == 200) {
+                  message.success('删除成功');
+                  dispatch({ type: 'dict/dictTypeAll' });
+                }
+              },
+            });
+          }else{
+            message.error("请选择一个字典类型删除！");
+          }
+        }else{
+          message.error("请选择需要删除的字典类型！");
+        }
+      }
     render(){
        
-        const { type}=this.props.dict;
-        console.log(this.props);
+        const { types}=this.props.dict;
         const {
             loading,
             dict: { data }
             } = this.props;
-          const { selectedRows } = this.state;
+          const { selectedRows ,checkNodeIds} = this.state;
         const children = [];
        // console.log(type.data)
-        const arr=type.data
+        const arr=types.data
         arr?arr.forEach((item,index,array)=>{
             //console.log(item)
             children.push( <TreeNode title={item.dictTypeName} key={item.id} />);
@@ -234,20 +256,17 @@ class Dict extends PureComponent{
                                   <span>字典类型</span>
                                 </Col>
                                 <Col span={17} className={dictStyle.right}>
-                                    <Button type="link" icon="plus">新增</Button>
-                                    <Button type="link" icon="edit">编辑</Button>
-                                    <Button type="link" icon="delete">删除</Button>
+                                    <AddDictType reloadDictType={this.reloadDictType.bind(this)} />
+                                    <EditDictType checkNodeIds={checkNodeIds} reloadDictType={this.reloadDictType.bind(this)}/>
+                                    <Button type="link" icon="delete" onClick={()=>{this.delDictType(checkNodeIds)}}>删除</Button>
                                 </Col>
                             </Row>
                         </div>
                         <Tree
                             checkable
                             defaultExpandAll
-                            // defaultExpandedKeys={['0-0-0', '0-0-1']}
-                            // defaultSelectedKeys={['0-0-0', '0-0-1']}
-                            // defaultCheckedKeys={['0-0-0', '0-0-1']}
-                            // onSelect={this.onSelect}
-                            // onCheck={this.onCheck}
+                             onSelect={this.onSelect}
+                             onCheck={this.onCheck}
                         >
                             <TreeNode title="字典类型树" key="0" >
                                 {children}
