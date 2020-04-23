@@ -1,5 +1,5 @@
 import React from 'react';
-import {Checkbox, Form, Input, Modal,Select,Button,Card,message,DatePicker} from "antd";
+import {Checkbox, Form, Input, Modal,Select,Button,Card,message,Switch} from "antd";
 import {connect} from "dva";
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import moment from 'moment';
@@ -58,20 +58,16 @@ class EditDict extends React.Component{
     const { dispatch, form, record } = this.props;
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        if(this.state.pics.size > 0){
-          values.pic = [...this.state.pics].join(',');
-        }
-        // 房源id
         values.id = record.id;
 
         dispatch({
-          type: 'vist/updateVistRequestForm',
+          type: 'dict/updateDictForm',
           payload: values,
         });
 
         setTimeout(()=>{
           this.handleCancel();
-          this.props.reload();
+          this.props.reloadDict();
         },500)
 
       }
@@ -79,21 +75,6 @@ class EditDict extends React.Component{
 
   };
 
-  handleFileList = (obj)=>{
-    let pics = new Set();
-    obj.forEach((v, k) => {
-      if(v.response){
-        pics.add(v.response.name);
-      }
-      if(v.url){
-        pics.add(v.url);
-      }
-    });
-
-    this.setState({
-      pics : pics
-    })
-  }
 
   render(){
 
@@ -115,50 +96,16 @@ class EditDict extends React.Component{
         >
           <div style={{overflow:'auto'}}>
             <Form hideRequiredMark style={{ marginTop: 8 }}>
-              <FormItem {...formItemLayout} label="租客姓名">
-                {getFieldDecorator('tenantName',{initialValue:record.tenantName  ,rules:[{ required: true, message:"此项为必填项" }]})(<Input style={{ width: '100%' }} disabled />)}
-            </FormItem>
-                <FormItem {...formItemLayout} label="租客电话" >
-                {getFieldDecorator('mobile',
-                    { initialValue:record.mobile,
-                        rules:[{
-                            required: true, message:"此项为必填项" 
-                            }]})
-                            (<Input style={{ width: '100%' }} disabled
-                            />)}
-                </FormItem>
-                <FormItem {...formItemLayout} label="请求时间">
-                {getFieldDecorator('request_time',
-                    {initialValue:moment(record.request_time),
-                        rules:[{
-                            required: true, message:"此项为必填项" 
-                            }]})
-                            (
-                                <DatePicker   disabled/>
-                            )}
-                </FormItem>
-                <FormItem {...formItemLayout} label="看房时间">
-                {getFieldDecorator('vist_time',
-                    {initialValue:moment(record.vist_time) ,
-                        rules:[{
-                            required: true, message:"此项为必填项" 
-                            }]})
-                            (
-                                <DatePicker  />
-                            )}
-                </FormItem>
-                <FormItem {...formItemLayout} label="备注信息">
-                {getFieldDecorator('remark',
-                    {initialValue:record.remark ,
-                        rules:[{
-                            required: true, message:"此项为必填项" 
-                            }]})
-                            (<TextArea
-                                autoSize={{ minRows: 2, maxRows: 6 }}
-                              />
-                            )}
-                </FormItem>
-
+              <FormItem {...formItemLayout} label="字典名">
+                {getFieldDecorator('name',{initialValue:record.name  ,rules:[{ required: true, message:"此项为必填项" }]})(<Input style={{ width: '100%' }}  />)}
+              </FormItem>
+              <FormItem {...formItemLayout} label="字典值">
+                {getFieldDecorator('value',{initialValue:record.value  ,rules:[{ required: true, message:"此项为必填项" }]})(<Input style={{ width: '100%' }}  />)}
+              </FormItem>
+              <FormItem {...formItemLayout} label="是否默认值">
+                {getFieldDecorator('isDefault')
+                ( <Switch checkedChildren="是" unCheckedChildren="否"  />)}
+              </FormItem>
             </Form>
           </div>
 

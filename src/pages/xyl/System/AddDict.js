@@ -1,6 +1,6 @@
 import React from 'react';
-import {Checkbox, Form, Input, Modal,Select,Button,Card,message,DatePicker} from "antd";
-import {connect} from "dva";
+import { Checkbox, Form, Input, Modal, Select, Button, Card, message, Switch } from 'antd';
+import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import moment from 'moment';
 
@@ -10,10 +10,10 @@ const InputGroup = Input.Group;
 const CheckboxGroup = Checkbox.Group;
 const { TextArea } = Input;
 
-  const children = [];
-  for (let i = 1990; i <=2020; i++) {
-    children.push(<Option key={ i}>{""+i}</Option>);
-  }
+const children = [];
+for (let i = 1990; i <= 2020; i++) {
+  children.push(<Option key={i}>{'' + i}</Option>);
+}
 
 const formItemLayout = {
   labelCol: {
@@ -29,22 +29,28 @@ const formItemLayout = {
 
 @connect()
 @Form.create()
-class AddDict extends React.Component{
-
-  constructor(props){
+class AddDict extends React.Component {
+  constructor(props) {
     super(props);
 
-    this.state={
-      visible:false,
-      pics:new Set()
+    this.state = {
+      visible: false,
+      pics: new Set(),
     };
-
   }
 
-  showModal = () => {
-    this.setState({
-      visible: true
-    });
+  showModal = checkNodeIds => {
+    if (Array.isArray(checkNodeIds) && checkNodeIds.length > 0) {
+      if (checkNodeIds.length === 1) {
+        this.setState({
+          visible: true,
+        });
+      } else {
+        message.error('请选择一个字典类型新增字典！');
+      }
+    } else {
+      message.error('请选择新增字典的类型！');
+    }
   };
 
   handleCancel = () => {
@@ -54,119 +60,82 @@ class AddDict extends React.Component{
   };
 
   handleSave = () => {
-
-    const { dispatch, form, record } = this.props;
+    const { dispatch, form, checkNodeIds } = this.props;
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        if(this.state.pics.size > 0){
-          values.pic = [...this.state.pics].join(',');
+        console.log(values);
+        values.dictTypeId = checkNodeIds[0];
+        if (values.isDefault) {
+          values.isDefault = '1';
+        } else {
+          values.isDefault = '0';
         }
-        // 房源id
-        values.id = record.id;
-
         dispatch({
-          type: 'vist/updateVistRequestForm',
+          type: 'dict/submitDictForm',
           payload: values,
         });
 
-        setTimeout(()=>{
+        setTimeout(() => {
           this.handleCancel();
-          this.props.reload();
-        },500)
-
+          this.props.reloadDict();
+        }, 500);
       }
     });
-
   };
 
-  handleFileList = (obj)=>{
-    let pics = new Set();
-    obj.forEach((v, k) => {
-      if(v.response){
-        pics.add(v.response.name);
-      }
-      if(v.url){
-        pics.add(v.url);
-      }
-    });
-
-    this.setState({
-      pics : pics
-    })
-  }
-
-  render(){
-
+  render() {
     const record = this.props.record;
     const {
-      form: { getFieldDecorator }
+      form: { getFieldDecorator },
+      checkNodeIds,
     } = this.props;
 
     return (
       <React.Fragment>
-        <a onClick={() => {this.showModal()}}>编辑</a>
+        <Button
+          type="link"
+          icon="plus"
+          onClick={() => {
+            this.showModal(checkNodeIds);
+          }}
+        >
+          新增
+        </Button>
         <Modal
-          title={'编辑'}
+          title={'新增字典'}
           width={640}
           visible={this.state.visible}
-          onOk={()=>{this.handleSave()}}
-          onCancel={()=>{this.handleCancel()}}
+          onOk={() => {
+            this.handleSave();
+          }}
+          onCancel={() => {
+            this.handleCancel();
+          }}
           destroyOnClose={true}
         >
-          <div style={{overflow:'auto'}}>
+          <div style={{ overflow: 'auto' }}>
             <Form hideRequiredMark style={{ marginTop: 8 }}>
-              <FormItem {...formItemLayout} label="租客姓名">
-                {getFieldDecorator('tenantName',{initialValue:record.tenantName  ,rules:[{ required: true, message:"此项为必填项" }]})(<Input style={{ width: '100%' }} disabled />)}
-            </FormItem>
-                <FormItem {...formItemLayout} label="租客电话" >
-                {getFieldDecorator('mobile',
-                    { initialValue:record.mobile,
-                        rules:[{
-                            required: true, message:"此项为必填项" 
-                            }]})
-                            (<Input style={{ width: '100%' }} disabled
-                            />)}
-                </FormItem>
-                <FormItem {...formItemLayout} label="请求时间">
-                {getFieldDecorator('request_time',
-                    {initialValue:moment(record.request_time),
-                        rules:[{
-                            required: true, message:"此项为必填项" 
-                            }]})
-                            (
-                                <DatePicker   disabled/>
-                            )}
-                </FormItem>
-                <FormItem {...formItemLayout} label="看房时间">
-                {getFieldDecorator('vist_time',
-                    {initialValue:moment(record.vist_time) ,
-                        rules:[{
-                            required: true, message:"此项为必填项" 
-                            }]})
-                            (
-                                <DatePicker  />
-                            )}
-                </FormItem>
-                <FormItem {...formItemLayout} label="备注信息">
-                {getFieldDecorator('remark',
-                    {initialValue:record.remark ,
-                        rules:[{
-                            required: true, message:"此项为必填项" 
-                            }]})
-                            (<TextArea
-                                autoSize={{ minRows: 2, maxRows: 6 }}
-                              />
-                            )}
-                </FormItem>
-
+              <FormItem {...formItemLayout} label="字典名">
+                {getFieldDecorator('name', {
+                  rules: [{ required: true, message: '此项为必填项' }],
+                })(<Input style={{ width: '100%' }} />)}
+              </FormItem>
+              <FormItem {...formItemLayout} label="字典值">
+                {getFieldDecorator('value', {
+                  rules: [{ required: true, message: '此项为必填项' }],
+                })(<Input style={{ width: '100%' }} />)}
+              </FormItem>
+              <FormItem {...formItemLayout} label="是否默认值">
+                {getFieldDecorator('isDefault')(
+                  <Switch checkedChildren="是" unCheckedChildren="否" />
+                )}
+              </FormItem>
             </Form>
           </div>
-
         </Modal>
       </React.Fragment>
-    )
+    );
   }
-
 }
 
 export default AddDict;
