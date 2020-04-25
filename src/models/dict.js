@@ -1,6 +1,6 @@
 import { routerRedux } from 'dva/router';
 import { addDictType ,queryDictTypeAll,updateDictType,deleteDictType,
-    addDict,queryDict,updateDict,deleteDict ,getDictTypeById}
+    addDict,queryDict,updateDict,deleteDict ,getDictTypeById,getDicts}
     from '@/services/dict';
 import {message} from "antd";
 export default {
@@ -13,9 +13,18 @@ export default {
     },
     types:{},
     type:{},
+    dictMap:{},
   },
 
   effects: {
+      //根据类型获取字典
+      *getDicts({ payload }, { call, put }) {
+        const response = yield call(getDicts, payload);
+        yield put({
+          type: 'saveDict',
+          payload: response,
+        });
+      },
       //类型
       *dictTypeAll({ payload }, { call, put }) {
         const response = yield call(queryDictTypeAll, payload);
@@ -105,6 +114,12 @@ export default {
             //length:data.length(),
           };
         },
+        saveDict(state, action) {
+            return {
+              ...state,
+              dictMap:action.payload.data,
+            };
+          },
     },
     
 };

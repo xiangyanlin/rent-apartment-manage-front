@@ -55,3 +55,11 @@ export async function deleteDict(params) {
     method: 'delete',
   });
 }
+
+  //根据类型id获取字典
+export async function getDicts(params) {
+  return request('/xyl/dict/getDicts', {
+    method: 'POST',
+    body: params,
+  });
+}

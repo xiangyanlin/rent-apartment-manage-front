@@ -3,8 +3,6 @@ import { formatMessage, FormattedMessage } from 'umi/locale';
 import { Form, Input, Upload, Select, Button,Radio ,Avatar } from 'antd';
 import { connect } from 'dva';
 import styles from './BaseView.less';
-import GeographicView from './GeographicView';
-import PhoneView from './PhoneView';
 import avatar from '../../../assets/avatar.png';
 // import { getTimeDistance } from '@/utils/utils';
 
@@ -40,7 +38,8 @@ const validatorPhone = (rule, value, callback) => {
   callback();
 };
 
-@connect(({ loading,user }) => ({
+@connect(({ loading,user,dict }) => ({
+  dict:dict.dictMap,
   currentUser:user.currentUser,
   submitting: loading.effects['user/updateUserForm'],
 }))
@@ -52,6 +51,13 @@ class BaseView extends Component {
 };
   componentDidMount() {
     this.setBaseInfo();
+    const { dispatch } = this.props;
+    const ids=new Array;
+    ids.push(1,2,3,4);
+    dispatch({
+      type: 'dict/getDicts',
+      payload:ids,
+    });
   }
 
   setBaseInfo = () => {
@@ -115,13 +121,67 @@ class BaseView extends Component {
         }
     });
 };
+//获取学历
+getEducationOptops=(dict)=>{
 
+  let educationOptops=new Array;
+  if(typeof(dict)!='undefined'&&dict!=null){
+    for(var key in dict){
+      console.log(key+":"+dict[key])
+      if(key=='学历'&&Array.isArray(dict[key])&&dict[key].length>0){
+        dict[key].forEach((Item,index)=>{
+          educationOptops.push( <Option value={Item.value}>{Item.name}</Option>);
+          })
+      }
+    }
+  }
+  
+  return educationOptops;
+}
+//从字典获取学历下拉选项
+getEducationOptops=(dict)=>{
+
+  let educationOptops=new Array;
+  if(typeof(dict)!='undefined'&&dict!=null){
+    for(var key in dict){
+      console.log(key+":"+dict[key])
+      if(key=='学历'&&Array.isArray(dict[key])&&dict[key].length>0){
+        dict[key].forEach((Item,index)=>{
+          educationOptops.push( <Option value={Item.value}>{Item.name}</Option>);
+          })
+      }
+    }
+  }
+  
+  return educationOptops;
+}
+  //从字典获取性别
+getSexRadios=(dict)=>{
+
+  let educationOptops=new Array;
+  if(typeof(dict)!='undefined'&&dict!=null){
+    for(var key in dict){
+      console.log(key+":"+dict[key])
+      if(key=='性别'&&Array.isArray(dict[key])&&dict[key].length>0){
+        dict[key].forEach((Item,index)=>{
+          educationOptops.push( <Radio value={Item.value}>{Item.name}</Radio>);
+          })
+      }
+    }
+  }
+  
+  return educationOptops;
+}
   render() {
+    //console.log(this.props);
     const { file } = this.state;
     const {
       form: { getFieldDecorator },
       submitting,
     } = this.props;
+    const {dict}=this.props;
+     
+
     return (
       <div className={styles.baseView} ref={this.getViewDom}>
         <div className={styles.left}>
@@ -146,58 +206,6 @@ class BaseView extends Component {
                 ],
               })(<Input />)}
             </FormItem>
-            {/* <FormItem label={formatMessage({ id: 'app.settings.basic.profile' })}>
-              {getFieldDecorator('profile', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'app.settings.basic.profile-message' }, {}),
-                  },
-                ],
-              })(
-                <Input.TextArea
-                  placeholder={formatMessage({ id: 'app.settings.basic.profile-placeholder' })}
-                  rows={4}
-                />
-              )}
-            </FormItem> */}
-            {/* <FormItem label={formatMessage({ id: 'app.settings.basic.country' })}>
-              {getFieldDecorator('country', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'app.settings.basic.country-message' }, {}),
-                  },
-                ],
-              })(
-                <Select style={{ maxWidth: 220 }}>
-                  <Option value="China">中国</Option>
-                </Select>
-              )}
-            </FormItem> */}
-            {/* <FormItem label={formatMessage({ id: 'app.settings.basic.geographic' })}>
-              {getFieldDecorator('geographic', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'app.settings.basic.geographic-message' }, {}),
-                  },
-                  {
-                    validator: validatorGeographic,
-                  },
-                ],
-              })(<GeographicView />)}
-            </FormItem> */}
-            {/* <FormItem label={formatMessage({ id: 'app.settings.basic.address' })}>
-              {getFieldDecorator('address', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'app.settings.basic.address-message' }, {}),
-                  },
-                ],
-              })(<Input />)}
-            </FormItem> */}
             <FormItem label={formatMessage({ id: 'app.settings.basic.phone' })}>
               {getFieldDecorator('mobile', {
                 rules: [
@@ -212,10 +220,8 @@ class BaseView extends Component {
             </FormItem>
             <FormItem label={formatMessage({ id: 'app.settings.basic.sex' })}>
               {getFieldDecorator('sex')
-              (      <Radio.Group >
-                      <Radio value={"0"}>未知</Radio>
-                      <Radio value={"1"}>男</Radio>
-                      <Radio value={"2"}>女</Radio>
+              (     <Radio.Group >
+                      {this.getSexRadios(dict)}
                     </Radio.Group>)}
             </FormItem>
             <FormItem label={formatMessage({ id: 'app.settings.basic.profession' })}>
@@ -225,11 +231,7 @@ class BaseView extends Component {
             <FormItem label={formatMessage({ id: 'app.settings.basic.education' })}>
               {getFieldDecorator('education')
               (<Select  style={{ width: 120 }} >
-                <Option value="1">专科以下</Option>
-                <Option value="2">专科</Option>
-                <Option value="3">本科</Option>
-                <Option value="4">研究生</Option>
-                <Option value="5">研究生以上</Option>
+                {this.getEducationOptops(dict)}
               </Select>)}
             </FormItem>
             {/* <FormItem >
