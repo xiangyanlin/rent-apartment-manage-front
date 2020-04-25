@@ -4,7 +4,7 @@ import moment from 'moment';
 import { Row, Col, Input, Button, Icon, Card, Form, Select, Divider,  Popconfirm,message, } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-
+import EditNews from './EditNews'
 import styles from '../TableList.less';
 
 const getValue = obj =>
@@ -39,6 +39,10 @@ class News extends PureComponent {
       dataIndex: 'title',
     },
     {
+      title: '资讯简介',
+      dataIndex: 'summary',
+    },
+    {
       title: '阅读量',
       dataIndex: 'readNum',
     },
@@ -47,12 +51,17 @@ class News extends PureComponent {
       dataIndex: 'publishTime',
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
+    {
+      title: '修改时间',
+      dataIndex: 'updateTime',
+      render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+    },
 
     {
       title: '操作',
       render: (text, record) => (
         <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>查看详情</a>
+          <EditNews record={record} reload={this.reload.bind(this)} />
           <Divider type="vertical" />
           <Popconfirm
             title="您确认要删除这条数据吗?"
@@ -100,6 +109,16 @@ class News extends PureComponent {
       payload: params,
     });
   }
+  
+  reload(){
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'news/fetch',
+      payload: params,
+    });
+  }
+
+
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch } = this.props;
@@ -219,7 +238,7 @@ class News extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderSimpleForm()}</div>
-
+            <Button type="primary" icon="plus" onClick={()=>{ return this.props.history.push("/admin/news/addNews")}}>新增</Button>
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}

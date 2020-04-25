@@ -136,6 +136,11 @@ export default [
             name: 'list',
             component: './xyl/News/List',
           },
+          {
+            path: '/admin/news/addNews',
+            name: 'addNews',
+            component: './xyl/News/AddNews',
+          },
         ],
       },
 

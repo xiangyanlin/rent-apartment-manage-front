@@ -90,6 +90,7 @@ export default {
   'menu.heyue.list': '合约列表',
   'menu.news': '资讯管理',
   'menu.news.list': '资讯列表',
+  'menu.news.addNews': '新增资讯',
   'menu.qa': '问答管理',
   'menu.qa.list': '问答列表',
   'menu.finance': '财务管理',
