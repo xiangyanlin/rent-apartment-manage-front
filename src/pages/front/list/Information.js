@@ -1,14 +1,14 @@
 import React, { PureComponent ,Fragment} from 'react';
 import numeral from 'numeral';
 import { connect } from 'dva';
-import {Input,Button, Form, Card, Select, Icon, Avatar, List, Dropdown, Menu } from 'antd';
+import {Input,Button, Form, Card, Select, Icon, Avatar, List, Tooltip, Menu } from 'antd';
 import { formatWan } from '@/utils/utils';
 import styles from './Information.less';
 
 
-const IconText = ({ icon, text }) => (
+const IconText = ({ type, text }) => (
   <span>
-    {React.createElement(icon, { style: { marginRight: 8 } })}
+    <Icon type={type} style={{ marginRight: 8 }} />
     {text}
   </span>
 );
@@ -45,23 +45,6 @@ class FilterCardList extends PureComponent {
     
     return (
       <div className={styles.filterCardList}>
-                <Card bordered={false} style={{marginBottom:"5px"}}>
-          <Form layout="inline">
-          <FormItem>
-          {getFieldDecorator('keyWord')(
-            <div style={{ textAlign: 'center' }}>
-            <Input.Search
-              placeholder="请输入"
-              enterButton="搜索"
-              size="large"
-              onSearch={this.handleFormSubmit}
-              style={{ width: 522 }}
-            />
-          </div>
-            )}
-          </FormItem>
-          </Form>
-        </Card>
         <Card
                 hoverable
                 bodyStyle={{ paddingBottom: 20 }}
@@ -86,16 +69,23 @@ class FilterCardList extends PureComponent {
         
               <List.Item
                 key={item.title}
-                // actions={[
-                //   <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />,
-                //   <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />,
-                //   <IconText icon={MessageOutlined} text="2" key="list-vertical-message" />,
-                // ]}
+                actions={[
+                <Tooltip title="阅读人数">
+                  <div><IconText type="read" text={item.readNum} key="list-vertical-star-o" /></div>
+                </Tooltip>
+                  ,
+                  // <Tooltip title="prompt text">
+                  //   <span>111</span>
+                  // </Tooltip>
+                  // <IconText type="message" text="2" key="list-vertical-message" />,
+                ]}
                 extra={
                   <img
                     width={272}
                     alt="logo"
-                    src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
+                    src={item.pic
+                      ? 'http://127.0.0.1:8080/common/getImage?filename=' + item.pic.split(',')[0]
+                      : item.pic}
                   />
                 }
               >
@@ -103,9 +93,10 @@ class FilterCardList extends PureComponent {
                 <List.Item.Meta
                   // avatar={<Avatar src={item.avatar} />}
                   title={<a href={item.href}>{item.title}</a>}
-                  // description={item.description}
+                 description={item.summary}
                 />
-                {item.content}
+                <a>查看详情>>></a>
+                {/* {item.content} */}
                 
               </List.Item>
               

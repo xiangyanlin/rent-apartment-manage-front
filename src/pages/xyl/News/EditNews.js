@@ -2,23 +2,13 @@ import React from 'react';
 import {Checkbox, Form, Input, Modal,Select,Button,Card,message} from "antd";
 import {connect} from "dva";
 import { formatMessage, FormattedMessage } from 'umi/locale';
+import PicturesWall from '../Utils/PicturesWall';
+
 const FormItem = Form.Item;
 const { Option } = Select;
 const InputGroup = Input.Group;
 const CheckboxGroup = Checkbox.Group;
-const validatorGeographic = (rule, value, callback) => {
-    const { province, city ,area} = value;
-    if (!province.key) {
-      callback('Please input your province!');
-    }
-    if (!city.key) {
-      callback('Please input your city!');
-    }
-    if (!area.key) {
-      callback('Please input your area!');
-    }
-    callback();
-  };
+const { TextArea } = Input;
   
   const children = [];
   for (let i = 1990; i <=2020; i++) {
@@ -71,11 +61,11 @@ class EditNews extends React.Component{
         if(this.state.pics.size > 0){
           values.pic = [...this.state.pics].join(',');
         }
-        // 房源id
+        // 资讯id
         values.id = record.id;
-
+        values.updateTime=new Date();
         dispatch({
-          type: 'estate/updateEstateForm',
+          type: 'news/updateInformation',
           payload: values,
         });
 
@@ -125,70 +115,38 @@ class EditNews extends React.Component{
         >
           <div style={{overflow:'auto'}}>
             <Form hideRequiredMark style={{ marginTop: 8 }}>
-              <FormItem {...formItemLayout} label="楼盘名称">
-                {getFieldDecorator('name',{initialValue:record.name  ,rules:[{ required: true, message:"此项为必填项" }]})(<Input style={{ width: '100%' }} disabled />)}
-            </FormItem>
-                <FormItem {...formItemLayout} label="所在地址" >
-                {getFieldDecorator('address',
-                    { initialValue:record.province+record.city+record.area+record.address ,
-                        rules:[{
-                            required: true, message:"此项为必填项" 
-                            }]})
-                            (<Input style={{ width: '100%' }} disabled
-                            />)}
-                </FormItem>
-                <FormItem {...formItemLayout} label="建筑年代">
-                {getFieldDecorator('year',
-                    {initialValue:record.year ,
-                        rules:[{
-                            required: true, message:"此项为必填项" 
-                            }]})
-                            (
-                            <Select  style={{ width: '40%' }} placeholder="请选择年份" >
-                            {children}
-                            </Select>
-                            )}
-                </FormItem>
-                <FormItem {...formItemLayout} label="建筑类型">
-                {getFieldDecorator('type',
-                    {initialValue:record.type ,
-                        rules:[{
-                            required: true, message:"此项为必填项" 
-                            }]})
-                            (
-                            <Select  style={{ width: 120 }} >
-                            <Option value="1">塔楼</Option>
-                            <Option value="2">板楼</Option>
-                            </Select>
-                            )}
-                </FormItem>
-                <FormItem {...formItemLayout} label="物业费">
-                {getFieldDecorator('propertyCost',
-                    {initialValue:record.propertyCost ,
-                        rules:[{
-                            required: true, message:"此项为必填项" 
-                            }]})
-                            (<Input style={{ width: '30%' }} addonAfter="元/平" />
-                            )}
-                </FormItem>
-                <FormItem {...formItemLayout} label="物业公司">
-                {getFieldDecorator('propertyCompany',
-                    {initialValue:record.propertyCompany ,
-                        rules:[{
-                            required: true, message:"此项为必填项" 
-                            }]})
-                            (<Input style={{ width: '100%' }} 
-                            />)}
-                </FormItem>
-                <FormItem {...formItemLayout} label="开发商">
-                {getFieldDecorator('developers',
-                    {initialValue:record.developers ,
-                        rules:[{
-                            required: true, message:"此项为必填项" 
-                            }]})
-                            (<Input style={{ width: '100%' }} 
-                            />)}
-                </FormItem>
+            <FormItem {...formItemLayout} label="资讯标题">
+              {getFieldDecorator('title',
+                  {initialValue:record.title  ,
+                    rules:[{
+                        required: true, message:"此项为必填项" 
+                        }]})
+                        (<Input style={{ width: '100%' }} 
+                        />)}
+              </FormItem>
+              <FormItem {...formItemLayout} label="资讯简介">
+              {getFieldDecorator('summary',
+                  {initialValue:record.summary  ,
+                    rules:[{
+                        required: true, message:"此项为必填项" 
+                        }]})
+                        (<TextArea style={{ width: '100%' }} autosize={{ minRows: 2, maxRows: 6 }}
+                        />)}
+              </FormItem>
+              <FormItem {...formItemLayout} label="资讯内容">
+              {getFieldDecorator('content',
+                  {initialValue:record.content  ,
+                    rules:[{
+                        required: true, message:"此项为必填项" 
+                        }]})
+                        (
+                        <TextArea style={{ width: '100%' }} autosize={{ minRows: 12, maxRows: 30 }}
+                        />
+                        )}
+              </FormItem>
+              <FormItem {...formItemLayout} label="上传资讯图">
+                  <PicturesWall handleFileList={this.handleFileList.bind(this)}/>
+              </FormItem>
             </Form>
           </div>
 
