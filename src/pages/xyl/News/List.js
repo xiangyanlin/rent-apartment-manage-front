@@ -38,9 +38,13 @@ class News extends PureComponent {
       title: '资讯标题',
       dataIndex: 'title',
     },
+    // {
+    //   title: '资讯简介',
+    //   dataIndex: 'summary',
+    // },
     {
-      title: '资讯简介',
-      dataIndex: 'summary',
+      title: '发布者',
+      dataIndex: 'publisher',
     },
     {
       title: '阅读量',

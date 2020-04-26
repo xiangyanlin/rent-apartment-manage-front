@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
-import {Form,Input,DatePicker,Select,Button,Card,InputNumber,Radio,Icon,Tooltip,Checkbox,message} from 'antd';
+import {Form,Input,DatePicker,Select,Button,Card,Checkbox,message} from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import GeographicView from '@/components/GeographicView';
+import PicturesWall from '../Utils/PicturesWall';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -13,19 +13,7 @@ const Search = Input.Search;
 const InputGroup = Input.Group;
 const CheckboxGroup = Checkbox.Group;
 
-const validatorGeographic = (rule, value, callback) => {
-  const { province, city ,area} = value;
-  if (!province.key) {
-    callback('Please input your province!');
-  }
-  if (!city.key) {
-    callback('Please input your city!');
-  }
-  if (!area.key) {
-    callback('Please input your area!');
-  }
-  callback();
-};
+
 
 const children = [];
 for (let i = 1990; i <=2020; i++) {
@@ -33,45 +21,36 @@ for (let i = 1990; i <=2020; i++) {
 }
 
 
-@connect(
-  ({ loading}) => ({
-    submitting: loading.effects['estate/submitEstateForm'],
-    loading: loading.models.estate,
+@connect(({loading,user}) => ({
+    submitting: loading.effects['news/submitInformationForm'],
+    currentUser:user.currentUser
 }))
 @Form.create()
 class AddNews extends PureComponent {
-  state = { mode: 'year'};
-  componentDidMount() { //当组件挂载完成后执行加载数据
-    console.log("loading.......");
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'estate/fetch',
-      // type: 'rule/fetch',
-    });
-  }
+
     handleSubmit = e => {
-        const { dispatch, form } = this.props;
-        e.preventDefault();
-        form.validateFieldsAndScroll((err, values) => {
-            if (!err) {
-            values.province=values.geographic.province.label;
-            values.city=values.geographic.city.label;
-            values.area=values.geographic.area.label;
-             values.created=new Date();
-             values.updated=new Date();
-              dispatch({
-                    type: 'estate/submitEstateForm',
-                    payload: values,
-                    callback: res => {
-                      console.log(res); // 请求完成后返回的结果
-                      if (res.code == 200) {
-                        message.success('提交成功');
-                      }
-                    },
-                });
-              console.log(values);
-            }
-        });
+      const { dispatch, form ,currentUser} = this.props;
+      e.preventDefault();
+      form.validateFieldsAndScroll((err, values) => {
+          if (!err) {
+
+            // 处理图片
+            values.pic = [...this.state.pics].join(',');
+            values.publishTime=new Date();
+            values.publisher=currentUser.userName;
+            dispatch({
+                  type: 'news/submitInformationForm',
+                  payload: values,
+                  callback: res => {
+                    if (res.code == 200) {
+                      message.success('提交成功');
+                      dispatch({ type: 'news/fetch' });
+                    }
+                  },
+              });
+  
+          }
+      });
     };
 
     handleSearch = (value)=>{
@@ -144,82 +123,35 @@ class AddNews extends PureComponent {
         return (
             <PageHeaderWrapper>
                 <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }}>
-                    <Card bordered={false} title="楼盘信息">
-                        <FormItem {...formItemLayout} label="楼盘名称">
-                        {getFieldDecorator('name',
+                    <Card bordered={false} title="发布资讯">
+                        <FormItem {...formItemLayout} label="资讯标题">
+                        {getFieldDecorator('title',
                             {rules:[{
                                  required: true, message:"此项为必填项" 
                                  }]})
                                  (<Input style={{ width: '100%' }} 
                                   />)}
                         </FormItem>
-                        <FormItem  {...formItemLayout} label={formatMessage({ id: 'app.settings.basic.geographic' })}>
-                          {getFieldDecorator('geographic', {
-                            rules: [
-                              {
-                                required: true,
-                                message: formatMessage({ id: 'app.settings.basic.geographic-message' }, {}),
-                              },
-                              {
-                                validator: validatorGeographic,
-                              },
-                            ],
-                          })(<GeographicView />)}
-                        </FormItem>
-                        <FormItem {...formItemLayout} label="具体地址">
-                        {getFieldDecorator('address',
+                        <FormItem {...formItemLayout} label="资讯简介">
+                        {getFieldDecorator('summary',
                             {rules:[{
                                  required: true, message:"此项为必填项" 
                                  }]})
-                                 (<Input style={{ width: '100%' }} 
+                                 (<TextArea style={{ width: '100%' }} autosize={{ minRows: 2, maxRows: 6 }}
                                   />)}
                         </FormItem>
-                        <FormItem {...formItemLayout} label="建筑年代">
-                        {getFieldDecorator('year',
+                        <FormItem {...formItemLayout} label="资讯内容">
+                        {getFieldDecorator('content',
                             {rules:[{
                                  required: true, message:"此项为必填项" 
                                  }]})
                                  (
-                                  <Select  style={{ width: '40%' }} placeholder="请选择年份" >
-                                    {children}
-                                  </Select>
+                                  <TextArea style={{ width: '100%' }} autosize={{ minRows: 12, maxRows: 30 }}
+                                  />
                                  )}
                         </FormItem>
-                        <FormItem {...formItemLayout} label="建筑类型">
-                        {getFieldDecorator('type',
-                            {rules:[{
-                                 required: true, message:"此项为必填项" 
-                                 }]})
-                                 (
-                                  <Select  style={{ width: 120 }} >
-                                    <Option value="1">塔楼</Option>
-                                    <Option value="2">板楼</Option>
-                                  </Select>
-                                 )}
-                        </FormItem>
-                        <FormItem {...formItemLayout} label="物业费">
-                        {getFieldDecorator('propertyCost',
-                            {rules:[{
-                                 required: true, message:"此项为必填项" 
-                                 }]})
-                                 (<Input style={{ width: '30%' }} addonAfter="元/平" />
-                                 )}
-                        </FormItem>
-                        <FormItem {...formItemLayout} label="物业公司">
-                        {getFieldDecorator('propertyCompany',
-                            {rules:[{
-                                 required: true, message:"此项为必填项" 
-                                 }]})
-                                 (<Input style={{ width: '100%' }} 
-                                  />)}
-                        </FormItem>
-                        <FormItem {...formItemLayout} label="开发商">
-                        {getFieldDecorator('developers',
-                            {rules:[{
-                                 required: true, message:"此项为必填项" 
-                                 }]})
-                                 (<Input style={{ width: '100%' }} 
-                                  />)}
+                        <FormItem {...formItemLayout} label="上传资讯图">
+                            <PicturesWall handleFileList={this.handleFileList.bind(this)}/>
                         </FormItem>
                         <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
                             <Button type="primary" htmlType="submit" loading={submitting}>

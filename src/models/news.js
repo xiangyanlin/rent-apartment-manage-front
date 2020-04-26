@@ -1,5 +1,5 @@
 import { routerRedux } from 'dva/router';
-import { queryInformationList ,removeNews} from '@/services/news';
+import { queryInformationList ,removeNews,addInformation,updateInformation} from '@/services/news';
 
 export default {
   namespace: 'news',
@@ -25,6 +25,18 @@ export default {
           if (callback && typeof callback == 'function') {
             callback(response); // 返回结果
           }
+        }
+      },
+      *submitInformationForm({ payload,callback }, { call }) {
+        const response = yield call(addInformation, payload);
+        if (callback && typeof callback == 'function') {
+          callback(response); // 返回结果
+        }
+      },
+      *updateInformation({ payload ,callback}, { call }) {
+        const response = yield call(updateInformation, payload);
+        if (callback && typeof callback == 'function') {
+          callback(response); // 返回结果
         }
       },
   },
