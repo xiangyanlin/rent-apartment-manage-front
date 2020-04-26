@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { formatMessage } from 'umi/locale';
 import Link from 'umi/link';
-import { Icon } from 'antd';
+import { Icon ,Card} from 'antd';
 import GlobalFooter from '@/components/GlobalFooter';
 import SelectLang from '@/components/SelectLang';
 import styles from './UserLayout.less';
@@ -51,8 +51,11 @@ class UserLayout extends React.PureComponent {
         <div className={styles.lang}>
           <SelectLang />
         </div>
+        
         <div className={styles.content}>
+        <Card >
           <div className={styles.top}>
+         
             <div className={styles.header}>
               <Link to="/">
                 <img alt="logo" className={styles.logo} src={logo} />
@@ -62,7 +65,9 @@ class UserLayout extends React.PureComponent {
             <div className={styles.desc}>租房管理系统 使用了前沿的流行的技术作为支撑</div>
           </div>
           {children}
+          </Card>
         </div>
+        
         {/* <GlobalFooter links={links} copyright={copyright} /> */}
       </div>
     );
