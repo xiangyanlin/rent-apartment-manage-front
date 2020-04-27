@@ -1,8 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Row, Col, Form, Card, Select, List, Pagination,Input,Button,Icon } from 'antd';
-import TagSelect from '@/components/TagSelect';
-import StandardFormRow from '@/components/StandardFormRow';
+import PageHeaderWrapper from '@/components/FrontPageHeaderWrapper';
 import styles from './Projects.less';
 const { Option } = Select;
 const FormItem = Form.Item;
@@ -278,7 +277,7 @@ class CoverCardList extends PureComponent {
               }
               title={
                 <div style={{ fontSize: '20px' }}>
-                  <a style={{ color: 'black' }} href={'/details/house?id=' + item.id}>
+                  <a style={{ color: 'black' }} href={'/house/details?id=' + item.id}>
                     {item.title}
                   </a>
                 </div>
@@ -313,6 +312,7 @@ class CoverCardList extends PureComponent {
     };
 
     return (
+      <PageHeaderWrapper>
       <div>
         <Card bordered={false}>
           <Form layout="inline" onSubmit={this.handleSearch}>
@@ -344,6 +344,7 @@ class CoverCardList extends PureComponent {
           <Pagination {...pagination} onChange={this.handleStandardTableChange} />
         </div>
       </div>
+      </PageHeaderWrapper>
     );
   }
 }

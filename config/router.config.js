@@ -443,9 +443,14 @@ export default [
       { path: '/', redirect: '/home' },
       //租房
       {
-        path: '/list/projects',
+        path: '/house/projects',
         name: 'projects',
-        component: './front/list/Projects',
+        component: './front/Rent/Projects',
+      },
+      {
+        path: '/house/details',
+        name: 'houseDetails',
+        component: './front/Rent/details',
       },
       //资讯
       {
@@ -466,11 +471,7 @@ export default [
         component: './front/details/top',
         routes: [
           { path: '/details', redirect: '/details/house' },
-          {
-            path: '/details/house',
-            name: 'details',
-            component: './front/details/details',
-          },
+          
           {
             path: '/details/info',
             name: 'info',

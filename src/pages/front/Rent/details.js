@@ -52,11 +52,11 @@ class Details extends PureComponent {
     //console.log(pic);
     return (
       <Card
-        style={{ marginTop: 24 }}
+        style={{ marginTop: 24 ,display:"flex",justifyContent:"center"}}
         bordered={false}
         bodyStyle={{ padding: '8px 32px 32px 32px' }}
       >
-      <div>
+      <div style={{width:"70%"}}>
         <div>
           <div className={styles.title}>
             <p>{data.title}</p>
