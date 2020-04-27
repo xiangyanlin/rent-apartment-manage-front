@@ -43,68 +43,72 @@ class FilterCardList extends PureComponent {
     const { getFieldDecorator } = form;
 
     return (
-      <div className={styles.filterCardList}>
-        <Card hoverable bodyStyle={{ paddingBottom: 20 }}>
-          <List
-            itemLayout="vertical"
-            size="large"
-            pagination={{
-              onChange: page => {
-                console.log(page);
-              },
-              pageSize: 3,
-            }}
-            dataSource={list}
-            footer={
-              <div>
-                {/* <b>ant design</b>  */}
-                租房管理系统
-              </div>
-            }
-            renderItem={item => (
-              <List.Item
-                key={item.title}
-                actions={[
-                  <Tooltip title="阅读人数">
-                    <div>
-                      <IconText type="read" text={item.readNum} key="list-vertical-star-o" />
-                    </div>
-                  </Tooltip>,
-                  // <Tooltip title="prompt text">
-                  //   <span>111</span>
-                  // </Tooltip>
-                  // <IconText type="message" text="2" key="list-vertical-message" />,
-                ]}
-                extra={
-                  <img
-                    width={272}
-                    alt="logo"
-                    src={
-                      item.pic
-                        ? 'http://127.0.0.1:8080/common/getImage?filename=' + item.pic.split(',')[0]
-                        : item.pic
-                    }
-                  />
-                }
-              >
-                <List.Item.Meta
-                  // avatar={<Avatar src={item.avatar} />}
-                  title={<a href={item.href}>{item.title}</a>}
-                  description={item.summary}
-                />
-                <a
-                  onClick={() => {
-                    return this.props.history.push('/info/details'), { info: item };
-                  }}
+
+        <Card
+          bordered={false}
+          bodyStyle={{ padding: '8px 32px 32px 32px' ,display:"flex",justifyContent:"center"}}
+        >
+          <div style={{width:"80%"}}>
+            <List
+              itemLayout="vertical"
+              size="large"
+              pagination={{
+                onChange: page => {
+                  console.log(page);
+                },
+                pageSize: 3,
+              }}
+              dataSource={list}
+              footer={
+                <div>
+                  {/* <b>ant design</b>  */}
+                  租房管理系统
+                </div>
+              }
+              renderItem={item => (
+                <List.Item
+                  key={item.title}
+                  actions={[
+                    <Tooltip title="阅读人数">
+                      <div>
+                        <IconText type="read" text={item.readNum} key="list-vertical-star-o" />
+                      </div>
+                    </Tooltip>,
+                    // <Tooltip title="prompt text">
+                    //   <span>111</span>
+                    // </Tooltip>
+                    // <IconText type="message" text="2" key="list-vertical-message" />,
+                  ]}
+                  extra={
+                    <img
+                      width={272} height={150}
+                      alt="logo"
+                      src={
+                        item.pic
+                          ? 'http://127.0.0.1:8080/common/getImage?filename=' + item.pic.split(',')[0]
+                          : item.pic
+                      }
+                    />
+                  }
                 >
-                  查看详情>>>
-                </a>
-                {/* {item.content} */}
-              </List.Item>
-            )}
-          />
+                  <List.Item.Meta
+                    // avatar={<Avatar src={item.avatar} />}
+                    title={<a href={item.href}>{item.title}</a>}
+                    description={item.summary}
+                  />
+                  <a
+                    onClick={() => {
+                      return this.props.history.push('/info/details'), { info: item };
+                    }}
+                  >
+                    查看详情>>>
+                  </a>
+                  {/* {item.content} */}
+                </List.Item>
+              )}
+            />
+            </div>
         </Card>
-      </div>
     );
   }
 }

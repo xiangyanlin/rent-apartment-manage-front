@@ -313,8 +313,12 @@ class CoverCardList extends PureComponent {
 
     return (
       <PageHeaderWrapper>
-      <div>
-        <Card bordered={false}>
+      <Card 
+                bordered={false}
+                bodyStyle={{ padding: '8px 32px 32px 32px' ,display:"flex",justifyContent:"center"}}
+      >
+      <div style={{width:"80%"}}>
+
           <Form layout="inline" onSubmit={this.handleSearch}>
           <FormItem>
           {getFieldDecorator('keyWord')(
@@ -333,17 +337,15 @@ class CoverCardList extends PureComponent {
 
           </Form>
           <div className={styles.tableListForm}>{this.renderForm()}</div>
-        </Card>
-        <Card style={{marginTop:"5px"}}
-              className={styles.card}
-              hoverable
-            >
+       
+
         <div className={styles.cardList}>{cardList}</div>
-        </Card>
+      
         <div className={styles.pagination}>
           <Pagination {...pagination} onChange={this.handleStandardTableChange} />
         </div>
       </div>
+      </Card>
       </PageHeaderWrapper>
     );
   }
