@@ -43,9 +43,9 @@ class Home extends PureComponent {
               {/* <Header></Header> */}
               <div className={styles.head} data-stellar-background-ratio="0.07">
               <div style={{float:"right",marginRight:"20px"}}>
-                  <a href="/list/search/projects">租房</a>
-                  <a href="/list/search/information">资讯</a>
-                  <a href="/list/search/question">问答</a>
+                  <a href="/list/projects">租房</a>
+                  <a href="/list/information">资讯</a>
+                  <a href="/list/question">问答</a>
               </div>
               <div className={styles.title}>
                   <span>租房管理系统</span>

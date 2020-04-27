@@ -442,28 +442,28 @@ export default [
     component: '../layouts/FrontLayout',
     routes: [
        { path: '/', redirect: '/home' },
-     
+      //列表
       {
-        path: '/list/search',
+        path: '/list',
         name: 'searchlist',
         component: './front/list/List',
         routes: [
           {
             path: '/list/search',
-            redirect: '/list/search/projects',
+            redirect: '/list/projects',
           },
           {
-            path: '/list/search/projects',
+            path: '/list/projects',
             name: 'projects',
             component: './front/list/Projects',
           },
           {
-            path: '/list/search/information',
+            path: '/list/information',
             name: 'information',
             component: './front/list/Information',
           },
           {
-            path: '/list/search/question',
+            path: '/list/question',
             name: 'question',
             component: './front/list/Question',
           },
@@ -480,6 +480,11 @@ export default [
             path: '/details/house',
             name: 'details',
             component: './front/details/details',
+          },
+          {
+            path: '/details/info',
+            name: 'info',
+            component: './front/details/InfoDetail',
           },
         ],
       },

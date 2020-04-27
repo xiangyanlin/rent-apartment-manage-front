@@ -95,7 +95,7 @@ class FilterCardList extends PureComponent {
                   title={<a href={item.href}>{item.title}</a>}
                  description={item.summary}
                 />
-                <a>查看详情>>></a>
+                <a onClick={()=>{ return this.props.history.push("/details/info")}}>查看详情>>></a>
                 {/* {item.content} */}
                 
               </List.Item>
