@@ -454,31 +454,22 @@ export default [
       },
       //资讯
       {
-        path: '/list/information',
-        name: 'information',
-        component: './front/list/Information',
+        path: '/info/list',
+        name: 'info',
+        component: './front/Info/Information',
+      },
+      {
+        path: '/info/details',
+        name: 'infoDetails',
+        component: './front/Info/InfoDetail',
       },
       //问答
       {
-        path: '/list/question',
+        path: '/question/list',
         name: 'question',
-        component: './front/list/Question',
+        component: './front/Question/Question',
       },
-      //详情
-      {
-        path: '/details',
-        name: 'details',
-        component: './front/details/top',
-        routes: [
-          { path: '/details', redirect: '/details/house' },
-          
-          {
-            path: '/details/info',
-            name: 'info',
-            component: './front/details/InfoDetail',
-          },
-        ],
-      },
+
       //个人中心
       {
         name: 'account',

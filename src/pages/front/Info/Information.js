@@ -94,7 +94,7 @@ class FilterCardList extends PureComponent {
                 />
                 <a
                   onClick={() => {
-                    return this.props.history.push('/details/info'), { info: item };
+                    return this.props.history.push('/info/details'), { info: item };
                   }}
                 >
                   查看详情>>>
