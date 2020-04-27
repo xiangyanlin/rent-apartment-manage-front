@@ -1,8 +1,26 @@
 import React, { PureComponent } from 'react';
-import { Button, Carousel, Divider, Checkbox, Row, Col ,Card} from 'antd';
+import { Form, Carousel, Divider, Checkbox, Row, Col ,Card} from 'antd';
+import { connect } from 'dva';
 import moment from 'moment';
 import styles from './Information.less';
+
+@connect(({ news, loading }) => ({
+    news,
+    loading: loading.models.news,
+  }))
+@Form.create()
 class InfoDetail extends PureComponent{
+    componentWillUnmount(){
+        const { dispatch } = this.props;
+        const {info}=this.props.location.state;
+        dispatch({
+          type: 'news/updateInformation',
+          payload:{
+            id:info.id,
+            readNum:info.readNum+1,
+          }
+        });
+      }
     render(){
         
         const {info}=this.props.location.state;
