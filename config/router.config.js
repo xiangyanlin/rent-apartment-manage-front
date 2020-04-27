@@ -201,7 +201,6 @@ export default [
         ],
       },
 
-      
       // // forms
       // {
       //   path: '/admin/form',
@@ -432,7 +431,7 @@ export default [
     ],
   },
   //前台
-  { 
+  {
     path: '/home',
     name: 'home',
     component: './front/home',
@@ -441,33 +440,24 @@ export default [
     path: '/',
     component: '../layouts/FrontLayout',
     routes: [
-       { path: '/', redirect: '/home' },
-      //列表
+      { path: '/', redirect: '/home' },
+      //租房
       {
-        path: '/list',
-        name: 'searchlist',
-        component: './front/list/List',
-        routes: [
-          {
-            path: '/list/search',
-            redirect: '/list/projects',
-          },
-          {
-            path: '/list/projects',
-            name: 'projects',
-            component: './front/list/Projects',
-          },
-          {
-            path: '/list/information',
-            name: 'information',
-            component: './front/list/Information',
-          },
-          {
-            path: '/list/question',
-            name: 'question',
-            component: './front/list/Question',
-          },
-        ],
+        path: '/list/projects',
+        name: 'projects',
+        component: './front/list/Projects',
+      },
+      //资讯
+      {
+        path: '/list/information',
+        name: 'information',
+        component: './front/list/Information',
+      },
+      //问答
+      {
+        path: '/list/question',
+        name: 'question',
+        component: './front/list/Question',
       },
       //详情
       {

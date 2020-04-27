@@ -16,7 +16,7 @@ export default class FrontTopNavHeader extends PureComponent {
   }
 
   render() {
-    const {currentUser}=this.props;
+    const { currentUser } = this.props;
     const { theme, contentWidth, logo } = this.props;
     const { maxWidth } = this.state;
     return (
@@ -42,17 +42,13 @@ export default class FrontTopNavHeader extends PureComponent {
               <BaseMenu {...this.props} style={{ border: 'none', height: 64 }} />
             </div>
           </div>
-          {Object.keys(currentUser).length?
-          (
-            <div>注册 | 登录</div>
-             
-          ):
-          (
+          {Object.keys(currentUser).length === 0 ? (
+            <div className={styles.goto}>
+              <a href="/user/login">登录</a> | <a href="/user/register">注册</a>
+            </div>
+          ) : (
             <RightContent {...this.props} />
-            // <div>注册 | 登录</div>
-            
           )}
-          
         </div>
       </div>
     );

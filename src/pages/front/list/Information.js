@@ -1,10 +1,9 @@
-import React, { PureComponent ,Fragment} from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import numeral from 'numeral';
 import { connect } from 'dva';
-import {Input,Button, Form, Card, Select, Icon, Avatar, List, Tooltip, Menu } from 'antd';
+import { Input, Button, Form, Card, Select, Icon, Avatar, List, Tooltip, Menu } from 'antd';
 import { formatWan } from '@/utils/utils';
 import styles from './Information.less';
-
 
 const IconText = ({ type, text }) => (
   <span>
@@ -40,16 +39,13 @@ class FilterCardList extends PureComponent {
 
   render() {
     const { list, pagination } = this.props.news.data;
-    const {    loading,   form, } = this.props;
+    const { loading, form } = this.props;
     const { getFieldDecorator } = form;
-    
+
     return (
       <div className={styles.filterCardList}>
-        <Card
-                hoverable
-                bodyStyle={{ paddingBottom: 20 }}
-              >
-        <List
+        <Card hoverable bodyStyle={{ paddingBottom: 20 }}>
+          <List
             itemLayout="vertical"
             size="large"
             pagination={{
@@ -66,14 +62,14 @@ class FilterCardList extends PureComponent {
               </div>
             }
             renderItem={item => (
-        
               <List.Item
                 key={item.title}
                 actions={[
-                <Tooltip title="阅读人数">
-                  <div><IconText type="read" text={item.readNum} key="list-vertical-star-o" /></div>
-                </Tooltip>
-                  ,
+                  <Tooltip title="阅读人数">
+                    <div>
+                      <IconText type="read" text={item.readNum} key="list-vertical-star-o" />
+                    </div>
+                  </Tooltip>,
                   // <Tooltip title="prompt text">
                   //   <span>111</span>
                   // </Tooltip>
@@ -83,26 +79,31 @@ class FilterCardList extends PureComponent {
                   <img
                     width={272}
                     alt="logo"
-                    src={item.pic
-                      ? 'http://127.0.0.1:8080/common/getImage?filename=' + item.pic.split(',')[0]
-                      : item.pic}
+                    src={
+                      item.pic
+                        ? 'http://127.0.0.1:8080/common/getImage?filename=' + item.pic.split(',')[0]
+                        : item.pic
+                    }
                   />
                 }
               >
-
                 <List.Item.Meta
                   // avatar={<Avatar src={item.avatar} />}
                   title={<a href={item.href}>{item.title}</a>}
-                 description={item.summary}
+                  description={item.summary}
                 />
-                <a onClick={()=>{ return this.props.history.push("/details/info")}}>查看详情>>></a>
+                <a
+                  onClick={() => {
+                    return this.props.history.push('/details/info'), { info: item };
+                  }}
+                >
+                  查看详情>>>
+                </a>
                 {/* {item.content} */}
-                
               </List.Item>
-              
             )}
           />
-           </Card>
+        </Card>
       </div>
     );
   }

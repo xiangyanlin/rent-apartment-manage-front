@@ -24,7 +24,7 @@ export default class GlobalFrontHeader extends PureComponent {
   };
 
   render() {
-    const {currentUser}=this.props;
+    const { currentUser } = this.props;
     // console.log();
 
     const { collapsed, isMobile, logo } = this.props;
@@ -40,18 +40,13 @@ export default class GlobalFrontHeader extends PureComponent {
           type={collapsed ? 'menu-unfold' : 'menu-fold'}
           onClick={this.toggle}
         /> */}
-        {Object.keys(currentUser).length === 0?
-          (
-           <div className={styles.goto}> 
-            <a href="/user/login">登录</a> | <a href="/user/register">注册</a>  
-             </div>
-             
-          ):
-          (
-            <RightContent {...this.props} />
-            // <div>注册 | 登录</div>
-            
-          )}
+        {Object.keys(currentUser).length === 0 ? (
+          <div className={styles.goto}>
+            <a href="/user/login">登录</a> | <a href="/user/register">注册</a>
+          </div>
+        ) : (
+          <RightContent {...this.props} />
+        )}
       </div>
     );
   }
