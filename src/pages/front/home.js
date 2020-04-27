@@ -43,9 +43,9 @@ class Home extends PureComponent {
               {/* <Header></Header> */}
               <div className={styles.head} data-stellar-background-ratio="0.07">
               <div style={{float:"right",marginRight:"20px"}}>
-                  <a href="/list/projects">租房</a>
-                  <a href="/list/information">资讯</a>
-                  <a href="/list/question">问答</a>
+                  <a href="/house/projects">租房</a>
+                  <a href="/info/list">资讯</a>
+                  <a href="/question/list">问答</a>
               </div>
               <div className={styles.title}>
                   <span>租房管理系统</span>
@@ -54,7 +54,7 @@ class Home extends PureComponent {
               </div>
               <div className={styles.buttom}>
                   <div style={{width:"20%",float:"left"}}>
-                  <a href="/list/search/projects">
+                  <a href="/house/projects">
                       <img src={house}/>
                       <span>去租房</span>
                   </a>

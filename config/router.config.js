@@ -445,6 +445,7 @@ export default [
       {
         path: '/house/projects',
         name: 'projects',
+        hide:true,
         component: './front/Rent/Projects',
       },
       {
@@ -456,6 +457,7 @@ export default [
       {
         path: '/info/list',
         name: 'info',
+        hide:true,
         component: './front/Info/Information',
       },
       {
@@ -467,6 +469,7 @@ export default [
       {
         path: '/question/list',
         name: 'question',
+        hide:true,
         component: './front/Question/Question',
       },
 

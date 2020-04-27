@@ -3,7 +3,9 @@ import Link from 'umi/link';
 import RightContent from '../GlobalHeader/RightContent';
 import BaseMenu from '../SiderMenu/BaseMenu';
 import styles from './index.less';
+import { Menu, Icon } from 'antd';
 
+const { SubMenu } = Menu;
 export default class FrontTopNavHeader extends PureComponent {
   state = {
     maxWidth: undefined,
@@ -19,6 +21,7 @@ export default class FrontTopNavHeader extends PureComponent {
     const { currentUser } = this.props;
     const { theme, contentWidth, logo } = this.props;
     const { maxWidth } = this.state;
+    //console.log(this.props)
     return (
       <div className={`${styles.head} ${theme === 'light' ? styles.light : ''}`}>
         <div

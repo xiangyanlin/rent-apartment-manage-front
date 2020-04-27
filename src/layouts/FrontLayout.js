@@ -148,7 +148,15 @@ class FrontLayout extends React.PureComponent {
     const {
       route: { routes },
     } = this.props;
-    return memoizeOneFormatter(routes);
+    const routesData=new Array()
+    if(Array.isArray(routes)){
+      routes.forEach((item,index)=>{
+        if(item.hide){
+          routesData.push(item)
+        }
+      })
+    }
+    return memoizeOneFormatter(routesData);
   }
 
   /**
@@ -234,7 +242,7 @@ class FrontLayout extends React.PureComponent {
       children,
       location: { pathname },
     } = this.props;
-    console.log(this.props);
+   // console.log(this.props);
     const { isMobile, menuData } = this.state;
     const isTop = PropsLayout === 'topmenu';
     const routerConfig = this.matchParamsPath(pathname);
