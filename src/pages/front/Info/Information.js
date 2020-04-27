@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import numeral from 'numeral';
 import { connect } from 'dva';
-import { Input, Button, Form, Card, Select, Icon, Avatar, List, Tooltip, Menu } from 'antd';
+import { Input, Button, Form, Card, Select, Icon, Avatar, List, Tooltip, Pagination } from 'antd';
 import { formatWan } from '@/utils/utils';
 import styles from './Information.less';
 
@@ -37,6 +37,21 @@ class FilterCardList extends PureComponent {
     });
   }
 
+  handlePaginationChange = (page, pageSize) => {
+    const { dispatch } = this.props;
+    // console.log(page,pageSize);
+    const params = {
+      currentPage: page,
+      pageSize: pageSize,
+    };
+
+    //
+    dispatch({
+      type: 'houseResource/fetch',
+      payload: params,
+    });
+  };
+
   render() {
     const { list, pagination } = this.props.news.data;
     const { loading, form } = this.props;
@@ -46,18 +61,12 @@ class FilterCardList extends PureComponent {
 
         <Card
           bordered={false}
-          bodyStyle={{ padding: '8px 32px 32px 32px' ,display:"flex",justifyContent:"center"}}
+          bodyStyle={{ padding: '8px 32px 32px 32px' }}
         >
-          <div style={{width:"80%"}}>
+          <div style={{padding:"0 10%"}}>
             <List
               itemLayout="vertical"
               size="large"
-              pagination={{
-                onChange: page => {
-                  console.log(page);
-                },
-                pageSize: 3,
-              }}
               dataSource={list}
               footer={
                 <div>
@@ -98,7 +107,7 @@ class FilterCardList extends PureComponent {
                   />
                   <a
                     onClick={() => {
-                      return this.props.history.push('/info/details'), { info: item };
+                      return this.props.history.push('/info/details', { info: item });
                     }}
                   >
                     查看详情>>>
@@ -107,7 +116,11 @@ class FilterCardList extends PureComponent {
                 </List.Item>
               )}
             />
+             <div className={styles.pagination}>
+               <Pagination {...pagination} onChange={this.handleStandardTableChange} />
             </div>
+            </div>
+
         </Card>
     );
   }
