@@ -1,10 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
-import {Comment,Input, Form, Card, Select, List, Tag, Icon, Tooltip } from 'antd';
-
-import TagSelect from '@/components/TagSelect';
-import StandardFormRow from '@/components/StandardFormRow';
-import ArticleListContent from '@/components/ArticleListContent';
+import {Pagination ,Input, Form, Card, Select, List, Button, Icon, Row,Col,Tag  } from 'antd';
+import moment from 'moment';
+import PageHeaderWrapper from '@/components/FrontPageHeaderWrapper';
 import styles from './Question.less';
 
 const { Option } = Select;
@@ -31,7 +29,7 @@ class SearchList extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'question/fetch',
+      type: 'question/list',
     });
   }
 
@@ -53,7 +51,7 @@ class SearchList extends Component {
   };
 
   render() {
-    const { list, pagination } = this.props.question.data;
+    const { list, pagination } = this.props.question.value;
     const { form,loading,} = this.props;
     const { getFieldDecorator } = form;
 
@@ -76,15 +74,16 @@ class SearchList extends Component {
 
 
     return (
-      <Fragment>
-        <Card bordered={false}>
+      <PageHeaderWrapper>
+      <div className={styles.container}>
+        <Row  type="flex" justify='center'>
           <Form layout="inline">
           <FormItem>
           {getFieldDecorator('keyWord')(
             <div style={{ textAlign: 'center' }}>
             <Input.Search
-              placeholder="请输入"
-              enterButton="搜索"
+              placeholder="租房知识有疑问？来搜搜吧~"
+              enterButton="找答案"
               size="large"
               onSearch={this.handleFormSubmit}
               style={{ width: 522 }}
@@ -92,33 +91,60 @@ class SearchList extends Component {
           </div>
             )}
           </FormItem>
+          <FormItem>
+          <Button type="primary" size='large'>去提问</Button>
+          </FormItem>
           </Form>
-        </Card>
+         </Row>
         <Card
+          title="问答列表"
           style={{ marginTop: 24 }}
           bordered={false}
           bodyStyle={{ padding: '8px 32px 32px 32px' }}
         >
-          <div>问答列表</div>
-          <List
-            className="comment-list"
-            // header={`${data.length} replies`}
-            itemLayout="horizontal"
-            dataSource={list}
-            renderItem={item => (
-              <li>
-                <Comment
-                  actions={item.actions}
-                  author={item.author}
-                  avatar={item.avatar}
-                  content={item.content}
-                  datetime={item.datetime}
-                />
-              </li>
-            )}
-          />
+                   <div style={{padding:"0 10%"}}>
+            <List
+              itemLayout="vertical"
+              size="large"
+              dataSource={list}
+              footer={
+                <div>
+                  租房管理系统
+                </div>
+              }
+              renderItem={item => (
+                <List.Item
+                  key={item.questions}
+                  actions={[
+                      <div>
+                          <Tag >
+                            <span>{moment(item.quiz_time).format('YYYY-MM-DD HH:mm:ss')}</span>
+                          </Tag>
+                      </div>,
+                  ]}
+                >
+                  <List.Item.Meta
+                    title={
+                      <a
+                      onClick={() => {
+                        return this.props.history.push('/info/details', { info: item });
+                      }}
+                    >
+                      {item.questions}
+                    </a>}
+                    description={item.answer}
+                  />
+
+                </List.Item>
+              )}
+            />
+             <div className={styles.pagination}>
+               <Pagination {...pagination} onChange={this.handleStandardTableChange} />
+            </div>
+            </div>
         </Card>
-      </Fragment>
+      </div>
+      </PageHeaderWrapper>
     );
   }
 }

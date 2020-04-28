@@ -2,7 +2,7 @@ import React, { PureComponent, Fragment } from 'react';
 import numeral from 'numeral';
 import { connect } from 'dva';
 import { Input, Button, Form, Card, Select, Icon, Avatar, List, Tooltip, Pagination } from 'antd';
-import { formatWan } from '@/utils/utils';
+import PageHeaderWrapper from '@/components/FrontPageHeaderWrapper';
 import styles from './Information.less';
 
 const IconText = ({ type, text }) => (
@@ -58,7 +58,7 @@ class FilterCardList extends PureComponent {
     const { getFieldDecorator } = form;
 
     return (
-
+      <PageHeaderWrapper>
         <Card
           bordered={false}
           bodyStyle={{ padding: '8px 32px 32px 32px' }}
@@ -120,8 +120,9 @@ class FilterCardList extends PureComponent {
                <Pagination {...pagination} onChange={this.handleStandardTableChange} />
             </div>
             </div>
-
+           
         </Card>
+        </PageHeaderWrapper>
     );
   }
 }
