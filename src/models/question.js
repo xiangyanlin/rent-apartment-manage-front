@@ -1,5 +1,5 @@
 import { routerRedux } from 'dva/router';
-import { queryQWuestionsList,removeQuestions } from '@/services/question';
+import { queryQWuestionsList,queryQuestionsUser,removeQuestions,addQuestions,updateQuestions } from '@/services/question';
 
 export default {
   namespace: 'question',
@@ -9,6 +9,10 @@ export default {
       list: [],
       pagination: {},
     },
+    value:{
+      list:[],
+      pagination: {},
+    }
   },
 
   effects: {
@@ -16,6 +20,13 @@ export default {
       const response = yield call(queryQWuestionsList, payload);
       yield put({
         type: 'save',
+        payload: response,
+      });
+    },
+    *list({ payload }, { call, put }) {
+      const response = yield call(queryQuestionsUser, payload);
+      yield put({
+        type: 'saveRecord',
         payload: response,
       });
     },
@@ -27,6 +38,18 @@ export default {
         }
       }
     },
+    *submitQuestions({ payload,callback }, { call }) {
+      const response = yield call(addQuestions, payload);
+      if (callback && typeof callback == 'function') {
+        callback(response); // 返回结果
+      }
+    },
+    *updateQuestions({ payload ,callback}, { call }) {
+      const response = yield call(updateQuestions, payload);
+      if (callback && typeof callback == 'function') {
+        callback(response); // 返回结果
+      }
+    },
   },
 
   reducers: {
@@ -35,8 +58,12 @@ export default {
       return {
         ...state,
         data: action.payload,
-        estateMap: map,
-        //length:data.length(),
+      };
+    },
+    saveRecord(state, action) {
+      return {
+        ...state,
+        value: action.payload,
       };
     },
   },

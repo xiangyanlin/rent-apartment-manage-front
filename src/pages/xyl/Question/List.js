@@ -47,24 +47,29 @@ class Question extends PureComponent {
       dataIndex: 'id',
     },
     {
-      title: '问答标题',
-      dataIndex: 'title',
+      title: '所提问题',
+      dataIndex: 'questions',
     },
     {
-      title: '发布者',
-      dataIndex: 'publisher',
+      title: '回答',
+      dataIndex: 'answer',
     },
     {
-      title: '阅读量',
-      dataIndex: 'readNum',
+      title: '提问者',
+      dataIndex: 'questioner',
     },
     {
-      title: '回复量',
-      dataIndex: 'replyNum',
+      title: '回答者',
+      dataIndex: 'answerer',
     },
     {
-      title: '发布时间',
-      dataIndex: 'publishTime',
+      title: '提问时间',
+      dataIndex: 'quiz_time',
+      render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+    },
+    {
+      title: '回答时间',
+      dataIndex: 'answer_time',
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
 
@@ -116,7 +121,7 @@ class Question extends PureComponent {
     //当组件挂载完成后执行加载数据
     const { dispatch } = this.props;
     dispatch({
-      type: 'question/fetch',
+      type: 'question/list',
       payload: params,
     });
   }
@@ -142,7 +147,7 @@ class Question extends PureComponent {
     }
 
     dispatch({
-      type: 'question/fetch',
+      type: 'question/list',
       payload: params,
     });
   };
@@ -225,9 +230,10 @@ class Question extends PureComponent {
 
   render() {
     const {
-      question: { data },
+      question: { value },
       loading,
     } = this.props;
+    console.log(this.props)
     const { selectedRows } = this.state;
     console.log(this.props);
     return (
@@ -239,7 +245,7 @@ class Question extends PureComponent {
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}
-              data={data}
+              data={value}
               columns={this.columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
