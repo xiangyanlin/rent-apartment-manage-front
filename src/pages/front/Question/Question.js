@@ -33,22 +33,21 @@ class SearchList extends Component {
     });
   }
 
-  setOwner = () => {
-    const { form } = this.props;
-    form.setFieldsValue({
-      owner: ['wzj'],
+  handleSearch = e => {
+
+
+    const { dispatch, form } = this.props;
+
+    form.validateFields((err, values) => {
+      if (err) return;
+
+      dispatch({
+        type: 'question/list',
+        payload: values,
+      });
     });
   };
 
-  fetchMore = () => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'list/appendFetch',
-      payload: {
-        count: pageSize,
-      },
-    });
-  };
 
   render() {
     const { list, pagination } = this.props.question.value;
@@ -78,19 +77,19 @@ class SearchList extends Component {
       <div className={styles.container}>
         <Row  type="flex" justify='center'>
           <Form layout="inline">
-          <FormItem>
-          {getFieldDecorator('keyWord')(
-            <div style={{ textAlign: 'center' }}>
-            <Input.Search
-              placeholder="租房知识有疑问？来搜搜吧~"
-              enterButton="找答案"
-              size="large"
-              onSearch={this.handleFormSubmit}
-              style={{ width: 522 }}
-            />
-          </div>
-            )}
-          </FormItem>
+            <FormItem>
+            {getFieldDecorator('keyWord')(
+              <div style={{ textAlign: 'center' }}>
+              <Input.Search
+                placeholder="租房知识有疑问？来搜搜吧~"
+                enterButton="找答案"
+                size="large"
+                onSearch={this.handleSearch}
+                style={{ width: 522 }}
+              />
+             </div>
+              )}
+            </FormItem>
           <FormItem>
              <Button type="primary" size='large' onClick={()=>{ return this.props.history.push("/question/publish")}}>去提问</Button>
           </FormItem>
