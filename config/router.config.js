@@ -472,6 +472,16 @@ export default [
         hide:true,
         component: './front/Question/Question',
       },
+      {
+        path: '/question/publish',
+        name: 'questionPublish',
+        component: './front/Question/Publish',
+      },
+      {
+        path: '/question/detail',
+        name: 'questionDetail',
+        component: './front/Question/QuestionDetail',
+      },
 
       //个人中心
       {

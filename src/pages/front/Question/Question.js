@@ -92,7 +92,7 @@ class SearchList extends Component {
             )}
           </FormItem>
           <FormItem>
-          <Button type="primary" size='large'>去提问</Button>
+             <Button type="primary" size='large' onClick={()=>{ return this.props.history.push("/question/publish")}}>去提问</Button>
           </FormItem>
           </Form>
          </Row>
@@ -127,7 +127,7 @@ class SearchList extends Component {
                     title={
                       <a
                       onClick={() => {
-                        return this.props.history.push('/info/details', { info: item });
+                        return this.props.history.push('/question/detail', { question: item });
                       }}
                     >
                       {item.questions}

@@ -124,6 +124,8 @@ export default {
   'menu.list.searchlist.applications': '搜索列表（应用）',
   'menu.searchlist.articles': '搜索列表（文章）',
   'menu.question': '问答',
+  'menu.questionPublish': '发布提问',
+  'menu.questionDetail': '问答详情',
   'menu.projects': '租房',
   'menu.houseDetails': '房源详情',
   'menu.searchlist.applications': '搜索列表（应用）',
