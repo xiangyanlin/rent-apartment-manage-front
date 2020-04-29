@@ -1,13 +1,21 @@
 import { queryTags } from '@/services/api';
-
+import { queryMonitor } from '@/services/dashboard';
 export default {
   namespace: 'monitor',
 
   state: {
     tags: [],
+    server:{},
   },
 
   effects: {
+    *fetch({ payload }, { call, put }) {
+      const response = yield call(queryMonitor, payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+    },
     *fetchTags(_, { call, put }) {
       const response = yield call(queryTags);
       yield put({
@@ -15,6 +23,7 @@ export default {
         payload: response.list,
       });
     },
+
   },
 
   reducers: {
@@ -22,6 +31,12 @@ export default {
       return {
         ...state,
         tags: action.payload,
+      };
+    },
+    save(state, action) {
+      return {
+        ...state,
+        server: action.payload.data,
       };
     },
   },

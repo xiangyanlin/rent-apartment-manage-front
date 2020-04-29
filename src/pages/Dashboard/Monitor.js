@@ -1,14 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { formatMessage, FormattedMessage } from 'umi/locale';
 import { Row, Col, Card, Tooltip } from 'antd';
-import { Pie, WaterWave, Gauge, TagCloud } from '@/components/Charts';
-import NumberInfo from '@/components/NumberInfo';
-import CountDown from '@/components/CountDown';
-import ActiveChart from '@/components/ActiveChart';
-import numeral from 'numeral';
-import GridContent from '@/components/PageHeaderWrapper/GridContent';
-
 import Authorized from '@/utils/Authorized';
 import styles from './Monitor.less';
 
@@ -31,213 +23,191 @@ class Monitor extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'monitor/fetchTags',
+      type: 'monitor/fetch',
     });
   }
+  getSysFile = () => {
+    const { monitor, loading } = this.props;
+    const { server } = monitor;
+    console.log(server.sysFiles)
+    if (Array.isArray(server.sysFiles)) {
+      return server.sysFiles.reduce((pre, item) => {
+        pre.push((
+          <tr key={item.dirName}>
+            <td><div className={styles.cell}>{item.dirName}</div></td>
+            <td><div className={styles.cell}>{item.sysTypeName}</div></td>
+            <td><div className={styles.cell}>{item.typeName}</div></td>
+            <td><div className={styles.cell}>{item.total}</div></td>
+            <td><div className={styles.cell}>{item.free}</div></td>
+            <td><div className={styles.cell}>{item.used}</div></td>
+            <td><div className={styles.cell} className="{'text-danger': sysFile.usage > 80}">{item.usage}%</div></td>
+          </tr>
+        ))
+        return pre
+      }, [])
 
+    }
+  }
   render() {
     const { monitor, loading } = this.props;
-    const { tags } = monitor;
-
+    const { server } = monitor;
     return (
-      <GridContent>
-        <Row gutter={24}>
-          <Col xl={18} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 24 }}>
+
+
+      <div className={styles.app}>
+        {server.cpu ? (<Row>
+          <Col span={12} className={styles.card}>
             <Card
-              title={
-                <FormattedMessage
-                  id="app.monitor.trading-activity"
-                  defaultMessage="Real-Time Trading Activity"
-                />
-              }
-              bordered={false}
-            >
-              <Row>
-                <Col md={6} sm={12} xs={24}>
-                  <NumberInfo
-                    subTitle={
-                      <FormattedMessage
-                        id="app.monitor.total-transactions"
-                        defaultMessage="Total transactions today"
-                      />
-                    }
-                    suffix="元"
-                    total={numeral(124543233).format('0,0')}
-                  />
-                </Col>
-                <Col md={6} sm={12} xs={24}>
-                  <NumberInfo
-                    subTitle={
-                      <FormattedMessage
-                        id="app.monitor.sales-target"
-                        defaultMessage="Sales target completion rate"
-                      />
-                    }
-                    total="92%"
-                  />
-                </Col>
-                <Col md={6} sm={12} xs={24}>
-                  <NumberInfo
-                    subTitle={
-                      <FormattedMessage
-                        id="app.monitor.remaining-time"
-                        defaultMessage="Remaining time of activity"
-                      />
-                    }
-                    total={<CountDown target={targetTime} />}
-                  />
-                </Col>
-                <Col md={6} sm={12} xs={24}>
-                  <NumberInfo
-                    subTitle={
-                      <FormattedMessage
-                        id="app.monitor.total-transactions-per-second"
-                        defaultMessage="Total transactions per second"
-                      />
-                    }
-                    suffix="元"
-                    total={numeral(234).format('0,0')}
-                  />
-                </Col>
-              </Row>
-              <div className={styles.mapChart}>
-                <Tooltip
-                  title={
-                    <FormattedMessage
-                      id="app.monitor.waiting-for-implementation"
-                      defaultMessage="Waiting for implementation"
-                    />
-                  }
-                >
-                  <img
-                    src="https://gw.alipayobjects.com/zos/rmsportal/HBWnDEUXCnGnGrRfrpKa.png"
-                    alt="map"
-                  />
-                </Tooltip>
+              title='CPU'>
+              <div className="el-table el-table--enable-row-hover el-table--medium">
+                <table cellSpacing={0}  style={{ width: ' 100%' }} >
+                  <thead>
+                    <tr>
+                      <th className={styles.isLeaf}><div className={styles.cell}>属性</div></th>
+                      <th className={styles.isLeaf}><div className={styles.cell}>值</div></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><div className={styles.cell}>核心数</div></td>
+                      <td><div className={styles.cell} >{server.cpu.cpuNum}</div></td>
+                    </tr>
+                    <tr>
+                      <td><div className={styles.cell}>用户使用率</div></td>
+                      <td><div className={styles.cell} >{server.cpu.used}%</div></td>
+                    </tr>
+                    <tr>
+                      <td><div className={styles.cell}>系统使用率</div></td>
+                      <td><div className={styles.cell} >{server.cpu.sys}%</div></td>
+                    </tr>
+                    <tr>
+                      <td><div className={styles.cell}>当前空闲率</div></td>
+                      <td><div className={styles.cell} >{server.cpu.free}%</div></td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </Card>
           </Col>
-          <Col xl={6} lg={24} md={24} sm={24} xs={24}>
-            <Card
-              title={
-                <FormattedMessage
-                  id="app.monitor.activity-forecast"
-                  defaultMessage="Activity forecast"
-                />
-              }
-              style={{ marginBottom: 24 }}
-              bordered={false}
-            >
-              <ActiveChart />
-            </Card>
-            <Card
-              title={<FormattedMessage id="app.monitor.efficiency" defaultMessage="Efficiency" />}
-              style={{ marginBottom: 24 }}
-              bodyStyle={{ textAlign: 'center' }}
-              bordered={false}
-            >
-              <Gauge
-                title={formatMessage({ id: 'app.monitor.ratio', defaultMessage: 'Ratio' })}
-                height={180}
-                percent={87}
-              />
-            </Card>
-          </Col>
-        </Row>
-        <Row gutter={24}>
-          <Col xl={12} lg={24} sm={24} xs={24}>
-            <Card
-              title={
-                <FormattedMessage
-                  id="app.monitor.proportion-per-category"
-                  defaultMessage="Proportion Per Category"
-                />
-              }
-              bordered={false}
-              className={styles.pieCard}
-            >
-              <Row style={{ padding: '16px 0' }}>
-                <Col span={8}>
-                  <Pie
-                    animate={false}
-                    percent={28}
-                    subTitle={
-                      <FormattedMessage id="app.monitor.fast-food" defaultMessage="Fast food" />
-                    }
-                    total="28%"
-                    height={128}
-                    lineWidth={2}
-                  />
-                </Col>
-                <Col span={8}>
-                  <Pie
-                    animate={false}
-                    color="#5DDECF"
-                    percent={22}
-                    subTitle={
-                      <FormattedMessage
-                        id="app.monitor.western-food"
-                        defaultMessage="Western food"
-                      />
-                    }
-                    total="22%"
-                    height={128}
-                    lineWidth={2}
-                  />
-                </Col>
-                <Col span={8}>
-                  <Pie
-                    animate={false}
-                    color="#2FC25B"
-                    percent={32}
-                    subTitle={
-                      <FormattedMessage id="app.monitor.hot-pot" defaultMessage="Hot pot" />
-                    }
-                    total="32%"
-                    height={128}
-                    lineWidth={2}
-                  />
-                </Col>
-              </Row>
+
+          <Col span={12} className={styles.card}
+          >
+            <Card title='内存'>
+              <div className="el-table el-table--enable-row-hover el-table--medium">
+                <table cellSpacing={0} cellSpacing={0} style={{ width: ' 100%' }}>
+                  <thead>
+                    <tr>
+                      <th className={styles.isLeaf}><div className={styles.cell}>属性</div></th>
+                      <th className={styles.isLeaf}><div className={styles.cell}>内存</div></th>
+                      <th className={styles.isLeaf}><div className={styles.cell}>JVM</div></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><div className={styles.cell}>总内存</div></td>
+                      <td><div className={styles.cell} >{server.mem.total}G</div></td>
+                      <td><div className={styles.cell}>{server.jvm.total}M</div></td>
+                    </tr>
+                    <tr>
+                      <td><div className={styles.cell}>已用内存</div></td>
+                      <td><div className={styles.cell}>{server.mem.used}G</div></td>
+                      <td><div className={styles.cell}>{server.jvm.used}M</div></td>
+                    </tr>
+                    <tr>
+                      <td><div className={styles.cell}>剩余内存</div></td>
+                      <td><div className={styles.cell}>{server.mem.free}G</div></td>
+                      <td><div className={styles.cell} >{server.jvm.free}M</div></td>
+                    </tr>
+                    <tr>
+                      <td><div className={styles.cell}>使用率</div></td>
+                      <td><div className={styles.cell} >{server.mem.usage}%</div></td>
+                      <td><div className={styles.cell} >{server.jvm.usage}%</div></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </Card>
           </Col>
-          <Col xl={6} lg={12} sm={24} xs={24}>
-            <Card
-              title={
-                <FormattedMessage
-                  id="app.monitor.popular-searches"
-                  defaultMessage="Popular Searches"
-                />
-              }
-              loading={loading}
-              bordered={false}
-              bodyStyle={{ overflow: 'hidden' }}
-            >
-              <TagCloud data={tags} height={161} />
+
+          <Col span={24} className={styles.card}>
+            <Card title='服务器信息'>
+              <div className="el-table el-table--enable-row-hover el-table--medium">
+                <table cellSpacing={0} style={{ width: ' 100%' }}>
+                  <tbody>
+                    <tr>
+                      <td><div className={styles.cell}>服务器名称</div></td>
+                      <td><div className={styles.cell} >{server.sys.computerName}</div></td>
+                      <td><div className={styles.cell}>操作系统</div></td>
+                      <td><div className={styles.cell} >{server.sys.osName}</div></td>
+                    </tr>
+                    <tr>
+                      <td><div className={styles.cell}>服务器IP</div></td>
+                      <td><div className={styles.cell} >{server.sys.computerIp}</div></td>
+                      <td><div className={styles.cell}>系统架构</div></td>
+                      <td><div className={styles.cell} >{server.sys.osArch}</div></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </Card>
           </Col>
-          <Col xl={6} lg={12} sm={24} xs={24}>
-            <Card
-              title={
-                <FormattedMessage
-                  id="app.monitor.resource-surplus"
-                  defaultMessage="Resource Surplus"
-                />
-              }
-              bodyStyle={{ textAlign: 'center', fontSize: 0 }}
-              bordered={false}
-            >
-              <WaterWave
-                height={161}
-                title={
-                  <FormattedMessage id="app.monitor.fund-surplus" defaultMessage="Fund Surplus" />
-                }
-                percent={34}
-              />
+
+          <Col span={24} className={styles.card}>
+            <Card title='Java虚拟机信息'>
+              <div className="el-table el-table--enable-row-hover el-table--medium">
+                <table cellSpacing={0} style={{ width: ' 100%' }}>
+                  <tbody>
+                    <tr>
+                      <td><div className={styles.cell}>Java名称</div></td>
+                      <td><div className={styles.cell}>{server.jvm.name}</div></td>
+                      <td><div className={styles.cell}>Java版本</div></td>
+                      <td><div className={styles.cell} >{server.jvm.version}</div></td>
+                    </tr>
+                    <tr>
+                      <td><div className={styles.cell}>启动时间</div></td>
+                      <td><div className={styles.cell} >{server.jvm.startTime}</div></td>
+                      <td><div className={styles.cell}>运行时长</div></td>
+                      <td><div className={styles.cell} >{server.jvm.runTime}</div></td>
+                    </tr>
+                    <tr>
+                      <td ><div className={styles.cell}colSpan={1}>安装路径</div></td>
+                      <td><div className={styles.cell}colSpan={3}>{server.jvm.home}</div></td>
+                    </tr>
+                    <tr>
+                      <td ><div className={styles.cell} colSpan={1}>项目路径</div></td>
+                      <td><div className={styles.cell} colSpan={3}>{server.sys.userDir}</div></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </Card>
           </Col>
-        </Row>
-      </GridContent>
+
+          <Col span={24} className={styles.card}>
+            <Card title="磁盘状态">
+              <div className="el-table el-table--enable-row-hover el-table--medium">
+                <table cellSpacing={0} style={{ width: ' 100%' }}>
+                  <thead>
+                    <tr>
+                      <th className={styles.isLeaf}><div className={styles.cell}>盘符路径</div></th>
+                      <th className={styles.isLeaf}><div className={styles.cell}>文件系统</div></th>
+                      <th className={styles.isLeaf}><div className={styles.cell}>盘符类型</div></th>
+                      <th className={styles.isLeaf}><div className={styles.cell}>总大小</div></th>
+                      <th className={styles.isLeaf}><div className={styles.cell}>可用大小</div></th>
+                      <th className={styles.isLeaf}><div className={styles.cell}>已用大小</div></th>
+                      <th className={styles.isLeaf}><div className={styles.cell}>已用百分比</div></th>
+                    </tr>
+                  </thead>
+                  <tbody >
+                    {this.getSysFile()}
+                  </tbody>
+                </table>
+              </div>
+            </Card>
+          </Col>
+        </Row>) : ("")}
+        {/* */}
+      </div>
     );
   }
 }
