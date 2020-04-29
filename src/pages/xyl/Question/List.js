@@ -6,13 +6,13 @@ import {
   Col,
   Input,
   Button,
-  Icon,
+  Tag,
   Card,
   Form,
   Select,
   Divider,
   Popconfirm,
-  message,
+  message, Popover 
 } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -49,10 +49,29 @@ class Question extends PureComponent {
     {
       title: '所提问题',
       dataIndex: 'questions',
+      render: (text, record) => (
+        <Popover content={record.questions} title="问题"overlayStyle={{width:"40%"}}>
+          <Button type="dashed">查看</Button>
+        </Popover>
+        )
+    },
+    {
+      title: '提问描述',
+      dataIndex: 'summary',
+      render: (text, record) => (
+        <Popover content={record.summary?record.summary:"暂无描述"} title="描述"overlayStyle={{width:"40%"}}>
+          <Button type="dashed">查看</Button>
+        </Popover>
+        )
     },
     {
       title: '回答',
       dataIndex: 'answer',
+      render: (text, record) => (
+      <Popover content={record.answer?record.answer:"暂无回答"} title="回答"overlayStyle={{width:"40%"}}>
+        <Button type="dashed">查看</Button>
+      </Popover>
+      )
     },
     {
       title: '提问者',
@@ -61,6 +80,13 @@ class Question extends PureComponent {
     {
       title: '回答者',
       dataIndex: 'answerer',
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      render: (text, record, index) => {
+        return this.covertStatus(record.status);
+      },
     },
     {
       title: '提问时间',
@@ -77,7 +103,7 @@ class Question extends PureComponent {
       title: '操作',
       render: (text, record) => (
         <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>查看详情</a>
+          <a onClick={() => this.handleUpdateModalVisible(true, record)}>回答</a>
           <Divider type="vertical" />
           <Popconfirm
             title="您确认要删除这条数据吗?"
@@ -205,6 +231,15 @@ class Question extends PureComponent {
       });
     });
   };
+
+  covertStatus=(status)=>{
+    if (status =='1'){
+      return "待回答";
+    } 
+    else if (status=='2'){
+      return "以回答";
+    } 
+  }
 
   renderSimpleForm() {
     const {
