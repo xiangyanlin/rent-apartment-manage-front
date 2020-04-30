@@ -1,17 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import {
-  Row,
-  Col,
-  Input,
-  Button,
-  Icon,
-  Card,
-  Form,
-  Select,
-  Divider,
-} from 'antd';
+import { Row, Col, Input, Button, Icon, Card, Form, Select, Divider } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
@@ -21,9 +11,9 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-    const params = {
-      role:3,
-    };
+const params = {
+  roleId: 3,
+};
 
 /* eslint react/no-multi-comp:0 */
 @connect(({ owner, loading }) => ({
@@ -53,13 +43,13 @@ class Owner extends PureComponent {
     {
       title: '性别',
       dataIndex: 'sex',
-      render:(text,record,index)=>{
-           return this.convertSex(record);     
-      }
+      render: (text, record, index) => {
+        return this.convertSex(record);
+      },
     },
     {
       title: '身份证号',
-      dataIndex: 'idCard'
+      dataIndex: 'idCard',
     },
     {
       title: '房源数量',
@@ -68,9 +58,9 @@ class Owner extends PureComponent {
     {
       title: '是否认证',
       dataIndex: 'identify',
-      render:(text,record,index)=>{
-        return this.convertIdentify(record);     
-      }
+      render: (text, record, index) => {
+        return this.convertIdentify(record);
+      },
     },
     {
       title: '操作',
@@ -83,28 +73,26 @@ class Owner extends PureComponent {
   ];
   // 数字转文字
   //性别
-  convertSex=(record)=>{
-      if (record.sex =='0'){
-        return "未知";
-      } 
-      else if (record.sex=='1'){
-        return "男";
-      } 
-      else if (record.sex=='2'){
-        return "女";
-      }         
-  }
+  convertSex = record => {
+    if (record.sex == '0') {
+      return '未知';
+    } else if (record.sex == '1') {
+      return '男';
+    } else if (record.sex == '2') {
+      return '女';
+    }
+  };
   //认证
-  convertIdentify=(record)=>{
-    if (record.identify =='0'){
-      return "未认证";
-    } 
-    else if (record.identify=='1'){
-      return "已认证";
-    }         
-}
+  convertIdentify = record => {
+    if (record.identify == '0') {
+      return '未认证';
+    } else if (record.identify == '1') {
+      return '已认证';
+    }
+  };
 
-  componentDidMount() { //当组件挂载完成后执行加载数据
+  componentDidMount() {
+    //当组件挂载完成后执行加载数据
     const { dispatch } = this.props;
     dispatch({
       type: 'owner/fetch',
@@ -125,7 +113,7 @@ class Owner extends PureComponent {
     const params = {
       currentPage: pagination.current,
       pageSize: pagination.pageSize,
-      role:3,
+      roleId: 3,
       ...formValues,
       ...filters,
     };
@@ -178,7 +166,7 @@ class Owner extends PureComponent {
       if (err) return;
 
       const values = {
-        role:3,
+        roleId: 3,
         ...fieldsValue,
         updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
       };
@@ -201,13 +189,14 @@ class Owner extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 5, lg: 24, xl: 48 }}>
-          
           <Col md={8} sm={48}>
-            {getFieldDecorator('keyWord')(<Input placeholder="请输入关键字 如 姓名/手机号/身份证号" />)}
+            {getFieldDecorator('keyWord')(
+              <Input placeholder="请输入关键字 如 姓名/手机号/身份证号" />
+            )}
           </Col>
           <Col md={8} sm={24}>
             <span className={styles.submitButtons}>
-              <Button type="primary" htmlType="submit"   icon="search" >
+              <Button type="primary" htmlType="submit" icon="search">
                 搜索
               </Button>
             </span>
@@ -228,7 +217,7 @@ class Owner extends PureComponent {
       <PageHeaderWrapper title="房东列表">
         <Card bordered={false}>
           <div className={styles.tableList}>
-          <div className={styles.tableListForm}>{this.renderSimpleForm()}</div>
+            <div className={styles.tableListForm}>{this.renderSimpleForm()}</div>
 
             <StandardTable
               selectedRows={selectedRows}

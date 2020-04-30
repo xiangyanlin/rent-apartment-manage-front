@@ -20,10 +20,12 @@ export default [
       { path: '/admin', redirect: '/admin/dashboard/analysis' },
       // dashboard
       { path: '/admin/dashboard', redirect: '/admin/dashboard/analysis' },
+
       {
         path: '/admin/dashboard',
         name: 'dashboard',
         icon: 'dashboard',
+        authority: ['admin', 'dashboard'],
         hideChildrenInMenu: false,
         routes: [
           {
@@ -48,6 +50,7 @@ export default [
         path: '/admin/house',
         name: 'house',
         icon: 'home',
+        authority: ['admin', 'house'],
         routes: [
           {
             path: '/admin/house/resource',
@@ -87,6 +90,7 @@ export default [
         path: '/admin/owner',
         name: 'fangdong',
         icon: 'key',
+        authority: ['admin', 'owner'],
         routes: [
           {
             path: '/admin/owner/list',
@@ -101,6 +105,7 @@ export default [
         path: '/admin/users',
         name: 'users',
         icon: 'user',
+        authority: ['admin', 'consumer'],
         routes: [
           {
             path: '/admin/users/list',
@@ -113,7 +118,7 @@ export default [
       {
         // 合约管理
         path: '/admin/contract',
-        //authority: ['admin'],
+        authority: ['admin', 'contract'],
         name: 'heyue',
         icon: 'file-text',
         routes: [
@@ -130,6 +135,7 @@ export default [
         path: '/admin/news',
         name: 'news',
         icon: 'message',
+        authority: ['admin', 'news'],
         routes: [
           {
             path: '/admin/news/list',
@@ -149,6 +155,7 @@ export default [
         path: '/admin/question',
         name: 'qa',
         icon: 'question-circle',
+        authority: ['admin', 'qa'],
         routes: [
           {
             path: '/admin/question/list',
@@ -182,6 +189,7 @@ export default [
         path: '/admin/system',
         name: 'system',
         icon: 'laptop',
+        authority: ['admin'],
         routes: [
           {
             path: '/admin/system/authority',
@@ -445,7 +453,7 @@ export default [
       {
         path: '/house/projects',
         name: 'projects',
-        hide:true,
+        hide: true,
         component: './front/Rent/Projects',
       },
       {
@@ -457,7 +465,7 @@ export default [
       {
         path: '/info/list',
         name: 'info',
-        hide:true,
+        hide: true,
         component: './front/Info/Information',
       },
       {
@@ -469,7 +477,7 @@ export default [
       {
         path: '/question/list',
         name: 'question',
-        hide:true,
+        hide: true,
         component: './front/Question/Question',
       },
       {

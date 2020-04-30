@@ -12,11 +12,12 @@ import {
   Select,
   Divider,
   Popconfirm,
-  message, Popover 
+  message,
+  Popover,
 } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import Answer from './Answer'
+import Answer from './Answer';
 import styles from '../TableList.less';
 
 const getValue = obj =>
@@ -26,9 +27,9 @@ const getValue = obj =>
 const params = {};
 
 /* eslint react/no-multi-comp:0 */
-@connect(({ question, user,loading }) => ({
+@connect(({ question, user, loading }) => ({
   question,
-  currentUser:user.currentUser,
+  currentUser: user.currentUser,
   loading: loading.models.question,
 }))
 @Form.create()
@@ -51,28 +52,36 @@ class Question extends PureComponent {
       title: '所提问题',
       dataIndex: 'questions',
       render: (text, record) => (
-        <Popover content={record.questions} title="问题"overlayStyle={{width:"40%"}}>
+        <Popover content={record.questions} title="问题" overlayStyle={{ width: '40%' }}>
           <Button type="dashed">查看</Button>
         </Popover>
-        )
+      ),
     },
     {
       title: '提问描述',
       dataIndex: 'summary',
       render: (text, record) => (
-        <Popover content={record.summary?record.summary:"暂无描述"} title="描述"overlayStyle={{width:"40%"}}>
+        <Popover
+          content={record.summary ? record.summary : '暂无描述'}
+          title="描述"
+          overlayStyle={{ width: '40%' }}
+        >
           <Button type="dashed">查看</Button>
         </Popover>
-        )
+      ),
     },
     {
       title: '回答',
       dataIndex: 'answer',
       render: (text, record) => (
-      <Popover content={record.answer?record.answer:"暂无回答"} title="回答"overlayStyle={{width:"40%"}}>
-        <Button type="dashed">查看</Button>
-      </Popover>
-      )
+        <Popover
+          content={record.answer ? record.answer : '暂无回答'}
+          title="回答"
+          overlayStyle={{ width: '40%' }}
+        >
+          <Button type="dashed">查看</Button>
+        </Popover>
+      ),
     },
     {
       title: '提问者',
@@ -130,7 +139,7 @@ class Question extends PureComponent {
       type: 'question/remove',
       payload: { id: rowId },
       callback: res => {
-       // console.log(res); // 请求完成后返回的结果
+        // console.log(res); // 请求完成后返回的结果
         if (res.code == 200) {
           message.success('删除成功');
           dispatch({ type: 'question/fetch' });
@@ -241,14 +250,13 @@ class Question extends PureComponent {
     });
   };
 
-  covertStatus=(status)=>{
-    if (status =='1'){
-      return "待回答";
-    } 
-    else if (status=='2'){
-      return "以回答";
-    } 
-  }
+  covertStatus = status => {
+    if (status == '1') {
+      return '待回答';
+    } else if (status == '2') {
+      return '以回答';
+    }
+  };
 
   renderSimpleForm() {
     const {
@@ -258,7 +266,7 @@ class Question extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 5, lg: 24, xl: 48 }}>
           <Col md={8} sm={48}>
-            {getFieldDecorator('keyWord')(<Input placeholder="请输入关键字 如 资讯标题/发布者" />)}
+            {getFieldDecorator('keyWord')(<Input placeholder="请输入关键字 如 租房" />)}
           </Col>
           <Col md={8} sm={24}>
             <span className={styles.submitButtons}>
@@ -277,7 +285,7 @@ class Question extends PureComponent {
       question: { value },
       loading,
     } = this.props;
-    console.log(this.props)
+    console.log(this.props);
     const { selectedRows } = this.state;
     return (
       <PageHeaderWrapper title="问答列表">
