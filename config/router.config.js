@@ -192,9 +192,9 @@ export default [
         authority: ['admin'],
         routes: [
           {
-            path: '/admin/system/authority',
+            path: '/admin/system/role',
             name: 'authority',
-            component: './xyl/System/Authority',
+            component: './xyl/System/Role',
           },
           {
             path: '/admin/system/dict',
