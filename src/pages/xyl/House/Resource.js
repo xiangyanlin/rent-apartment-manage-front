@@ -99,6 +99,13 @@ class Resource extends PureComponent {
       dataIndex: 'floor',
     },
     {
+      title: '状态',
+      dataIndex: 'status',
+      render: (text, record, index) => {
+        return this.covertStatus(record.status);
+      },
+    },
+    {
       title: '操作',
       render: (text, record) => (
         <Fragment>
@@ -117,7 +124,23 @@ class Resource extends PureComponent {
           >
             <a href="#">删除</a>
           </Popconfirm>
+            {record.status=="0"?
+            <div>
+              <Divider type="vertical" />
+              <Popconfirm
+                title="您确认通过此房源的审核吗?"
+                onConfirm={() => {
+                  this.examine(record.id);
+                }}
+                onCancel={this.cancel}
+                okText="确认"
+                cancelText="取消"
+              >
+                <a href="#">审核</a>
+              </Popconfirm>
+            </div>:<span></span>}
         </Fragment>
+        
       ),
     },
   ];
@@ -138,7 +161,30 @@ class Resource extends PureComponent {
       },
     });
   };
-
+    //审核确认框
+    examine = (rowId, e) => {
+      const { dispatch } = this.props;
+      dispatch({
+        type: 'house/updateHouseForm',
+        payload: { id: rowId ,status:"1"},
+        callback: res => {
+          if (res.code == 200) {
+            message.success('审核成功');
+          }
+        },
+      });
+      this.reload()
+    };
+  covertStatus=(status)=>{
+    if (status =='0'){
+      return "待审核";
+    } else if (status =='1'){
+      return "待租";
+    } 
+    else if (status=='2'){
+      return "租出";
+    } 
+  }
   cancel = e => {
     console.log(e);
     message.error('Click on No');
@@ -147,7 +193,6 @@ class Resource extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'houseResource/fetch',
-      // type: 'rule/fetch',
     });
   }
 
@@ -156,7 +201,6 @@ class Resource extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'houseResource/fetch',
-      // type: 'rule/fetch',
     });
   }
 

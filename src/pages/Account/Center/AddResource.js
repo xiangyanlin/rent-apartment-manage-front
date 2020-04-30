@@ -60,7 +60,7 @@ class AddResource extends PureComponent {
 
               // 处理图片
               values.pic = [...this.state.pics].join(',');
-
+              values.status="0";
               dispatch({
                     type: 'house/submitHouseForm',
                     payload: values,

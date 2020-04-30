@@ -72,7 +72,7 @@ class AddResource extends PureComponent {
 
               // 楼盘id
               values.estateId =  this.state.estateId;
-
+              values.status="0";
               // 处理图片
               values.pic = [...this.state.pics].join(',');
 
