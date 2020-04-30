@@ -235,8 +235,7 @@ class News extends PureComponent {
       news: { data },
       loading,
     } = this.props;
-    const { selectedRows } = this.state;
-
+    const { selectedRows } = this.state
     return (
       <PageHeaderWrapper title="资讯列表">
         <Card bordered={false}>

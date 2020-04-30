@@ -16,7 +16,7 @@ import {
 } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-
+import Answer from './Answer'
 import styles from '../TableList.less';
 
 const getValue = obj =>
@@ -26,8 +26,9 @@ const getValue = obj =>
 const params = {};
 
 /* eslint react/no-multi-comp:0 */
-@connect(({ question, loading }) => ({
+@connect(({ question, user,loading }) => ({
   question,
+  currentUser:user.currentUser,
   loading: loading.models.question,
 }))
 @Form.create()
@@ -103,7 +104,7 @@ class Question extends PureComponent {
       title: '操作',
       render: (text, record) => (
         <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>回答</a>
+          <Answer record={record} reload={this.reload.bind(this)} />
           <Divider type="vertical" />
           <Popconfirm
             title="您确认要删除这条数据吗?"
@@ -129,7 +130,7 @@ class Question extends PureComponent {
       type: 'question/remove',
       payload: { id: rowId },
       callback: res => {
-        console.log(res); // 请求完成后返回的结果
+       // console.log(res); // 请求完成后返回的结果
         if (res.code == 200) {
           message.success('删除成功');
           dispatch({ type: 'question/fetch' });
@@ -148,7 +149,15 @@ class Question extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'question/list',
-      payload: params,
+      // payload: {status:2},
+    });
+  }
+
+  reload() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'question/list',
+      // payload: {status:2},
     });
   }
 
@@ -270,7 +279,6 @@ class Question extends PureComponent {
     } = this.props;
     console.log(this.props)
     const { selectedRows } = this.state;
-    console.log(this.props);
     return (
       <PageHeaderWrapper title="问答列表">
         <Card bordered={false}>
