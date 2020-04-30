@@ -5,15 +5,9 @@ import { formatMessage, FormattedMessage } from 'umi/locale';
 import moment from 'moment';
 
 const FormItem = Form.Item;
-const { Option } = Select;
-const InputGroup = Input.Group;
-const CheckboxGroup = Checkbox.Group;
-const { TextArea } = Input;
 
-const children = [];
-for (let i = 1990; i <= 2020; i++) {
-  children.push(<Option key={i}>{'' + i}</Option>);
-}
+
+
 
 const formItemLayout = {
   labelCol: {
@@ -27,7 +21,9 @@ const formItemLayout = {
   },
 };
 
-@connect()
+@connect(({ user }) => ({
+  currentUser:user.currentUser,
+}))
 @Form.create()
 class AddRole extends React.Component {
   constructor(props) {
@@ -40,17 +36,9 @@ class AddRole extends React.Component {
   }
 
   showModal = checkNodeIds => {
-    if (Array.isArray(checkNodeIds) && checkNodeIds.length > 0) {
-      if (checkNodeIds.length === 1) {
         this.setState({
           visible: true,
         });
-      } else {
-        message.error('请选择一个字典类型新增字典！');
-      }
-    } else {
-      message.error('请选择新增字典的类型！');
-    }
   };
 
   handleCancel = () => {
@@ -60,31 +48,27 @@ class AddRole extends React.Component {
   };
 
   handleSave = () => {
-    const { dispatch, form, checkNodeIds } = this.props;
+    const { dispatch, form, currentUser } = this.props;
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log(values);
-        values.dictTypeId = checkNodeIds[0];
-        if (values.isDefault) {
-          values.isDefault = '1';
-        } else {
-          values.isDefault = '0';
-        }
+  
+        values.createTime = new Date();
+        values.createBy=currentUser.userName;
+        values.status='0';
         dispatch({
-          type: 'dict/submitDictForm',
+          type: 'role/submitRole',
           payload: values,
         });
 
         setTimeout(() => {
           this.handleCancel();
-          this.props.reloadDict();
+          this.props.reload();
         }, 500);
       }
     });
   };
 
   render() {
-    const record = this.props.record;
     const {
       form: { getFieldDecorator },
       checkNodeIds,
@@ -93,7 +77,7 @@ class AddRole extends React.Component {
     return (
       <React.Fragment>
         <Button
-          type="link"
+          type="primary"
           icon="plus"
           onClick={() => {
             this.showModal(checkNodeIds);
@@ -115,20 +99,10 @@ class AddRole extends React.Component {
         >
           <div style={{ overflow: 'auto' }}>
             <Form hideRequiredMark style={{ marginTop: 8 }}>
-              <FormItem {...formItemLayout} label="字典名">
-                {getFieldDecorator('name', {
+              <FormItem {...formItemLayout} label="角色名称">
+                {getFieldDecorator('roleName', {
                   rules: [{ required: true, message: '此项为必填项' }],
                 })(<Input style={{ width: '100%' }} />)}
-              </FormItem>
-              <FormItem {...formItemLayout} label="字典值">
-                {getFieldDecorator('value', {
-                  rules: [{ required: true, message: '此项为必填项' }],
-                })(<Input style={{ width: '100%' }} />)}
-              </FormItem>
-              <FormItem {...formItemLayout} label="是否默认值">
-                {getFieldDecorator('isDefault')(
-                  <Switch checkedChildren="是" unCheckedChildren="否" />
-                )}
               </FormItem>
             </Form>
           </div>

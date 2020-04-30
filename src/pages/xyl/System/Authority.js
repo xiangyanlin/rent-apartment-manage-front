@@ -2,12 +2,9 @@ import React from 'react';
 import {Checkbox, Form, Input, Modal,Select,Button,Card,message} from "antd";
 import {connect} from "dva";
 import { formatMessage, FormattedMessage } from 'umi/locale';
-import PicturesWall from '../Utils/PicturesWall';
+
 
 const FormItem = Form.Item;
-const { Option } = Select;
-const InputGroup = Input.Group;
-const CheckboxGroup = Checkbox.Group;
 const { TextArea } = Input;
   
   const children = [];
@@ -27,7 +24,9 @@ const formItemLayout = {
   },
 };
 
-@connect()
+@connect(({ user }) => ({
+  currentUser:user.currentUser,
+}))
 @Form.create()
 class Authority extends React.Component{
 
@@ -55,17 +54,16 @@ class Authority extends React.Component{
 
   handleSave = () => {
 
-    const { dispatch, form, record } = this.props;
+    const { dispatch, form, record ,currentUser} = this.props;
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        if(this.state.pics.size > 0){
-          values.pic = [...this.state.pics].join(',');
-        }
-        // 资讯id
         values.id = record.id;
         values.updateTime=new Date();
+        values.updateBy=currentUser.userName;
+        values.roleKey=values.roleKey.join(",");
+        console.log(values)
         dispatch({
-          type: 'news/updateInformation',
+          type: 'role/updateRole',
           payload: values,
         });
 
@@ -79,21 +77,6 @@ class Authority extends React.Component{
 
   };
 
-  handleFileList = (obj)=>{
-    let pics = new Set();
-    obj.forEach((v, k) => {
-      if(v.response){
-        pics.add(v.response.name);
-      }
-      if(v.url){
-        pics.add(v.url);
-      }
-    });
-
-    this.setState({
-      pics : pics
-    })
-  }
 
   render(){
 
@@ -104,9 +87,9 @@ class Authority extends React.Component{
 
     return (
       <React.Fragment>
-        <a onClick={() => {this.showModal()}}>编辑</a>
+        <a onClick={() => {this.showModal()}}>设置权限</a>
         <Modal
-          title={'编辑'}
+          title={'设置权限'}
           width={640}
           visible={this.state.visible}
           onOk={()=>{this.handleSave()}}
@@ -115,38 +98,26 @@ class Authority extends React.Component{
         >
           <div style={{overflow:'auto'}}>
             <Form hideRequiredMark style={{ marginTop: 8 }}>
-            <FormItem {...formItemLayout} label="资讯标题">
-              {getFieldDecorator('title',
-                  {initialValue:record.title  ,
-                    rules:[{
-                        required: true, message:"此项为必填项" 
-                        }]})
-                        (<Input style={{ width: '100%' }} 
-                        />)}
-              </FormItem>
-              <FormItem {...formItemLayout} label="资讯简介">
-              {getFieldDecorator('summary',
-                  {initialValue:record.summary  ,
-                    rules:[{
-                        required: true, message:"此项为必填项" 
-                        }]})
-                        (<TextArea style={{ width: '100%' }} autosize={{ minRows: 2, maxRows: 6 }}
-                        />)}
-              </FormItem>
-              <FormItem {...formItemLayout} label="资讯内容">
-              {getFieldDecorator('content',
-                  {initialValue:record.content  ,
-                    rules:[{
-                        required: true, message:"此项为必填项" 
-                        }]})
-                        (
-                        <TextArea style={{ width: '100%' }} autosize={{ minRows: 12, maxRows: 30 }}
-                        />
-                        )}
-              </FormItem>
-              <FormItem {...formItemLayout} label="上传资讯图">
-                  <PicturesWall handleFileList={this.handleFileList.bind(this)}/>
-              </FormItem>
+              <FormItem {...formItemLayout} label="角色权限">
+                {getFieldDecorator('roleKey',
+                    {initialValue:record.roleKey?record.roleKey.split(','):[]  ,
+                      rules:[{
+                          required: true, message:"此项为必填项" 
+                          }]})
+                          (
+                            <Checkbox.Group
+                              options={[
+                                { label: '分析面板', value: 'dashboard' },
+                                { label: '房源管理', value: 'house' },
+                                { label: '房东管理', value: 'owner' },
+                                { label: '用户管理', value: 'consumer' },
+                                { label: '合约管理', value: 'contract' },
+                                { label: '资讯管理', value: 'news' },
+                                { label: '问答管理', value: 'qa' },
+                              ]}
+                          />
+                          )}
+                </FormItem>
             </Form>
           </div>
 

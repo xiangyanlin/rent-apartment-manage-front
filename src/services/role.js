@@ -20,7 +20,7 @@ export async function addRole(params) {
   });
 }
 //修改
-export async function updateQuestions(params) {
+export async function updateRole(params) {
   return request('/xyl/role/update', {
     method: 'PUT',
     body: params,

@@ -16,7 +16,8 @@ import {
 } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-
+import AddRole from "./AddRole";
+import Authority from "./Authority";
 import styles from '../TableList.less';
 
 /* eslint react/no-multi-comp:0 */
@@ -68,21 +69,22 @@ class Role extends PureComponent {
     {
       title: '操作',
       render: (text, record) => (
-        <Fragment>
-          {/* <EditNews record={record} reload={this.reload.bind(this)} />
-          <Divider type="vertical" /> */}
-          <Popconfirm
-            title="您确认要删除这条数据吗?"
-            onConfirm={() => {
-              this.confirm(record.id);
-            }}
-            onCancel={this.cancel}
-            okText="确认"
-            cancelText="取消"
-          >
-            <a href="#">删除</a>
-          </Popconfirm>
-        </Fragment>
+        record.id==1?<span>超级管理员不允许操作</span>
+        :<Fragment>
+        <Authority record={record} reload={this.reload.bind(this)} />
+        <Divider type="vertical" />
+        <Popconfirm
+          title="您确认要删除这条数据吗?"
+          onConfirm={() => {
+            this.confirm(record.id);
+          }}
+          onCancel={this.cancel}
+          okText="确认"
+          cancelText="取消"
+        >
+          <a href="#">删除</a>
+        </Popconfirm>
+      </Fragment>
       ),
     },
   ];
@@ -238,15 +240,7 @@ class Role extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderSimpleForm()}</div>
-            <Button
-              type="primary"
-              icon="plus"
-              onClick={() => {
-                return this.props.history.push('/admin/news/addNews');
-              }}
-            >
-              新增
-            </Button>
+            <AddRole reload={this.reload.bind(this)} />
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}
