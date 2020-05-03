@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import Link from 'umi/link';
-import { Form, Button, Input, Checkbox, Alert, Icon } from 'antd';
+import { Form, Button, Input, Checkbox, Alert, Icon, Row ,Col} from 'antd';
 import Login from '@/components/Login';
 import styles from './Login.less';
 const { Tab, UserName, Password, Mobile, Captcha, Submit } = Login;
@@ -41,8 +41,15 @@ class LoginPage extends Component {
 
   handleSubmit = (err, values) => {
     const { type } = this.state;
+    const { autoLogin } = this.state;
     if (!err) {
       const { dispatch } = this.props;
+        localStorage.setItem('userName',values.userName);
+      if(autoLogin){
+          localStorage.setItem('password',values.paassword);
+      }else{
+          localStorage.removeItem('password');
+      }
       dispatch({
         type: 'login/login',
         payload: {
@@ -66,6 +73,8 @@ class LoginPage extends Component {
   render() {
     const { login, submitting } = this.props;
     const { type, autoLogin } = this.state;
+    const strName=localStorage.getItem("userName");
+    const strPass=localStorage.getItem("password")
     return (
       <div className={styles.main}>
         <Login
@@ -107,21 +116,34 @@ class LoginPage extends Component {
         {login.status === 'error' &&
             !submitting &&
             this.renderMessage(formatMessage({ id: 'app.login.message-invalid-credentials' }))}
-          <UserName name="userName" placeholder="请输入用户名" />
+          <UserName 
+            name="userName" 
+            placeholder="请输入用户名"
+            defaultValue={strName} />
           <Password
             name="password"
             placeholder="请输入密码"
             onPressEnter={() => this.loginForm.validateFields(this.handleSubmit)}
+            defaultValue={strPass}
           />
+
+          <div>
+            <Checkbox checked={autoLogin} onChange={this.changeAutoLogin}>
+              <FormattedMessage id="app.login.remember-me" />
+            </Checkbox>
+            <a style={{ float: 'right' }} href="">
+              <FormattedMessage id="app.login.forgot-password" />
+            </a>
+          </div> 
 
           <Submit loading={submitting}>
             <FormattedMessage id="app.login.login" />
           </Submit>
-          <div>
-            <Link className={styles.register} to="/User/Register">
+          <Row type="flex" justify="end" >
+            <Link to="/User/Register">
               <FormattedMessage id="app.login.signup" />
             </Link>
-          </div>
+          </Row>
         </Login>
       </div>
     );
