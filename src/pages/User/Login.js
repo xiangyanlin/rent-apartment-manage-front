@@ -46,7 +46,7 @@ class LoginPage extends Component {
       const { dispatch } = this.props;
         localStorage.setItem('userName',values.userName);
       if(autoLogin){
-          localStorage.setItem('password',values.paassword);
+          localStorage.setItem('password',values.password);
       }else{
           localStorage.removeItem('password');
       }

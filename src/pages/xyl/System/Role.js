@@ -9,7 +9,7 @@ import {
   Icon,
   Card,
   Form,
-  Select,
+  Tag,
   Divider,
   Popconfirm,
   message,
@@ -69,7 +69,7 @@ class Role extends PureComponent {
     {
       title: '操作',
       render: (text, record) => (
-        record.id==1?<span>超级管理员不允许操作</span>
+        record.id==1?<Tag>超级管理员不允许操作</Tag>
         :<Fragment>
         <Authority record={record} reload={this.reload.bind(this)} />
         <Divider type="vertical" />

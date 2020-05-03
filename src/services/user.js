@@ -9,7 +9,7 @@ export async function queryCurrent(params) {
   return request(`/xyl/user/currentUser?${stringify(params)}`);
 }
 
-export async function queryOwnerList(params) {
+export async function queryUserList(params) {
   return request(`/xyl/user/list?${stringify(params)}`);
 }
 //用户登录
@@ -25,6 +25,22 @@ export async function userRegister(params) {
   });
 }
 
+
+//新增
+export async function addUser(params) {
+  return request('/xyl/user/save', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+//删除
+export async function removeUser(params) {
+  return request(`/xyl/user/delete?${stringify(params)}`, {
+    method: 'delete',
+  });
+}
+
 //修改用户信息
 export async function updateUser(params) {
   return request('/xyl/user/update', {
@@ -32,4 +48,5 @@ export async function updateUser(params) {
     body: params,
   });
 }
+
 

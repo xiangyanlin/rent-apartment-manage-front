@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Row, Col, Input, Button, Icon, Card, Form, Select, Divider } from 'antd';
+import { Row, Col, Input, Button, Icon, Card, Form, Select, Divider ,Popconfirm,Tag } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
@@ -14,9 +14,9 @@ const getValue = obj =>
 const params = {};
 
 /* eslint react/no-multi-comp:0 */
-@connect(({ owner, loading }) => ({
-  owner,
-  loading: loading.models.owner,
+@connect(({ user, loading }) => ({
+  user,
+  loading: loading.models.user,
 }))
 @Form.create()
 class User extends PureComponent {
@@ -81,12 +81,43 @@ class User extends PureComponent {
     {
       title: '操作',
       render: (text, record) => (
-        <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>查看详情</a>
-        </Fragment>
+        record.roleId==1?<Tag>超级管理员不允许操作</Tag>
+        :<Fragment>
+        {/* <Authority record={record} reload={this.reload.bind(this)} />
+        <Divider type="vertical" /> */}
+        <Popconfirm
+          title="您确认要删除这条数据吗?"
+          onConfirm={() => {
+            this.confirm(record.id);
+          }}
+          onCancel={this.cancel}
+          okText="确认"
+          cancelText="取消"
+        >
+          <a href="#">删除</a>
+        </Popconfirm>
+      </Fragment>
       ),
     },
   ];
+
+     //删除确认框
+     confirm = (rowId, e) => {
+      //console.log(e);
+      const { dispatch } = this.props;
+      console.log(rowId);
+      dispatch({
+        type: 'user/remove',
+        payload: { id: rowId },
+        callback: res => {
+          console.log(res); // 请求完成后返回的结果
+          if (res.code == 200) {
+            message.success('删除成功');
+            dispatch({ type: 'user/fetch' });
+          }
+        },
+      });
+    };
   // 数字转文字
   //性别
   convertSex = record => {
@@ -132,7 +163,7 @@ class User extends PureComponent {
     //当组件挂载完成后执行加载数据
     const { dispatch } = this.props;
     dispatch({
-      type: 'owner/fetch',
+      type: 'user/fetch',
       payload: params,
     });
   }
@@ -158,34 +189,12 @@ class User extends PureComponent {
     }
 
     dispatch({
-      type: 'owner/fetch',
+      type: 'user/fetch',
       payload: params,
     });
   };
 
-  handleMenuClick = e => {
-    const { dispatch } = this.props;
-    const { selectedRows } = this.state;
 
-    if (!selectedRows) return;
-    switch (e.key) {
-      case 'remove':
-        dispatch({
-          type: 'owner/remove',
-          payload: {
-            key: selectedRows.map(row => row.key),
-          },
-          callback: () => {
-            this.setState({
-              selectedRows: [],
-            });
-          },
-        });
-        break;
-      default:
-        break;
-    }
-  };
 
   handleSelectRows = rows => {
     this.setState({
@@ -211,7 +220,7 @@ class User extends PureComponent {
       });
 
       dispatch({
-        type: 'owner/fetch',
+        type: 'user/fetch',
         payload: values,
       });
     });
@@ -243,7 +252,7 @@ class User extends PureComponent {
 
   render() {
     const {
-      owner: { data },
+      user: { data },
       loading,
     } = this.props;
     const { selectedRows } = this.state;

@@ -1,16 +1,19 @@
-import { query as queryUsers, queryCurrent,updateUser } from '@/services/user';
+import { query as queryUsers, queryUserList,queryCurrent,updateUser,addUser,removeUser } from '@/services/user';
 import { message } from 'antd';
 export default {
   namespace: 'user',
 
   state: {
-    list: [],
+    data: {
+      list: [],
+      pagination: {},
+    },
     currentUser: {},
   },
 
   effects: {
-    *fetch(_, { call, put }) {
-      const response = yield call(queryUsers);
+    *fetch({ payload }, { call, put }) {
+      const response = yield call(queryUserList, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -37,13 +40,29 @@ export default {
       }
      
     },
+    //删除用户
+    *remove({ payload, callback }, { call }) {
+      const response = yield call(removeUser, payload);
+      if (response.code === 200) {
+        if (callback && typeof callback == 'function') {
+          callback(response); // 返回结果
+        }
+      }
+    },
+    //新增用户
+    *submitUser({ payload, callback }, { call }) {
+      const response = yield call(addUser, payload);
+      if (callback && typeof callback == 'function') {
+        callback(response); // 返回结果
+      }
+    },
   },
 
   reducers: {
     save(state, action) {
       return {
         ...state,
-        list: action.payload,
+        data: action.payload,
       };
     },
     saveCurrentUser(state, action) {
