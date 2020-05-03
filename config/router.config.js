@@ -85,51 +85,7 @@ export default [
         ],
       },
 
-      {
-        // 房东管理
-        path: '/admin/owner',
-        name: 'fangdong',
-        icon: 'key',
-        authority: ['admin', 'owner'],
-        routes: [
-          {
-            path: '/admin/owner/list',
-            name: 'list',
-            component: './xyl/Owner/List',
-          },
-        ],
-      },
-
-      {
-        // 用户管理
-        path: '/admin/users',
-        name: 'users',
-        icon: 'user',
-        authority: ['admin', 'consumer'],
-        routes: [
-          {
-            path: '/admin/users/list',
-            name: 'list',
-            component: './xyl/Users/List',
-          },
-        ],
-      },
-
-      {
-        // 合约管理
-        path: '/admin/contract',
-        authority: ['admin', 'contract'],
-        name: 'heyue',
-        icon: 'file-text',
-        routes: [
-          {
-            path: '/admin/contract/list',
-            name: 'list',
-            component: './xyl/Contract/List',
-          },
-        ],
-      },
-
+      
       {
         // 资讯管理
         path: '/admin/news',
@@ -164,6 +120,54 @@ export default [
           },
         ],
       },
+
+      {
+        // 合约管理
+        path: '/admin/contract',
+        authority: ['admin', 'contract'],
+        name: 'heyue',
+        icon: 'file-text',
+        routes: [
+          {
+            path: '/admin/contract/list',
+            name: 'list',
+            component: './xyl/Contract/List',
+          },
+        ],
+      },
+
+      {
+        // 房东管理
+        path: '/admin/owner',
+        name: 'fangdong',
+        icon: 'key',
+        authority: ['admin', 'owner'],
+        routes: [
+          {
+            path: '/admin/owner/list',
+            name: 'list',
+            component: './xyl/Owner/List',
+          },
+        ],
+      },
+
+      {
+        // 用户管理
+        path: '/admin/users',
+        name: 'users',
+        icon: 'user',
+        authority: ['admin', 'consumer'],
+        routes: [
+          {
+            path: '/admin/users/list',
+            name: 'list',
+            component: './xyl/Users/List',
+          },
+        ],
+      },
+
+
+
 
       // {
       //   // 财务管理
