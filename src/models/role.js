@@ -1,5 +1,5 @@
 import { routerRedux } from 'dva/router';
-import { queryRole, removeRole, addRole, updateRole } from '@/services/role';
+import {queryRoleAll, queryRole, removeRole, addRole, updateRole } from '@/services/role';
 
 export default {
   namespace: 'role',
@@ -9,6 +9,7 @@ export default {
       list: [],
       pagination: {},
     },
+    roles:[]
   },
 
   effects: {
@@ -16,6 +17,13 @@ export default {
       const response = yield call(queryRole, payload);
       yield put({
         type: 'save',
+        payload: response,
+      });
+    },
+    *getRoles({ payload }, { call, put }) {
+      const response = yield call(queryRoleAll, payload);
+      yield put({
+        type: 'saveRoles',
         payload: response,
       });
     },
@@ -47,6 +55,12 @@ export default {
       return {
         ...state,
         data: action.payload,
+      };
+    },
+    saveRoles(state, action) {
+      return {
+        ...state,
+        roles: action.payload.data,
       };
     },
   },

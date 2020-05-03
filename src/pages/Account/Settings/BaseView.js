@@ -121,23 +121,7 @@ class BaseView extends Component {
         }
     });
 };
-//获取学历
-getEducationOptops=(dict)=>{
 
-  let educationOptops=new Array;
-  if(typeof(dict)!='undefined'&&dict!=null){
-    for(var key in dict){
-      console.log(key+":"+dict[key])
-      if(key=='学历'&&Array.isArray(dict[key])&&dict[key].length>0){
-        dict[key].forEach((Item,index)=>{
-          educationOptops.push( <Option value={Item.value}>{Item.name}</Option>);
-          })
-      }
-    }
-  }
-  
-  return educationOptops;
-}
 //从字典获取学历下拉选项
 getEducationOptops=(dict)=>{
 

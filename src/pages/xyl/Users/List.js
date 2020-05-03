@@ -4,7 +4,7 @@ import moment from 'moment';
 import { Row, Col, Input, Button, Icon, Card, Form, Select, Divider ,Popconfirm,Tag } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-
+import EditUser from "./EditUser"
 import styles from '../TableList.less';
 
 const getValue = obj =>
@@ -83,8 +83,8 @@ class User extends PureComponent {
       render: (text, record) => (
         record.roleId==1?<Tag>超级管理员不允许操作</Tag>
         :<Fragment>
-        {/* <Authority record={record} reload={this.reload.bind(this)} />
-        <Divider type="vertical" /> */}
+        <EditUser record={record} reload={this.reload.bind(this)} type="edit"/>
+        <Divider type="vertical" />
         <Popconfirm
           title="您确认要删除这条数据吗?"
           onConfirm={() => {
@@ -161,6 +161,14 @@ class User extends PureComponent {
   };
   componentDidMount() {
     //当组件挂载完成后执行加载数据
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'user/fetch',
+      payload: params,
+    });
+  }
+
+  reload(){
     const { dispatch } = this.props;
     dispatch({
       type: 'user/fetch',
@@ -262,7 +270,7 @@ class User extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderSimpleForm()}</div>
-
+            <EditUser record={{}} reload={this.reload.bind(this)} type="add"/>
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}

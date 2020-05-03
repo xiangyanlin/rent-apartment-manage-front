@@ -130,6 +130,9 @@ class Owner extends PureComponent {
     });
   }
 
+
+
+
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch } = this.props;
     const { formValues } = this.state;

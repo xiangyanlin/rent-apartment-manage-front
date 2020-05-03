@@ -26,3 +26,7 @@ export async function updateRole(params) {
     body: params,
   });
 }
+//全部
+export async function queryRoleAll(params) {
+  return request(`/xyl/role/selectAll?${stringify(params)}`);
+}
