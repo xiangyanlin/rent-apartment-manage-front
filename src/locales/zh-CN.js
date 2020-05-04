@@ -104,8 +104,8 @@ export default {
 
   'menu.dashboard': 'Dashboard',
   'menu.dashboard.analysis': '分析页',
-  'menu.dashboard.monitor': '监控页',
-  'menu.dashboard.workplace': '工作台',
+  'menu.dashboard.monitor': '服务器监控',
+  'menu.dashboard.workplace': '数据源监控',
   'menu.form': '表单页',
   'menu.form.basicform': '基础表单',
   'menu.form.stepform': '分步表单',
