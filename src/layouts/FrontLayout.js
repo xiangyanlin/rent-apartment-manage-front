@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout } from 'antd';
+import { Layout, Button, ConfigProvider } from 'antd';
 import DocumentTitle from 'react-document-title';
 import isEqual from 'lodash/isEqual';
 import memoizeOne from 'memoize-one';
@@ -17,7 +17,7 @@ import Footer from './Footer';
 import Header from './FrontHeader';
 import Context from './MenuContext';
 import Exception403 from '../pages/Exception/403';
-
+import zhCN from 'antd/es/locale/zh_CN';
 const { Content } = Layout;
 
 // Conversion router to menu.
@@ -286,6 +286,7 @@ class FrontLayout extends React.PureComponent {
       </Layout>
     );
     return (
+      <ConfigProvider locale={zhCN}>
       <React.Fragment>
         <DocumentTitle title={this.getPageTitle(pathname)}>
           <ContainerQuery query={query}>
@@ -298,6 +299,7 @@ class FrontLayout extends React.PureComponent {
         </DocumentTitle>
         {/* {this.renderSettingDrawer()} */}
       </React.Fragment>
+      </ConfigProvider>
     );
   }
 }
