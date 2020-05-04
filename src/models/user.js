@@ -33,7 +33,6 @@ export default {
     *updateUserForm({ payload,callback }, { call }) {
       const response=yield call(updateUser, payload);
       if (response.code == 200) {
-        message.success('修改成功');
         if (callback && typeof callback == 'function') {
           callback(response); // 返回结果
         }
@@ -52,6 +51,12 @@ export default {
     //新增用户
     *submitUser({ payload, callback }, { call }) {
       const response = yield call(addUser, payload);
+      if (callback && typeof callback == 'function') {
+        callback(response); // 返回结果
+      }
+    },
+    *checkUserName({ payload, callback }, { call }) {
+      const response = yield call(queryCurrent, payload);
       if (callback && typeof callback == 'function') {
         callback(response); // 返回结果
       }

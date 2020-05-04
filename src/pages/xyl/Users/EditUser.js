@@ -1,5 +1,5 @@
 import React from 'react';
-import { Checkbox, Form, Input, Modal, Select, Button, Card, message, Switch } from 'antd';
+import { Checkbox, Form, Input, Modal, Select, Button, Card, message, Radio } from 'antd';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import moment from 'moment';
@@ -61,12 +61,16 @@ class EditUser extends React.Component {
   //角色
   getOption = () => {
     const roles = this.props.role.roles
+    let disabled=false;
     if(Array.isArray(roles)){
       return roles.reduce((pre, item) => {
+        disabled=false;
+        if(item.id===1){
+          disabled=true;
+        }
           pre.push((
-              <Option key={item.id} value={item.id}>{item.roleName}</Option>
+              <Option key={item.id} value={item.id} disabled={disabled}>{item.roleName}</Option>
           ))
-          console.log(pre)
           return pre
       }, [])
     }
@@ -74,7 +78,7 @@ class EditUser extends React.Component {
   }
 
   getEducationOptops=()=>{
-    const dict= this.props.dict;
+    let dict= this.props.dict;
     let educationOptops=new Array;
     if(typeof(dict)!='undefined'&&dict!=null){
       for(var key in dict){
@@ -86,6 +90,22 @@ class EditUser extends React.Component {
       }
     }
     return educationOptops
+  }
+
+  getSexRadios=()=>{
+    let dict= this.props.dict;
+    let sexOptops=new Array;
+    if(typeof(dict)!='undefined'&&dict!=null){
+      for(var key in dict){
+        if(key=='性别'&&Array.isArray(dict[key])&&dict[key].length>0){
+          dict[key].forEach((item,index)=>{
+            sexOptops.push( <Radio key={item.id} value={item.value}>{item.name}</Radio>);
+            })
+        }
+      }
+    }
+    
+    return sexOptops;
   }
 
   showModal = () => {
@@ -102,14 +122,19 @@ class EditUser extends React.Component {
   };
 
   handleSave = () => {
-    const { dispatch, form, type } = this.props;
+    const { dispatch, form, type,record } = this.props;
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
           if(type=='edit'){
-
+            values.id=record.id;
             dispatch({
               type: 'user/updateUserForm',
               payload: values,
+              callback: res => {
+                if (res.code == 200) {
+                  message.success('修改成功');
+                }
+              },
             });
     
           }
@@ -132,12 +157,136 @@ class EditUser extends React.Component {
     });
   };
 
+  checkPassword = (rule, value, callback) => {
+    const { visible, confirmDirty } = this.state;
+    if (!value) {
+
+      callback(formatMessage({ id: 'validation.password.required' }));
+    } else {
+
+      if (value.length < 6) {
+        callback('请使用大于6位的密码');
+      } else {
+        callback();
+      }
+    }
+  };
+
+  checkPassword = (rule, value, callback) => {
+    const { visible, confirmDirty } = this.state;
+    if (!value) {
+      this.setState({
+        help: formatMessage({ id: 'validation.password.required' }),
+        visible: !!value,
+      });
+      callback('error');
+    } else {
+      this.setState({
+        help: '',
+      });
+      if (!visible) {
+        this.setState({
+          visible: !!value,
+        });
+      }
+      if (value.length < 6) {
+        callback('error');
+      } else {
+        const { form } = this.props;
+        if (value && confirmDirty) {
+          form.validateFields(['confirm'], { force: true });
+        }
+        callback();
+      }
+    }
+  };
+  //校验用户名
+  checkUserName = (rule, value, callback) => {
+    const userName = value;
+    if (userName) {
+      const { dispatch } = this.props;
+      dispatch({
+        type: 'user/checkUserName',
+        payload: {
+          userName:userName,
+        },
+        callback: res => {
+          console.log(res); // 请求完成后返回的结果
+          if (res.code == 200) {
+            callback(formatMessage({ id: 'validation.userName.wrong-format' }));
+            callback('error');
+          }
+          callback();
+        },
+      });
+    }else{
+      callback(formatMessage({ id: 'validation.userName.required' }));
+      callback('error');
+      
+    }
+    
+  };
+
+  //  身份证校验规则
+  checkLength = (rule, value, callback) => {
+    if (this.checkIDCard(value)) {
+      callback();
+    } else {
+      callback('请输入正确的身份证号码');
+    }
+  }
+
+  checkIDCard = (value) => {
+    // 加权因子
+    const weight_factor = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2];
+    // 校验码
+    const check_code = ['1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2'];
+
+    const code = value + '';
+    const last = value[17];
+
+    const seventeen = code.substring(0, 17);
+    
+	 // ISO 7064:1983.MOD 11-2
+    // 判断最后一位校验码是否正确
+    const arr = seventeen.split('');
+    const len = arr.length;
+    let num = 0;
+    for (let i = 0; i < len; i += 1) {
+      num += (arr[i] * weight_factor[i]);
+    }
+
+    // 获取余数
+    const resisue = num % 11;
+    const last_no = check_code[resisue];
+
+	// 格式的正则
+    // 正则思路
+    /*
+    第一位不可能是0
+    第二位到第六位可以是0-9
+    第七位到第十位是年份，所以七八位为19或者20
+    十一位和十二位是月份，这两位是01-12之间的数值
+    十三位和十四位是日期，是从01-31之间的数值
+    十五，十六，十七都是数字0-9
+    十八位可能是数字0-9，也可能是X
+    */
+    const idcard_patter = /^[1-9][0-9]{5}([1][9][0-9]{2}|[2][0][0|1][0-9])([0][1-9]|[1][0|1|2])([0][1-9]|[1|2][0-9]|[3][0|1])[0-9]{3}([0-9]|[X])$/;
+
+    // 判断格式是否正确
+    const format = idcard_patter.test(value);
+
+    // 返回验证结果，校验码和格式同时正确才算是合法的身份证号码
+    return last === last_no && format;
+  }
+
+
   render() {
     const {type,roles}= this.props;
-    console.log(this.props);
     let record=this.props.record;
     let title = ''
     let label=''
+    let  editable=false
     if(type==='add'){
       record={}
       label = "新增"
@@ -145,6 +294,7 @@ class EditUser extends React.Component {
     }else{
       label = "编辑"
       title='编辑用户'
+      editable=true
     }
     const {
       form: { getFieldDecorator },
@@ -178,14 +328,24 @@ class EditUser extends React.Component {
               <FormItem {...formItemLayout} label="用户名">
                 {getFieldDecorator('userName', {
                   initialValue:record.userName,
-                  rules: [{ required: true, message: '此项为必填项' }],
-                })(<Input style={{ width: '100%' }} />)}
+                  rules: [
+                    type=='add'? 
+                    { required: true,
+                      validator: this.checkUserName
+                    }:{ required: true,}
+                  ],
+                })(<Input style={{ width: '100%' }} disabled={editable}/>)}
               </FormItem>
               <FormItem {...formItemLayout} label="密码">
                 {getFieldDecorator('password', {
                   initialValue:record.password,
-                  rules: [{ required: true, message: '此项为必填项' }],
-                })(<Input style={{ width: '100%' }} />)}
+                  rules: [
+                    {
+                      validator: this.checkPassword,
+                    },
+                  ],
+                })(
+                <Input type="password" style={{ width: '100%' }} disabled={editable}/>)}
               </FormItem>
               <FormItem {...formItemLayout} label="设置角色">
                 {getFieldDecorator('roleId',{initialValue:record.roleId})(
@@ -195,23 +355,48 @@ class EditUser extends React.Component {
                 )}
               </FormItem>
               <FormItem {...formItemLayout} label="邮箱">
-                {getFieldDecorator('email',{initialValue:record.email})
+                {getFieldDecorator('email',{initialValue:record.email,              
+                rules: [
+                {
+                  type: 'email',
+                  message: formatMessage({ id: 'validation.email.wrong-format' }),
+                },
+              ],})
                 (<Input style={{ width: '100%' }} />)}
               </FormItem>
               <FormItem {...formItemLayout} label="手机号">
-                {getFieldDecorator('mobile',{initialValue:record.mobile})
+                {getFieldDecorator('mobile',{initialValue:record.mobile,
+                  rules: [
+                    {
+                      required: true,
+                      message: formatMessage({ id: 'validation.phone-number.required' }),
+                    },
+                    {
+                      pattern: /^\d{11}$/,
+                      message: formatMessage({ id: 'validation.phone-number.wrong-format' }),
+                    },
+                  ],})
                 (<Input style={{ width: '100%' }} />)}
               </FormItem>
               <FormItem {...formItemLayout} label="性别">
                 {getFieldDecorator('sex',{initialValue:record.sex})
-                (<Input style={{ width: '100%' }} />)}
+                (
+                <Radio.Group  style={{ width: '100%' }} >
+                  {this.getSexRadios()}
+                </Radio.Group>
+                )}
               </FormItem>
               <FormItem {...formItemLayout} label="真实姓名">
                 {getFieldDecorator('realName',{initialValue:record.realName})
                 (<Input style={{ width: '100%' }} />)}
               </FormItem>
               <FormItem {...formItemLayout} label="身份证号">
-                {getFieldDecorator('idCard',{initialValue:record.idCard})
+                {getFieldDecorator('idCard',{initialValue:record.idCard,
+                rules:[
+                  {
+                    validator: this.checkLength,
+                  },
+                ]})
                 (<Input style={{ width: '100%' }} />)}
               </FormItem>
               <FormItem {...formItemLayout} label="职业">
