@@ -43,6 +43,9 @@ class Center extends PureComponent {
   onTabChange = key => {
     const { match } = this.props;
     switch (key) {
+      case 'myQuestion':
+        router.push(`${match.url}/myQuestion`);
+        break;
       case 'myHouse':
         router.push(`${match.url}/myHouse`);
         break;
@@ -63,6 +66,9 @@ class Center extends PureComponent {
   onChange = key => {
     const { match } = this.props;
     switch (key) {
+      case 'myQuestion':
+        router.push(`${match.url}/myQuestion`);
+        break;
       case 'MyRequest':
         router.push(`${match.url}/MyRequest`);
         break;
@@ -145,6 +151,14 @@ class Center extends PureComponent {
 
     const operationTabList = [
       {
+        key: 'myQuestion',
+        tab: (
+          <span>
+            我的提问 <span style={{ fontSize: 14 }}></span>
+          </span>
+        ),
+      },
+      {
         key: 'myHouse',
         tab: (
           <span>
@@ -179,6 +193,14 @@ class Center extends PureComponent {
     ];
 
     const operationTenant = [
+      {
+        key: 'myQuestion',
+        tab: (
+          <span>
+            我的提问 <span style={{ fontSize: 14 }}></span>
+          </span>
+        ),
+      },
       {
         key: 'MyRequest',
         tab: (
@@ -251,7 +273,7 @@ class Center extends PureComponent {
             </Card>
           </Col>
           <Col lg={17} md={24}>
-            {currentUser.role!="2"?
+            {currentUser.roleId!=2?
             <Card
             className={styles.tabsCard}
             bordered={false}
