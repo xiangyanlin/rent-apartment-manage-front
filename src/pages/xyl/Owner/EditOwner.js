@@ -1,5 +1,5 @@
 import React from 'react';
-import { Checkbox, Form, Input, Modal, Select, Button, Card, message, Radio } from 'antd';
+import { Checkbox, Form, Input, Modal, Select, Button, InputNumber , message, Radio } from 'antd';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import moment from 'moment';
@@ -32,7 +32,7 @@ const formItemLayout = {
   dict:dict.dictMap,
 }))
 @Form.create()
-class EditUser extends React.Component {
+class EditOwner extends React.Component {
   state={
     click:""
   }
@@ -58,39 +58,8 @@ class EditUser extends React.Component {
       payload:ids,
     });
   }
-  //角色
-  getOption = () => {
-    const roles = this.props.role.roles
-    let disabled=false;
-    if(Array.isArray(roles)){
-      return roles.reduce((pre, item) => {
-        disabled=false;
-        if(item.id===1){
-          disabled=true;
-        }
-          pre.push((
-              <Option key={item.id} value={item.id} disabled={disabled}>{item.roleName}</Option>
-          ))
-          return pre
-      }, [])
-    }
 
-  }
 
-  getEducationOptops=()=>{
-    let dict= this.props.dict;
-    let educationOptops=new Array;
-    if(typeof(dict)!='undefined'&&dict!=null){
-      for(var key in dict){
-        if(key=='学历'&&Array.isArray(dict[key])){
-          dict[key].forEach((item,index)=>{
-            educationOptops.push( <Option key={item.id} value={item.value}>{item.name}</Option>);
-            })
-        }
-      }
-    }
-    return educationOptops
-  }
 
   getSexRadios=()=>{
     let dict= this.props.dict;
@@ -157,22 +126,7 @@ class EditUser extends React.Component {
     });
   };
 
-  checkPassword = (rule, value, callback) => {
-    const { visible, confirmDirty } = this.state;
-    if (!value) {
 
-      callback(formatMessage({ id: 'validation.password.required' }));
-    } else {
-
-      if (value.length < 6) {
-        callback('请使用大于6位的密码');
-      } else {
-        callback();
-      }
-    }
-  };
-
- 
   //校验用户名
   checkUserName = (rule, value, callback) => {
     const userName = value;
@@ -263,10 +217,10 @@ class EditUser extends React.Component {
     if(type==='add'){
       record={}
       label = "新增"
-      title='新增用户'
+      title='新增房东'
     }else{
       label = "编辑"
-      title='编辑用户'
+      title='编辑房东'
       editable=true
     }
     const {
@@ -310,49 +264,6 @@ class EditUser extends React.Component {
                   ],
                 })(<Input style={{ width: '100%' }} disabled={editable}/>)}
               </FormItem>
-              <FormItem {...formItemLayout} label="密码">
-                {getFieldDecorator('password', {
-                  initialValue:record.password,
-                  validateTrigger: 'onBlur', 
-                  rules: [
-                    {
-                      validator: this.checkPassword,
-                    },
-                  ],
-                })(
-                <Input type="password" style={{ width: '100%' }} disabled={editable}/>)}
-              </FormItem>
-              <FormItem {...formItemLayout} label="设置角色">
-                {getFieldDecorator('roleId',{initialValue:record.roleId})(
-                  <Select style={{ width: '100%' }} placeholder="请选择角色" >
-                   { this.getOption()}
-                  </Select>
-                )}
-              </FormItem>
-              <FormItem {...formItemLayout} label="邮箱">
-                {getFieldDecorator('email',{initialValue:record.email,              
-                rules: [
-                {
-                  type: 'email',
-                  message: formatMessage({ id: 'validation.email.wrong-format' }),
-                },
-              ],})
-                (<Input style={{ width: '100%' }} />)}
-              </FormItem>
-              <FormItem {...formItemLayout} label="手机号">
-                {getFieldDecorator('mobile',{initialValue:record.mobile,
-                  rules: [
-                    {
-                      required: true,
-                      message: formatMessage({ id: 'validation.phone-number.required' }),
-                    },
-                    {
-                      pattern: /^\d{11}$/,
-                      message: formatMessage({ id: 'validation.phone-number.wrong-format' }),
-                    },
-                  ],})
-                (<Input style={{ width: '100%' }} />)}
-              </FormItem>
               <FormItem {...formItemLayout} label="性别">
                 {getFieldDecorator('sex',{initialValue:record.sex})
                 (
@@ -366,7 +277,10 @@ class EditUser extends React.Component {
                 (<Input style={{ width: '100%' }} />)}
               </FormItem>
               <FormItem {...formItemLayout} label="身份证号">
-                {getFieldDecorator('idCard',{initialValue:record.idCard,
+                {getFieldDecorator('idCard',
+                {
+                    initialValue:record.idCard,
+                    validateTrigger: 'onBlur', 
                 rules:[
                   {
                     validator: this.checkLength,
@@ -374,17 +288,9 @@ class EditUser extends React.Component {
                 ]})
                 (<Input style={{ width: '100%' }} />)}
               </FormItem>
-              <FormItem {...formItemLayout} label="职业">
-                {getFieldDecorator('profession',{initialValue:record.profession})
-                (<Input style={{ width: '100%' }} />)}
-              </FormItem>
-              <FormItem {...formItemLayout} label="学历">
-                {getFieldDecorator('education',{initialValue:record.education})
-                (
-                  <Select style={{ width: '100%' }} placeholder="请选择学历" >
-                        {this.getEducationOptops()}
-                 </Select>
-                )}
+              <FormItem {...formItemLayout} label="房源数量">
+                {getFieldDecorator('houseNum',{initialValue:record.houseNum})
+                (<InputNumber  />)}
               </FormItem>
             </Form>
           </div>
@@ -394,4 +300,4 @@ class EditUser extends React.Component {
   }
 }
 
-export default EditUser;
+export default EditOwner;

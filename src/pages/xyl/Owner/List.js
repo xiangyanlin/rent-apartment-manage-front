@@ -4,7 +4,7 @@ import moment from 'moment';
 import { Row, Col, Input, Button, Icon, Card, Form, Select, Divider ,Popconfirm} from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-
+import EditOwner from "./EditOwner"
 import styles from '../TableList.less';
 
 const getValue = obj =>
@@ -66,8 +66,8 @@ class Owner extends PureComponent {
       title: '操作',
       render: (text, record) => (
         <Fragment>
-          {/* <EditNews record={record} reload={this.reload.bind(this)} />
-          <Divider type="vertical" /> */}
+          <EditOwner record={record} reload={this.reload.bind(this)} type="edit" />
+          <Divider type="vertical" />
           <Popconfirm
             title="您确认要删除这条数据吗?"
             onConfirm={() => {
@@ -90,13 +90,13 @@ class Owner extends PureComponent {
     const { dispatch } = this.props;
     //console.log(rowId);
     dispatch({
-      type: 'news/remove',
+      type: 'user/remove',
       payload: { id: rowId },
       callback: res => {
         console.log(res); // 请求完成后返回的结果
         if (res.code == 200) {
           message.success('删除成功');
-          dispatch({ type: 'news/fetch' });
+          dispatch({ type: 'user/fetch' , payload: params,});
         }
       },
     });
@@ -129,7 +129,13 @@ class Owner extends PureComponent {
       payload: params,
     });
   }
-
+  reload(){
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'user/fetch',
+      payload: params,
+    });
+  }
 
 
 
