@@ -1,10 +1,10 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Row, Col, Input, Button, Icon, Card, Form, Select, Divider } from 'antd';
+import { Row, Col, Input, Button, Popconfirm, Card, Form, Select, Divider } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-
+import EditContract from "./EditContract"
 import styles from '../TableList.less';
 
 const getValue = obj =>
@@ -71,11 +71,40 @@ class Contract extends PureComponent {
       title: '操作',
       render: (text, record) => (
         <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>查看详情</a>
+          <EditContract record={record} reload={this.reload.bind(this)} type="edit" />
+          <Divider type="vertical" />
+          <Popconfirm
+            title="您确认要删除这条数据吗?"
+            onConfirm={() => {
+              this.confirm(record.id);
+            }}
+            onCancel={this.cancel}
+            okText="确认"
+            cancelText="取消"
+          >
+            <a href="#">删除</a>
+          </Popconfirm>
         </Fragment>
       ),
     },
   ];
+
+
+
+  confirm = (rowId, e) => {
+  const { dispatch } = this.props;
+  dispatch({
+    type: 'contract/remove',
+    payload: { id: rowId },
+    callback: res => {
+      console.log(res); 
+      if (res.code == 200) {
+        message.success('删除成功');
+        dispatch({ type: 'contract/fetch' });
+      }
+    },
+  });
+};
   // 数字转文
   //状态
   convertStatus = record => {
@@ -96,6 +125,13 @@ class Contract extends PureComponent {
     dispatch({
       type: 'contract/fetch',
       payload: params,
+    });
+  }
+
+  reload(){
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'contract/fetch',
     });
   }
 
@@ -215,7 +251,7 @@ class Contract extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderSimpleForm()}</div>
-
+            <EditContract record={{}} reload={this.reload.bind(this)} type="add"/>
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}

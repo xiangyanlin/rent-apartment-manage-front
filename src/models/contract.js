@@ -1,5 +1,5 @@
 import { routerRedux } from 'dva/router';
-import { queryContractList } from '@/services/contract';
+import { queryContractList ,removeContract,addContract,updateContract} from '@/services/contract';
 
 export default {
   namespace: 'contract',
@@ -18,7 +18,27 @@ export default {
           type: 'save',
           payload: response,
         });
-      }
+      },
+      *remove({ payload, callback }, { call }) {
+        const response = yield call(removeContract, payload);
+        if (response.code === 200) {
+          if (callback && typeof callback == 'function') {
+            callback(response); // 返回结果
+          }
+        }
+      },
+      *submitContract({ payload, callback }, { call }) {
+        const response = yield call(addContract, payload);
+        if (callback && typeof callback == 'function') {
+          callback(response); // 返回结果
+        }
+      },
+      *updateContract({ payload, callback }, { call }) {
+        const response = yield call(updateContract, payload);
+        if (callback && typeof callback == 'function') {
+          callback(response); // 返回结果
+        }
+      },
   },
 
   reducers: {
@@ -27,8 +47,6 @@ export default {
         return {
           ...state,
           data: action.payload,
-          estateMap:map,
-          //length:data.length(),
         };
       },
     },
