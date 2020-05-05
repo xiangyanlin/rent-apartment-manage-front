@@ -170,22 +170,22 @@ getSexRadios=(dict)=>{
       <div className={styles.baseView} ref={this.getViewDom}>
         <div className={styles.left}>
           <Form layout="vertical" onSubmit={this.handleSubmit} hideRequiredMark>
+          <FormItem label="用户名">
+              {getFieldDecorator('userName', {
+                rules: [
+                  {
+                    required: true,
+                    message: formatMessage({ id: 'app.settings.basic.nickname-message' }, {}),
+                  },
+                ],
+              })(<Input disabled/>)}
+            </FormItem>
             <FormItem label={formatMessage({ id: 'app.settings.basic.email' })}>
               {getFieldDecorator('email', {
                 rules: [
                   {
                     required: true,
                     message: formatMessage({ id: 'app.settings.basic.email-message' }, {}),
-                  },
-                ],
-              })(<Input />)}
-            </FormItem>
-            <FormItem label={formatMessage({ id: 'app.settings.basic.nickname' })}>
-              {getFieldDecorator('userName', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'app.settings.basic.nickname-message' }, {}),
                   },
                 ],
               })(<Input />)}

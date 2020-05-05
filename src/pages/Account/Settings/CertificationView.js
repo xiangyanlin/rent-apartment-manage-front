@@ -21,7 +21,7 @@ class CertificationView extends Component {
   componentDidMount() {
     //当组件挂载完成后执行加载数据
     const { currentUser } = this.props;
-    if(currentUser.role=="3"){
+    if(currentUser.roleId==3){
       this.setState({display:"block"});
     }
   }
@@ -74,16 +74,16 @@ class CertificationView extends Component {
           { currentUser.role=="1"?
                 <div>认证身份：<span className={styles.name}>管理员</span></div>:
           <FormItem label="认证身份">
-              {getFieldDecorator('role', {
-                initialValue:currentUser.role  ,
+              {getFieldDecorator('roleId', {
+                initialValue:currentUser.roleId  ,
                 rules:[
                   { required: true, message:"此项为必填项" }
                 ]})(
                 <Select
                     onChange={this.handleChange}
                     style={{ width: 120 }} >
-                  <Option value="2">租客</Option>
-                  <Option value="3" >房东</Option>
+                  <Option value={2}>租客</Option>
+                  <Option value={3} >房东</Option>
                 </Select>
               )}
             </FormItem>}
