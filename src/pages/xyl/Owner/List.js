@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Row, Col, Input, Button, Icon, Card, Form, Select, Divider ,Popconfirm} from 'antd';
+import { Row, Col, Input, Button, Icon, Card, Form, Select, Divider ,Popconfirm, message} from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import EditOwner from "./EditOwner"
@@ -86,9 +86,7 @@ class Owner extends PureComponent {
 
      //删除确认框
    confirm = (rowId, e) => {
-    //console.log(e);
     const { dispatch } = this.props;
-    //console.log(rowId);
     dispatch({
       type: 'user/remove',
       payload: { id: rowId },

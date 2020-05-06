@@ -185,11 +185,11 @@ export default [
             name: 'dict',
             component: './xyl/System/Dict',
           },
-          {
-            path: '/admin/system/contract',
-            name: 'contract',
-            component: './xyl/System/Contract',
-          },
+          // {合约模板
+          //   path: '/admin/system/contract',
+          //   name: 'contract',
+          //   component: './xyl/System/Contract',
+          // },
         ],
       },
 

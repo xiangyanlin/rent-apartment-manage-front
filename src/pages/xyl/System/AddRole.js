@@ -86,7 +86,7 @@ class AddRole extends React.Component {
           新增
         </Button>
         <Modal
-          title={'新增字典'}
+          title={'新增角色'}
           width={640}
           visible={this.state.visible}
           onOk={() => {
