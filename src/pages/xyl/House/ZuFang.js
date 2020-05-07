@@ -1,11 +1,12 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Card, Form, Select, Divider } from 'antd';
+import { Card, Form, Popconfirm, Divider, message } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-
+import Zufang from "./EditZufang"
 import styles from '../TableList.less';
+import EditZufang from './EditZufang';
 
 const getValue = obj =>
   Object.keys(obj)
@@ -66,13 +67,38 @@ class ZuFang extends PureComponent {
       title: '操作',
       render: (text, record) => (
         <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>详情</a>
+          <Zufang record={record} reload={this.reload.bind(this)} type="edit" />
           <Divider type="vertical" />
-          <a href="">关闭</a>
+          <Popconfirm
+            title="您确认要删除这条数据吗?"
+            onConfirm={() => {
+              this.confirm(record.id);
+            }}
+            onCancel={this.cancel}
+            okText="确认"
+            cancelText="取消"
+          >
+            <a href="#">删除</a>
+          </Popconfirm>
         </Fragment>
       ),
     },
   ];
+
+  confirm = (rowId, e) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'zufang/remove',
+      payload: { id: rowId },
+      callback: res => {
+        console.log(res); 
+        if (res.code == 200) {
+          message.success('删除成功');
+          dispatch({ type: 'zufang/fetch' });
+        }
+      },
+    });
+  };
 
   convertStatus = record => {
     if (record.status == '1') {
@@ -86,6 +112,13 @@ class ZuFang extends PureComponent {
 
   componentDidMount() {
     //当组件挂载完成后执行加载数据
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'zufang/fetch',
+    });
+  }
+
+  reload (){
     const { dispatch } = this.props;
     dispatch({
       type: 'zufang/fetch',
@@ -159,6 +192,7 @@ class ZuFang extends PureComponent {
       <PageHeaderWrapper title="租房管理">
         <Card bordered={false}>
           <div className={styles.tableList}>
+          <EditZufang record={{}} reload={this.reload.bind(this)} type="add"/>
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}

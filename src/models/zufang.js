@@ -1,5 +1,5 @@
 import { routerRedux } from 'dva/router';
-import { queryRentManage } from '@/services/zufang';
+import { queryRentManage,removeRentCord,addRentCord,updateRentCord } from '@/services/zufang';
 
 export default {
   namespace: 'zufang',
@@ -18,7 +18,27 @@ export default {
           type: 'save',
           payload: response,
         });
-      }
+      },
+      *remove({ payload, callback }, { call }) {
+        const response = yield call(removeRentCord, payload);
+        if (response.code === 200) {
+          if (callback && typeof callback == 'function') {
+            callback(response); // 返回结果
+          }
+        }
+      },
+      *submitRentCord({ payload, callback }, { call }) {
+        const response = yield call(addRentCord, payload);
+        if (callback && typeof callback == 'function') {
+          callback(response); // 返回结果
+        }
+      },
+      *updateRentCord({ payload, callback }, { call }) {
+        const response = yield call(updateRentCord, payload);
+        if (callback && typeof callback == 'function') {
+          callback(response); // 返回结果
+        }
+      },
   },
 
   reducers: {
