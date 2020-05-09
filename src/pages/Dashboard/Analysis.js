@@ -33,16 +33,11 @@ import { getTimeDistance } from '@/utils/utils';
 
 import styles from './Analysis.less';
 
-const { TabPane } = Tabs;
-const { RangePicker } = DatePicker;
+const IconFont = Icon.createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js',   //阿里巴巴图标引用地址
+});
 
-const rankingListData = [];
-for (let i = 0; i < 7; i += 1) {
-  rankingListData.push({
-    title: `工专路 ${i} 号店`,
-    total: 323234,
-  });
-}
+
 
 @connect(({ chart, loading }) => ({
   chart,
@@ -78,6 +73,18 @@ class Analysis extends Component {
           loading: false,
         });
       }, 600);
+    });
+    dispatch({
+      type: 'chart/fetchUserTotal',
+    });
+    dispatch({
+      type: 'chart/fetchHouseTotal',
+    });
+    dispatch({
+      type: 'chart/fetchEstateTotal',
+    });
+    dispatch({
+      type: 'chart/fetchDecorationProp',
     });
   }
 
@@ -140,6 +147,8 @@ class Analysis extends Component {
   }
 
   render() {
+    console.log(this.props)
+    const {userTotal,houseTotal,estateTotal,decorationProp}=this.props.chart;
     const { rangePickerValue, salesType, loading: propsLoding, currentTabKey } = this.state;
     const { chart, loading: stateLoading } = this.props;
     const {
@@ -160,23 +169,6 @@ class Analysis extends Component {
     } else {
       salesPieData = salesType === 'online' ? salesTypeDataOnline : salesTypeDataOffline;
     }
-    const menu = (
-      <Menu>
-        <Menu.Item>操作一</Menu.Item>
-        <Menu.Item>操作二</Menu.Item>
-      </Menu>
-    );
-
-    const iconGroup = (
-      <span className={styles.iconGroup}>
-        <Dropdown overlay={menu} placement="bottomRight">
-          <Icon type="ellipsis" />
-        </Dropdown>
-      </span>
-    );
-
-
-   
     const topColResponsiveProps = {
       xs: 24,
       sm: 12,
@@ -193,35 +185,19 @@ class Analysis extends Component {
             <ChartCard
               bordered={false}
               title="用户总量"
+              loading={loading}
               action={
                 <Tooltip
-                  title={
-                    <FormattedMessage id="app.analysis.introduce" defaultMessage="introduce" />
-                  }
+                  title="本系统注册用户总数"
                 >
                   <Icon type="info-circle-o" />
                 </Tooltip>
               }
-              loading={loading}
-              total={() => <Yuan>126560</Yuan>}
-              footer={
-                <Field
-                  label={
-                    <FormattedMessage id="app.analysis.day-sales" defaultMessage="Day Sales" />
-                  }
-                  value={`￥${numeral(12423).format('0,0')}`}
-                />
-              }
+              total={numeral(userTotal).format('0,0')}
               contentHeight={46}
+              style={{height:"180px"}}
             >
-              <Trend flag="up" style={{ marginRight: 16 }}>
-                <FormattedMessage id="app.analysis.week" defaultMessage="Weekly Changes" />
-                <span className={styles.trendText}>12%</span>
-              </Trend>
-              <Trend flag="down">
-                <FormattedMessage id="app.analysis.day" defaultMessage="Daily Changes" />
-                <span className={styles.trendText}>11%</span>
-              </Trend>
+              <Icon type="contacts" theme="twoTone" style={{fontSize:"90px",float:"right"}} />
             </ChartCard>
           </Col>
           <Col {...topColResponsiveProps}>
@@ -231,93 +207,54 @@ class Analysis extends Component {
               title="房源总量"
               action={
                 <Tooltip
-                  title={
-                    <FormattedMessage id="app.analysis.introduce" defaultMessage="introduce" />
-                  }
+                  title="登记房源总数"
                 >
                   <Icon type="info-circle-o" />
                 </Tooltip>
               }
-              total={numeral(8846).format('0,0')}
-              footer={
-                <Field
-                  label={
-                    <FormattedMessage id="app.analysis.day-visits" defaultMessage="Day Visits" />
-                  }
-                  value={numeral(1234).format('0,0')}
-                />
-              }
+              total={numeral(houseTotal).format('0,0')}
               contentHeight={46}
+              style={{height:"180px"}}
             >
-              <MiniArea color="#975FE4" data={visitData} />
+              <Icon type="home" theme="twoTone" style={{fontSize:"85px",float:"right"}} />
             </ChartCard>
           </Col>
           <Col {...topColResponsiveProps}>
             <ChartCard
               bordered={false}
               loading={loading}
-              title={<FormattedMessage id="app.analysis.payments" defaultMessage="Payments" />}
+              title="楼盘总量"
               action={
                 <Tooltip
-                  title={
-                    <FormattedMessage id="app.analysis.introduce" defaultMessage="Introduce" />
-                  }
+                  title="系统录入楼盘总量"
                 >
                   <Icon type="info-circle-o" />
                 </Tooltip>
               }
-              total={numeral(6560).format('0,0')}
-              footer={
-                <Field
-                  label={
-                    <FormattedMessage
-                      id="app.analysis.conversion-rate"
-                      defaultMessage="Conversion Rate"
-                    />
-                  }
-                  value="60%"
-                />
-              }
+              total={numeral(estateTotal).format('0,0')}
               contentHeight={46}
+              style={{height:"180px"}}
             >
-              <MiniBar data={visitData} />
+               <Icon type="bank" theme="twoTone" style={{fontSize:"85px",float:"right"}} />
             </ChartCard>
           </Col>
           <Col {...topColResponsiveProps}>
             <ChartCard
               loading={loading}
               bordered={false}
-              title={
-                <FormattedMessage
-                  id="app.analysis.operational-effect"
-                  defaultMessage="Operational Effect"
-                />
-              }
+              title="精装房源占比"
               action={
                 <Tooltip
-                  title={
-                    <FormattedMessage id="app.analysis.introduce" defaultMessage="introduce" />
-                  }
+                  title="精装房源占房源总量的比例"
                 >
                   <Icon type="info-circle-o" />
                 </Tooltip>
               }
-              total="78%"
-              footer={
-                <div style={{ whiteSpace: 'nowrap', overflow: 'hidden' }}>
-                  <Trend flag="up" style={{ marginRight: 16 }}>
-                    <FormattedMessage id="app.analysis.week" defaultMessage="Weekly changes" />
-                    <span className={styles.trendText}>12%</span>
-                  </Trend>
-                  <Trend flag="down">
-                    <FormattedMessage id="app.analysis.day" defaultMessage="Weekly changes" />
-                    <span className={styles.trendText}>11%</span>
-                  </Trend>
-                </div>
-              }
+              total={decorationProp+"%"}
               contentHeight={46}
+              style={{height:"180px"}}
             >
-              <MiniProgress percent={78} strokeWidth={8} target={80} color="#13C2C2" />
+              <MiniProgress percent={decorationProp} strokeWidth={8} target={80} color="#13C2C2" />
             </ChartCard>
           </Col>
         </Row>

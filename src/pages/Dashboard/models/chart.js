@@ -1,9 +1,15 @@
 import { fakeChartData } from '@/services/api';
-
+import {queryUserTotal} from '@/services/user';
+import {queryResourceToTal,decorationProp} from '@/services/houseResource';
+import {queryEstateToTal} from '@/services/estate';
 export default {
   namespace: 'chart',
 
   state: {
+    userTotal:{},
+    houseTotal:{},
+    decorationProp:{},
+    estateTotal:{},
     visitData: [],
     visitData2: [],
     salesData: [],
@@ -34,6 +40,42 @@ export default {
         },
       });
     },
+    *fetchUserTotal(_, { call, put }) {
+      const response = yield call(queryUserTotal);
+      yield put({
+        type: 'save',
+        payload: {
+          userTotal: response.data,
+        },
+      });
+    },
+    *fetchHouseTotal(_, { call, put }) {
+      const response = yield call(queryResourceToTal);
+      yield put({
+        type: 'save',
+        payload: {
+          houseTotal: response.data,
+        },
+      });
+    },
+    *fetchEstateTotal(_, { call, put }) {
+      const response = yield call(queryEstateToTal);
+      yield put({
+        type: 'save',
+        payload: {
+          estateTotal: response.data,
+        },
+      });
+    },
+    *fetchDecorationProp(_, { call, put }) {
+      const response = yield call(decorationProp);
+      yield put({
+        type: 'save',
+        payload: {
+          decorationProp: response.data,
+        },
+      });
+    },
   },
 
   reducers: {
@@ -45,6 +87,10 @@ export default {
     },
     clear() {
       return {
+        userTotal:{},
+        houseTotal:{},
+        decorationProp:{},
+        estateTotal:{},
         visitData: [],
         visitData2: [],
         salesData: [],

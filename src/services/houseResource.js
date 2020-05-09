@@ -29,3 +29,13 @@ export async function addHouseResource(params) {
 export async function queryById(params) {
   return request(`/xyl/houseResources/selectOne?${stringify(params)}`);
 }
+
+//房源总量
+export async function queryResourceToTal() {
+  return request('/xyl/houseResources/total');
+}
+
+//精装房占比
+export async function decorationProp() {
+  return request('/xyl/houseResources/decorationProp');
+}

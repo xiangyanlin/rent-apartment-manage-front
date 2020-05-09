@@ -31,3 +31,8 @@ export async function deleteEstate(params) {
     method: 'delete',
   });
 }
+
+//楼盘总量
+export async function queryEstateToTal() {
+  return request('/xyl/estate/total');
+}

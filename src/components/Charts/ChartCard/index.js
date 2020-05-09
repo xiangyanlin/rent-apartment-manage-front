@@ -43,7 +43,7 @@ class ChartCard extends React.PureComponent {
         </div>
         {children && (
           <div className={styles.content} style={{ height: contentHeight || 'auto' }}>
-            <div className={contentHeight && styles.contentFixed}>{children}</div>
+            <div className={contentHeight &&styles.contentFixed}>{children}</div>
           </div>
         )}
         {footer && (

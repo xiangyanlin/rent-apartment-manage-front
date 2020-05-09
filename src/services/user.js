@@ -48,5 +48,7 @@ export async function updateUser(params) {
     body: params,
   });
 }
-
-
+//用户总数
+export async function queryUserTotal() {
+  return request('/xyl/user/total');
+}
