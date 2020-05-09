@@ -52,3 +52,8 @@ export async function updateUser(params) {
 export async function queryUserTotal() {
   return request('/xyl/user/total');
 }
+
+//按月查询用户数量
+export async function countUserByMon(params) {
+  return request(`/xyl/user/countByMon?${stringify(params)}`);
+}

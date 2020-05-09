@@ -86,6 +86,9 @@ class Analysis extends Component {
     dispatch({
       type: 'chart/fetchDecorationProp',
     });
+    dispatch({
+      type: 'chart/countUserByMon',
+    });
   }
 
   componentWillUnmount() {
@@ -148,15 +151,11 @@ class Analysis extends Component {
 
   render() {
     console.log(this.props)
-    const {userTotal,houseTotal,estateTotal,decorationProp}=this.props.chart;
+    const {userTotal,houseTotal,estateTotal,decorationProp,userNumbyTime}=this.props.chart;
     const { rangePickerValue, salesType, loading: propsLoding, currentTabKey } = this.state;
     const { chart, loading: stateLoading } = this.props;
     const {
-      visitData,
-      visitData2,
       salesData,
-      searchData,
-      offlineData,
       offlineChartData,
       salesTypeData,
       salesTypeDataOnline,
@@ -259,26 +258,18 @@ class Analysis extends Component {
           </Col>
         </Row>
 
-        <Card loading={loading} bordered={false} bodyStyle={{ padding: 0 }}>
+        <Card loading={loading} bordered={false} bodyStyle={{ padding: 0 }} title="新增用户数量图">
           <div className={styles.salesCard}>
-
                 <Row>
                   <Col >
                     <div className={styles.salesBar}>
                       <Bar
                         height={295}
-                        title={
-                          <FormattedMessage
-                            id="app.analysis.sales-trend"
-                            defaultMessage="Sales Trend"
-                          />
-                        }
-                        data={salesData}
+                        data={userNumbyTime}
                       />
                     </div>
                   </Col>
                 </Row>
- 
           </div>
         </Card>
 
@@ -289,25 +280,16 @@ class Analysis extends Component {
               loading={loading}
               className={styles.salesCard}
               bordered={false}
-              title={
-                <FormattedMessage
-                  id="app.analysis.the-proportion-of-sales"
-                  defaultMessage="The Proportion of Sales"
-                />
-              }
+              title="房源状态占比"
               bodyStyle={{ padding: 24 }}
               
               style={{ marginTop: 24, minHeight: 509 }}
             >
-              <h4 style={{ marginTop: 8, marginBottom: 32 }}>
-                <FormattedMessage id="app.analysis.sales" defaultMessage="Sales" />
-              </h4>
               <Pie
                 hasLegend
-                subTitle={<FormattedMessage id="app.analysis.sales" defaultMessage="Sales" />}
-                total={() => <Yuan>{salesPieData.reduce((pre, now) => now.y + pre, 0)}</Yuan>}
+                subTitle="房源数量"
+                total={salesPieData.reduce((pre, now) => now.y + pre, 0)}
                 data={salesPieData}
-                valueFormat={value => <Yuan>{value}</Yuan>}
                 height={248}
                 lineWidth={4}
               />
@@ -315,7 +297,8 @@ class Analysis extends Component {
           </Col>
         </Row>
 
-        <Card
+        {/* <Card
+          title="用户数量变化趋势"
           loading={loading}
           className={styles.offlineCard}
           bordered={false}
@@ -326,14 +309,11 @@ class Analysis extends Component {
                 <div style={{ padding: '0 24px' }}>
                   <TimelineChart
                     height={400}
-                    data={offlineChartData}
-                    titleMap={{
-                      y1: formatMessage({ id: 'app.analysis.traffic' }),
-                      y2: formatMessage({ id: 'app.analysis.payments' }),
-                    }}
+                    data={userNumbyTime}
+                    titleMap={{y1: "用户数量"}}
                   />
                 </div>
-        </Card>
+        </Card> */}
       </GridContent>
     );
   }

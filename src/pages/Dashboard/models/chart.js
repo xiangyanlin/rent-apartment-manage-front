@@ -1,5 +1,5 @@
 import { fakeChartData } from '@/services/api';
-import {queryUserTotal} from '@/services/user';
+import {queryUserTotal,countUserByMon} from '@/services/user';
 import {queryResourceToTal,decorationProp} from '@/services/houseResource';
 import {queryEstateToTal} from '@/services/estate';
 export default {
@@ -10,8 +10,7 @@ export default {
     houseTotal:{},
     decorationProp:{},
     estateTotal:{},
-    visitData: [],
-    visitData2: [],
+    userNumbyTime:[],
     salesData: [],
     searchData: [],
     offlineData: [],
@@ -76,6 +75,15 @@ export default {
         },
       });
     },
+    *countUserByMon({ payload }, { call, put }) {
+      const response = yield call(countUserByMon, payload);
+      yield put({
+        type: 'save',
+        payload: {
+          userNumbyTime:response.data,
+        },
+      });
+    },
   },
 
   reducers: {
@@ -91,8 +99,7 @@ export default {
         houseTotal:{},
         decorationProp:{},
         estateTotal:{},
-        visitData: [],
-        visitData2: [],
+        userNumbyTime:[],
         salesData: [],
         searchData: [],
         offlineData: [],
