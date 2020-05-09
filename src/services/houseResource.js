@@ -39,3 +39,8 @@ export async function queryResourceToTal() {
 export async function decorationProp() {
   return request('/xyl/houseResources/decorationProp');
 }
+
+//按朝向统计房源
+export async function countHouseByO() {
+  return request('/xyl/houseResources/countByO');
+}

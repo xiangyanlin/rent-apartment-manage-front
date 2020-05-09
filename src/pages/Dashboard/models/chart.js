@@ -1,6 +1,6 @@
 import { fakeChartData } from '@/services/api';
 import {queryUserTotal,countUserByMon} from '@/services/user';
-import {queryResourceToTal,decorationProp} from '@/services/houseResource';
+import {queryResourceToTal,decorationProp,countHouseByO} from '@/services/houseResource';
 import {queryEstateToTal} from '@/services/estate';
 export default {
   namespace: 'chart',
@@ -11,6 +11,7 @@ export default {
     decorationProp:{},
     estateTotal:{},
     userNumbyTime:[],
+    countHouseByO:[],
     salesData: [],
     searchData: [],
     offlineData: [],
@@ -84,6 +85,15 @@ export default {
         },
       });
     },
+    *counHouseByO({ payload }, { call, put }) {
+      const response = yield call(countHouseByO, payload);
+      yield put({
+        type: 'save',
+        payload: {
+          countHouseByO:response.data,
+        },
+      });
+    },
   },
 
   reducers: {
@@ -100,6 +110,7 @@ export default {
         decorationProp:{},
         estateTotal:{},
         userNumbyTime:[],
+        countHouseByO:[],
         salesData: [],
         searchData: [],
         offlineData: [],

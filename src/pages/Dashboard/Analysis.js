@@ -89,6 +89,9 @@ class Analysis extends Component {
     dispatch({
       type: 'chart/countUserByMon',
     });
+    dispatch({
+      type: 'chart/counHouseByO',
+    });
   }
 
   componentWillUnmount() {
@@ -151,7 +154,7 @@ class Analysis extends Component {
 
   render() {
     console.log(this.props)
-    const {userTotal,houseTotal,estateTotal,decorationProp,userNumbyTime}=this.props.chart;
+    const {userTotal,houseTotal,estateTotal,decorationProp,userNumbyTime,countHouseByO}=this.props.chart;
     const { rangePickerValue, salesType, loading: propsLoding, currentTabKey } = this.state;
     const { chart, loading: stateLoading } = this.props;
     const {
@@ -280,7 +283,7 @@ class Analysis extends Component {
               loading={loading}
               className={styles.salesCard}
               bordered={false}
-              title="房源状态占比"
+              title="房源朝向占比"
               bodyStyle={{ padding: 24 }}
               
               style={{ marginTop: 24, minHeight: 509 }}
@@ -288,8 +291,8 @@ class Analysis extends Component {
               <Pie
                 hasLegend
                 subTitle="房源数量"
-                total={salesPieData.reduce((pre, now) => now.y + pre, 0)}
-                data={salesPieData}
+                total={countHouseByO.reduce((pre, now) => now.y + pre, 0)}
+                data={countHouseByO}
                 height={248}
                 lineWidth={4}
               />
