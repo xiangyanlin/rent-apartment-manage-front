@@ -1,72 +1,100 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
-import {Form,Input,DatePicker,Select,Button,Card,Checkbox,message} from 'antd';
+import { Form, Input, DatePicker, Select, Button, Card, Checkbox, message } from 'antd';
 import styles from './Question.less';
+import LoginModal from "../LoginModal";
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
-@connect(({loading,user}) => ({
+@connect(({ loading, user }) => ({
     submitting: loading.effects['question/submitQuestions'],
-    currentUser:user.currentUser
+    currentUser: user.currentUser
 }))
 @Form.create()
-class Contract extends PureComponent{
+class Contract extends PureComponent {
+    constructor(props) {
+        super(props);
 
+        this.state = {
+            login: false,
+        };
+
+    }
     handleSubmit = e => {
-        const { dispatch, form ,currentUser} = this.props;
+        const { dispatch, form, currentUser } = this.props;
+        const userName=window.localStorage.getItem("currentUser");
         e.preventDefault();
-        form.validateFieldsAndScroll((err, values) => {
-            if (!err) {
-  
-
-              values.quizTime=new Date();
-              values.questionerId=currentUser.id;
-              values.status='1';
-              dispatch({
-                    type: 'question/submitQuestions',
-                    payload: values,
-                    callback: res => {
-                      if (res.code == 200) {
-                        message.success('提交成功');
-                      }
-                    },
-                });
+        if(userName===null){
+          this.showLoginModal();
+        }else{
+            form.validateFieldsAndScroll((err, values) => {
+                if (!err) {
+                    values.quizTime = new Date();
+                    values.questionerId = currentUser.id;
+                    values.status = '1';
+                    dispatch({
+                        type: 'question/submitQuestions',
+                        payload: values,
+                        callback: res => {
+                            if (res.code == 200) {
+                                message.success('提交成功');
+                            }
+                        },
+                    });
     
-            }
+                }
+            });
+        }
+
+    };
+
+    showLoginModal=()=>{
+        this.setState({
+          login: true
+        });
+    }
+
+    handleCancelLogin = () => {
+        this.setState({
+          login: false,
         });
       };
-  
-    render(){
+
+
+    render() {
         const { submitting } = this.props;
         const {
             form: { getFieldDecorator, getFieldValue },
         } = this.props;
         return (
             <div className={styles.container}>
-                <Card style={{padding:"0 5%",minHeight:"550px"}}
+                <Card style={{ padding: "0 5%", minHeight: "550px" }}
                     title='发布提问'>
+                     <LoginModal handleCancelLogin={this.handleCancelLogin}visible={this.state.login}/>
                     <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }}>
                         <FormItem label="一句话描述您的疑问">
-                        {getFieldDecorator('questions',
-                            {rules:[{
-                                 required: true, message:"此项为必填项" 
-                                 }]})
-                                 (<Input style={{ width: '100%' }} 
-                                  />)}
+                            {getFieldDecorator('questions',
+                                {
+                                    rules: [{
+                                        required: true, message: "此项为必填项"
+                                    }]
+                                })
+                                (<Input style={{ width: '100%' }}
+                                />)}
                         </FormItem>
-                        <FormItem  label="问题描述">
-                        {getFieldDecorator('summary')
-                                 (<TextArea style={{ width: '100%' }} autoSize ={{ minRows: 4, maxRows: 6 }}
-                                 placeholder='描述尽量详细，以便顾问能够回答的更精确~'
-                                  />)}
+                        <FormItem label="问题描述">
+                            {getFieldDecorator('summary')
+                                (<TextArea style={{ width: '100%' }} autoSize={{ minRows: 4, maxRows: 6 }}
+                                    placeholder='描述尽量详细，以便顾问能够回答的更精确~'
+                                />)}
                         </FormItem>
-                        <FormItem  style={{ marginTop: 32 }}>
+                        <FormItem style={{ marginTop: 32 }}>
                             <Button type="primary" htmlType="submit" loading={submitting} block>
                                 <FormattedMessage id="form.submit" />
                             </Button>
                         </FormItem>
-                </Form>
+                    </Form>
                 </Card>
             </div>
         );
