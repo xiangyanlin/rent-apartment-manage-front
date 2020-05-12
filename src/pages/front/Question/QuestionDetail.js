@@ -20,6 +20,13 @@ import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
 
 class QuestionDetail extends PureComponent {
+  constructor(props) {
+    super(props)
+    const { state } = this.props.location
+    if (!(state && state.question)) {
+        this.props.history.goBack()
+    }
+}
   render() {
     const { question } = this.props.location.state;
     return (

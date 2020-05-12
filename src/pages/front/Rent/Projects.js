@@ -277,7 +277,10 @@ class CoverCardList extends PureComponent {
               }
               title={
                 <div style={{ fontSize: '20px' }}>
-                  <a style={{ color: 'black' }} href={'/house/details?id=' + item.id}>
+                  <a style={{ color: 'black' }} 
+                  onClick={() => {
+                    return this.props.history.push('/house/details', { house: item });
+                  }} >
                     {item.title}
                   </a>
                 </div>
