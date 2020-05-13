@@ -78,6 +78,13 @@
     width: 1150px;
     position: relative;
 }
+.swipe{
+  width: 565px;
+    height: 390px;
+    float: left;
+    position: relative;
+    overflow: hidden;
+}
 .thumb{
     position: absolute;
     left: 0;
@@ -85,6 +92,60 @@
     width: 565px;
     height: 319px;
     overflow: hidden;
+}
+.abc{
+  height: 62px;
+  margin: 328px 35px 0;
+  overflow: hidden;
+  position: relative;
+}
+.abb{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 62px;
+  margin: 0;
+  text-align: center;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  white-space: nowrap;
+  font-size: 0;
+  transition: left .3s ease;
+  img {
+    display: inline-block;
+    width: 92px;
+    height: 62px;
+    margin-right: 9px;
+    opacity: .5;
+    overflow: hidden;
+    cursor: pointer;
+  }
+}
+.prev{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 26px;
+  height: 62px;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: auto 16px;
+  background-color: rgba(16,29,55,.6);
+  cursor: pointer;
+}
+.next{
+  position: absolute;
+  bottom: 0;
+  width: 26px;
+  height: 62px;
+  left: auto;
+  right: 0;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: auto 16px;
+  background-color: rgba(16,29,55,.6);
+  cursor: pointer;
 }
 .aside{
     width: 565px;

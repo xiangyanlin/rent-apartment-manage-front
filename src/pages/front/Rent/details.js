@@ -11,13 +11,15 @@ const CheckboxGroup = Checkbox.Group;
   loading: loading.models.houseResource,
 }))
 class Details extends PureComponent {
-
   constructor(props) {
-    super(props)
-    const { state } = this.props.location
+    super(props);
+    const { state } = this.props.location;
     if (!(state && state.house)) {
-      this.props.history.goBack()
+      this.props.history.goBack();
     }
+    this.state = {
+      n: 0,
+    };
   }
 
   reload() {
@@ -43,52 +45,84 @@ class Details extends PureComponent {
       return '暂无信息';
     }
   };
+  carousel = React.createRef();
 
   render() {
-
     const { house } = this.props.location.state;
     return (
       <Card
-        style={{ marginTop: 24, display: "flex", justifyContent: "center" }}
+        style={{ marginTop: 24, display: 'flex', justifyContent: 'center' }}
         bordered={false}
         bodyStyle={{ padding: '8px 32px 32px 32px' }}
       >
-        <div style={{ width: "70%" }}>
+        <div style={{ width: '70%' }}>
           <div>
             <div className={styles.title}>
               <p>{house.title}</p>
             </div>
             <div className={styles.subtitle}>
-
               <span>
                 维护时间：
-              <span>{moment(house.updated).format('YYYY-MM-DD HH:mm:ss')}</span>
+                <span>{moment(house.updated).format('YYYY-MM-DD HH:mm:ss')}</span>
               </span>
               <span className={styles.number}>官方投诉电话：13627441292</span>
 
               <p>
                 房源编号：
-              {house.id}
+                {house.id}
               </p>
             </div>
 
             <div className={styles.core}>
-              {/* 走马灯 */}
-              <div className={styles.thumb}>
-                <Carousel autoplay={true}>
-                  {house.pic
-                    ? house.pic.split(',').map((value, index) => {
-                      return (
-                        <div key={index}>
-                          <img
-                            style={{ width: '100%', maxHeight: 319, margin: '0 auto' }}
-                            src={'http://127.0.0.1:8080/common/getImage?filename=' + value}
-                          />
-                        </div>
-                      );
-                    })
-                    : house.pic}
-                </Carousel>
+              <div className={styles.swipe}>
+                {/* 走马灯 */}
+                <div className={styles.thumb}>
+                  <Carousel
+                    autoplay={true}
+                    afterChange={current => this.setState({ n: current })}
+                    ref={this.carousel}
+                  >
+                    {house.pic
+                      ? house.pic.split(',').map((value, index) => {
+                          return (
+                            <div key={index}>
+                              <img
+                                style={{ width: '100%', maxHeight: 319, margin: '0 auto' }}
+                                src={'http://127.0.0.1:8080/common/getImage?filename=' + value}
+                              />
+                            </div>
+                          );
+                        })
+                      : house.pic}
+                  </Carousel>
+                </div>
+                <div className={styles.abc}>
+                  <div className={styles.abb}>
+                    {house.pic
+                      ? house.pic.split(',').map((value, index) => {
+                          const opacity = index === this.state.n ? 1 : 0.6;
+                          return (
+                            <img
+                              onClick={() => this.carousel.current.slick.slickGoTo(index)}
+                              key={index}
+                              src={'http://127.0.0.1:8080/common/getImage?filename=' + value}
+                              style={{ opacity: opacity }}
+                            />
+                          );
+                        })
+                      : house.pic}
+                  </div>
+                </div>
+                <Button
+                  className={styles.prev}
+                  icon="left"
+                  onClick={() => this.carousel.current.slick.slickPrev()}
+                />
+                <Button
+                  className={styles.next}
+                  icon="right"
+                  onClick={() => this.carousel.current.slick.slickNext()}
+                />
               </div>
               <div className={styles.aside}>
                 <div className={styles.title}>
@@ -103,26 +137,29 @@ class Details extends PureComponent {
                     {house.rent}
                   </span>
                   元/每月
-              </div>
+                </div>
                 <Divider />
                 <div className={styles.label}>
                   <p>
                     租赁方式：
-                  <span>{house.rentMethod == 1 ? '整租' : '合租'}</span>
+                    <span>{house.rentMethod == 1 ? '整租' : '合租'}</span>
                   </p>
                   <p>
                     房屋类型：
-                  <span>{house.houseType}</span>
+                    <span>{house.houseType}</span>
                   </p>
                   <p>
                     朝&nbsp; &nbsp; 向：
-                  <span>{house.orientation}</span>
+                    <span>{house.orientation}</span>
                   </p>
                 </div>
-                <Divider></Divider>
+                <Divider />
                 <div>
-                  <span>看房时间&nbsp;:&nbsp;{this.coverTime(house.time)}</span>
-                  <div style={{ marginTop: "8px" }}>
+                  <span>
+                    看房时间&nbsp;:&nbsp;
+                    {this.coverTime(house.time)}
+                  </span>
+                  <div style={{ marginTop: '8px' }}>
                     <OrderVist data={house} />
                   </div>
                 </div>
@@ -138,33 +175,33 @@ class Details extends PureComponent {
                 <Row>
                   <Col span={12}>
                     楼&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;层&nbsp;:&nbsp;
-                  {house.floor}
+                    {house.floor}
                   </Col>
                   <Col span={12}>
                     楼&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号&nbsp;:&nbsp;
-                  {house.buildingNum}
+                    {house.buildingNum}
                   </Col>
                 </Row>
 
                 <Row>
                   <Col span={12}>
                     户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;型&nbsp;:&nbsp;
-                  {house.houseType}
+                    {house.houseType}
                   </Col>
                   <Col span={12}>
                     看房时间&nbsp;:&nbsp;
-                  {this.coverTime(house.time)}
+                    {this.coverTime(house.time)}
                   </Col>
                 </Row>
 
                 <Row>
                   <Col span={12}>
                     建筑面积&nbsp;:&nbsp;
-                  {house.coveredArea + '平方米'}
+                    {house.coveredArea + '平方米'}
                   </Col>
                   <Col span={12}>
                     使用面积&nbsp;:&nbsp;
-                  {house.useArea + '平方米'}
+                    {house.useArea + '平方米'}
                   </Col>
                 </Row>
               </div>
@@ -173,7 +210,7 @@ class Details extends PureComponent {
             <div>
               <span style={{ fontSize: '18px', color: 'rgba(48,48,51,.6)', marginRight: '20px' }}>
                 配套设施
-            </span>
+              </span>
               <div style={{ marginTop: '20px' }}>
                 <CheckboxGroup
                   options={[
