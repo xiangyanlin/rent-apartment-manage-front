@@ -30,7 +30,6 @@ const FormItem = Form.Item;
   onValuesChange({ dispatch }, changedValues, allValues) {
     // 表单项变化时请求数据
     // eslint-disable-next-line
-    console.log(changedValues, allValues);
     // 模拟查询表单生效
     dispatch({
       type: 'houseResource/fetch',
@@ -89,14 +88,14 @@ class CoverCardList extends PureComponent {
       payload: { keyWord: value },
     });
   };
-    //重置
-    handleFormReset = () => {
-      const { dispatch } = this.props;
-      dispatch({
-        type: 'houseResource/fetch',
-        payload: {},
-      });
-    };
+  //重置
+  handleFormReset = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'houseResource/fetch',
+      payload: {},
+    });
+  };
   handleSearch = e => {
     e.preventDefault();
 
@@ -137,31 +136,37 @@ class CoverCardList extends PureComponent {
         <FormItem label="方式">
           {getFieldDecorator('rentMethod')(
             <Radio.Group buttonStyle="solid">
-              <Radio.Button value="0">不限</Radio.Button>
+              <Radio.Button value="">不限</Radio.Button>
               <Radio.Button value="1">整租</Radio.Button>
               <Radio.Button value="2">合租</Radio.Button>
             </Radio.Group>
           )}
         </FormItem>
         <FormItem label="租金">
-          {getFieldDecorator('title')(
-            <Checkbox.Group
-              options={[
-                { label: 'Apple', value: 'Apple' },
-                { label: 'Pear', value: 'Pear' },
-                { label: 'Orange', value: 'Orange'},
-              ]}
-            />
-          )}
+          <Row style={{ width: '30%' }}>
+            <Col md={10} sm={24}>
+              <FormItem label="">
+                {getFieldDecorator('minRent')(<Input placeholder="价格" />)}
+              </FormItem>
+            </Col>
+            <Col md={4} sm={24}>
+              <div style={{ textAlign: 'center' }}>到</div>
+            </Col>
+            <Col md={10} sm={24}>
+              <FormItem label="">
+                {getFieldDecorator('maxRent')(<Input placeholder="价格" />)}
+              </FormItem>
+            </Col>
+          </Row>
         </FormItem>
         <FormItem label="户型">
           {getFieldDecorator('houseType')(
             <Checkbox.Group
               options={[
-                { label: '一室', value: '一室' },
-                { label: '二室', value: '二室' },
-                { label: '三室', value: '三室'},
-                { label: '四室', value: '四室'},
+                { label: '1室', value: '1室' },
+                { label: '2室', value: '2室' },
+                { label: '3室', value: '3室' },
+                { label: '4室', value: '4室' },
               ]}
             />
           )}
@@ -182,45 +187,53 @@ class CoverCardList extends PureComponent {
       form: { getFieldDecorator },
     } = this.props;
     return (
-      <Form onSubmit={this.handleSearch} layout="inline">
+      <Form onSubmit={this.handleSearch}>
         <FormItem label="方式">
           {getFieldDecorator('rentMethod')(
             <Radio.Group buttonStyle="solid">
-              <Radio.Button value="0">不限</Radio.Button>
+              <Radio.Button value="">不限</Radio.Button>
               <Radio.Button value="1">整租</Radio.Button>
               <Radio.Button value="2">合租</Radio.Button>
             </Radio.Group>
           )}
         </FormItem>
         <FormItem label="租金">
-          {getFieldDecorator('title')(
-            <Checkbox.Group
-              options={[
-                { label: 'Apple', value: 'Apple' },
-                { label: 'Pear', value: 'Pear' },
-                { label: 'Orange', value: 'Orange' },
-              ]}
-            />
-          )}
+          <Row style={{ width: '30%' }}>
+            <Col md={10} sm={24}>
+              <FormItem label="">
+                {getFieldDecorator('minRent')(<Input placeholder="价格" />)}
+              </FormItem>
+            </Col>
+            <Col md={4} sm={24}>
+              <div style={{ textAlign: 'center' }}>到</div>
+            </Col>
+            <Col md={10} sm={24}>
+              <FormItem label="">
+                {getFieldDecorator('maxRent')(<Input placeholder="价格" />)}
+              </FormItem>
+            </Col>
+          </Row>
         </FormItem>
         <FormItem label="户型">
           {getFieldDecorator('houseType')(
             <Checkbox.Group
               options={[
-                { label: 'Apple', value: 'Apple' },
-                { label: 'Pear', value: 'Pear' },
-                { label: 'Orange', value: 'Orange' },
+                { label: '1室', value: '1室' },
+                { label: '2室', value: '2室' },
+                { label: '3室', value: '3室' },
+                { label: '4室', value: '4室' },
               ]}
             />
           )}
         </FormItem>
         <FormItem label="朝向">
-          {getFieldDecorator('houseType')(
+          {getFieldDecorator('orientation')(
             <Checkbox.Group
               options={[
-                { label: 'Apple', value: 'Apple' },
-                { label: 'Pear', value: 'Pear' },
-                { label: 'Orange', value: 'Orange' },
+                { label: '东', value: '东' },
+                { label: '南', value: '南' },
+                { label: '西', value: '西' },
+                { label: '北', value: '北' },
               ]}
             />
           )}
@@ -230,9 +243,10 @@ class CoverCardList extends PureComponent {
           {getFieldDecorator('paymentMethod')(
             <Checkbox.Group
               options={[
-                { label: 'Apple', value: 'Apple' },
-                { label: 'Pear', value: 'Pear' },
-                { label: 'Orange', value: 'Orange'},
+                { label: '付一押一', value: '1' },
+                { label: '付三押一', value: '2' },
+                { label: '付六押一', value: '3' },
+                { label: '年付押一', value: '4' },
               ]}
             />
           )}
@@ -241,9 +255,11 @@ class CoverCardList extends PureComponent {
           {getFieldDecorator('time')(
             <Checkbox.Group
               options={[
-                { label: 'Apple', value: 'Apple' },
-                { label: 'Pear', value: 'Pear' },
-                { label: 'Orange', value: 'Orange', disabled: false },
+                { label: '上午', value: '1' },
+                { label: '中午', value: '2' },
+                { label: '下午', value: '3' },
+                { label: '晚上', value: '4' },
+                { label: '全天', value: '5' },
               ]}
             />
           )}
@@ -251,7 +267,7 @@ class CoverCardList extends PureComponent {
         <FormItem label="装修">
           {getFieldDecorator('decoration')(
             <Radio.Group buttonStyle="solid">
-              <Radio.Button value="0">不限</Radio.Button>
+              <Radio.Button value="">不限</Radio.Button>
               <Radio.Button value="1">精装</Radio.Button>
               <Radio.Button value="2">简装</Radio.Button>
               <Radio.Button value="3">毛坯</Radio.Button>
@@ -259,13 +275,13 @@ class CoverCardList extends PureComponent {
           )}
         </FormItem>
 
-        <diRowv>
+        <Row>
           <Divider style={{}}>
             <a style={{}} onClick={this.toggleForm}>
               收起 <Icon type="up" />
             </a>
           </Divider>
-        </diRowv>
+        </Row>
       </Form>
     );
   }
@@ -353,7 +369,12 @@ class CoverCardList extends PureComponent {
             onSearch={this.handleFormSubmit}
             style={{ width: 522 }}
           />
-          <Button size="large" type="dashed" style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
+          <Button
+            size="large"
+            type="dashed"
+            style={{ marginLeft: 8 }}
+            onClick={this.handleFormReset}
+          >
             重置
           </Button>
         </div>

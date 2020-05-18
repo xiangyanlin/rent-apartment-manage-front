@@ -124,7 +124,7 @@ class Resource extends PureComponent {
           >
             <a href="#">删除</a>
           </Popconfirm>
-            {record.status=="0"?
+          {record.status == '0' ? (
             <div>
               <Divider type="vertical" />
               <Popconfirm
@@ -138,9 +138,11 @@ class Resource extends PureComponent {
               >
                 <a href="#">审核</a>
               </Popconfirm>
-            </div>:<span></span>}
+            </div>
+          ) : (
+            <span />
+          )}
         </Fragment>
-        
       ),
     },
   ];
@@ -161,30 +163,29 @@ class Resource extends PureComponent {
       },
     });
   };
-    //审核确认框
-    examine = (rowId, e) => {
-      const { dispatch } = this.props;
-      dispatch({
-        type: 'house/updateHouseForm',
-        payload: { id: rowId ,status:"1"},
-        callback: res => {
-          if (res.code == 200) {
-            message.success('审核成功');
-          }
-        },
-      });
-      this.reload()
-    };
-  covertStatus=(status)=>{
-    if (status =='0'){
-      return "待审核";
-    } else if (status =='1'){
-      return "待租";
-    } 
-    else if (status=='2'){
-      return "租出";
-    } 
-  }
+  //审核确认框
+  examine = (rowId, e) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'house/updateHouseForm',
+      payload: { id: rowId, status: '1' },
+      callback: res => {
+        if (res.code == 200) {
+          message.success('审核成功');
+        }
+      },
+    });
+    this.reload();
+  };
+  covertStatus = status => {
+    if (status == '0') {
+      return '待审核';
+    } else if (status == '1') {
+      return '待租';
+    } else if (status == '2') {
+      return '租出';
+    }
+  };
   cancel = e => {
     console.log(e);
     message.error('Click on No');
@@ -377,8 +378,8 @@ class Resource extends PureComponent {
             <FormItem label="">
               {getFieldDecorator('used')(
                 <Select placeholder="房屋类型" style={{ width: '100%' }}>
-                  <Option value="0">住宅</Option>
-                  <Option value="1">商住两用</Option>
+                  <Option value="1">住宅</Option>
+                  <Option value="2">商住两用</Option>
                 </Select>
               )}
             </FormItem>
@@ -452,9 +453,9 @@ class Resource extends PureComponent {
     return expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
   }
 
-  handleOnClick=e=>{
-     return this.props.history.push("/admin/house/addResource")
-  }
+  handleOnClick = e => {
+    return this.props.history.push('/admin/house/addResource');
+  };
 
   render() {
     const {
@@ -468,7 +469,9 @@ class Resource extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
-           <Button type="primary" icon="plus" onClick={this.handleOnClick}>新增</Button>
+            <Button type="primary" icon="plus" onClick={this.handleOnClick}>
+              新增
+            </Button>
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}
