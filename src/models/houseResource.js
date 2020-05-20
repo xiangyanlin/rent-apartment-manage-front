@@ -8,6 +8,10 @@ export default {
       list: [],
       pagination: {},
     },
+    houses:{
+      list: [],
+      pagination: {},
+    }
   },
 
   effects: {
@@ -15,6 +19,13 @@ export default {
       const response = yield call(queryResource, payload);
       yield put({
         type: 'save',
+        payload: response,
+      });
+    },
+    *getHouses({ payload }, { call, put }) {
+      const response = yield call(queryResource, payload);
+      yield put({
+        type: 'hold',
         payload: response,
       });
     },
@@ -51,5 +62,11 @@ export default {
         data: action.payload,
       };
     },
+    hold(state, action) {
+      return {
+      ...state,
+      houses: action.payload,
+    };
+  },
   },
 };

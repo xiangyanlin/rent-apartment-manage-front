@@ -11,19 +11,20 @@ import {
   Icon,
   Button,
   Divider,
-  Carousel,
+  Tabs,
   Popconfirm,
   message,
 } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-
+import tabStyle from './style.less';
 import styles from '../TableList.less';
 import ShowPics from './ShowPics';
 import EditResource from './EditResource';
 
 const FormItem = Form.Item;
 const { Option } = Select;
+const { TabPane } = Tabs;
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
@@ -109,8 +110,6 @@ class Resource extends PureComponent {
       title: '操作',
       render: (text, record) => (
         <Fragment>
-          {/* <a onClick={() => {}}>查看</a>
-          <Divider type="vertical" /> */}
           <EditResource record={record} reload={this.reload.bind(this)} />
           <Divider type="vertical" />
           <Popconfirm
@@ -124,24 +123,89 @@ class Resource extends PureComponent {
           >
             <a href="#">删除</a>
           </Popconfirm>
-          {record.status == '0' ? (
-            <div>
-              <Divider type="vertical" />
-              <Popconfirm
-                title="您确认通过此房源的审核吗?"
-                onConfirm={() => {
-                  this.examine(record.id);
-                }}
-                onCancel={this.cancel}
-                okText="确认"
-                cancelText="取消"
-              >
-                <a href="#">审核</a>
-              </Popconfirm>
-            </div>
-          ) : (
-            <span />
-          )}
+        </Fragment>
+      ),
+    },
+  ];
+  auditColumns = [
+    {
+      title: '房源编号',
+      dataIndex: 'id',
+    },
+    {
+      title: '房源信息',
+      dataIndex: 'title',
+    },
+    {
+      title: '图',
+      dataIndex: 'pic',
+      render: (text, record, index) => {
+        return <ShowPics pics={text} />;
+      },
+    },
+    {
+      title: '楼栋',
+      render: (text, record, index) => {
+        return (
+          record.buildingFloorNum + '栋' + record.buildingNum + '单元' + record.buildingUnit + '号'
+        );
+      },
+    },
+    {
+      title: '支付方式',
+      render: (text, record, index) => {
+        return payType.get(record.paymentMethod);
+      },
+    },
+    {
+      title: '户型',
+      dataIndex: 'houseType',
+    },
+    {
+      title: '面积',
+      dataIndex: 'useArea',
+      render: (text, record, index) => {
+        return text + '平方';
+      },
+    },
+    {
+      title: '楼层',
+      dataIndex: 'floor',
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      render: (text, record, index) => {
+        return this.covertStatus(record.status);
+      },
+    },
+    {
+      title: '操作',
+      render: (text, record) => (
+        <Fragment>
+          <Popconfirm
+            title="您确认通过此房源的审核吗？"
+            onConfirm={() => {
+              this.examine(record.id);
+            }}
+            onCancel={this.cancel}
+            okText="确认"
+            cancelText="取消"
+          >
+            <a href="#">通过</a>
+          </Popconfirm>
+          <Divider type="vertical" />
+          <Popconfirm
+            title="您确认驳回此房源的审核吗？"
+            onConfirm={() => {
+              this.reject(record.id);
+            }}
+            onCancel={this.cancel}
+            okText="确认"
+            cancelText="取消"
+          >
+            <a href="#">驳回</a>
+          </Popconfirm>
         </Fragment>
       ),
     },
@@ -163,7 +227,7 @@ class Resource extends PureComponent {
       },
     });
   };
-  //审核确认框
+  //通过审核确认框
   examine = (rowId, e) => {
     const { dispatch } = this.props;
     dispatch({
@@ -175,7 +239,21 @@ class Resource extends PureComponent {
         }
       },
     });
-    this.reload();
+    this.reload1();
+  };
+  //拒绝审核确认框
+  reject = (rowId, e) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'house/updateHouseForm',
+      payload: { id: rowId, status: '3' },
+      callback: res => {
+        if (res.code == 200) {
+          message.success('审核成功');
+        }
+      },
+    });
+    this.reload1();
   };
   covertStatus = status => {
     if (status == '0') {
@@ -190,18 +268,33 @@ class Resource extends PureComponent {
     console.log(e);
     message.error('Click on No');
   };
-  reload() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'houseResource/fetch',
-    });
-  }
+
 
   componentDidMount() {
     //当组件挂载完成后执行加载数据
     const { dispatch } = this.props;
     dispatch({
       type: 'houseResource/fetch',
+      payload:{status:["1","2","3"]}
+    });
+    dispatch({
+      type: 'houseResource/getHouses',
+      payload:{status:["0"]}
+    });
+  }
+
+  reload() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'houseResource/fetch',
+      payload:{status:["1","2","3"]}
+    });
+  }
+  reload1() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'houseResource/getHouses',
+      payload:{status:["0"]}
     });
   }
 
@@ -460,6 +553,7 @@ class Resource extends PureComponent {
   render() {
     const {
       houseResource: { data },
+      houseResource:{houses},
       loading,
     } = this.props;
     const { selectedRows } = this.state;
@@ -467,19 +561,37 @@ class Resource extends PureComponent {
     return (
       <PageHeaderWrapper title="房源管理">
         <Card bordered={false}>
-          <div className={styles.tableList}>
-            <div className={styles.tableListForm}>{this.renderForm()}</div>
-            <Button type="primary" icon="plus" onClick={this.handleOnClick}>
-              新增
-            </Button>
-            <StandardTable
-              selectedRows={selectedRows}
-              loading={loading}
-              data={data}
-              columns={this.columns}
-              onSelectRow={this.handleSelectRows}
-              onChange={this.handleStandardTableChange}
-            />
+          <div className={tabStyle.cardContainer}>
+            <Tabs type={tabStyle.card}>
+              <TabPane tab="已上线" key="1">
+                <div className={styles.tableList}>
+                  <div className={styles.tableListForm}>{this.renderForm()}</div>
+                  <Button type="primary" icon="plus" onClick={this.handleOnClick}>
+                    新增
+                  </Button>
+                  <StandardTable
+                    rowKey="id"
+                    selectedRows={selectedRows}
+                    loading={loading}
+                    data={data}
+                    columns={this.columns}
+                    onSelectRow={this.handleSelectRows}
+                    onChange={this.handleStandardTableChange}
+                  />
+                </div>
+              </TabPane>
+              <TabPane tab="待审核" key="2">
+                <StandardTable
+                  rowKey="id"
+                  selectedRows={selectedRows}
+                  loading={loading}
+                  data={houses}
+                  columns={this.auditColumns}
+                  onSelectRow={this.handleSelectRows}
+                  onChange={this.handleStandardTableChange}
+                />
+              </TabPane>
+            </Tabs>
           </div>
         </Card>
       </PageHeaderWrapper>
