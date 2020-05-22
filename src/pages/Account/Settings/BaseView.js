@@ -8,7 +8,7 @@ import avatar from '../../../assets/avatar.png';
 
 const FormItem = Form.Item;
 const { Option } = Select;
-
+const url="http://127.0.0.1:8080/common/getImage?filename=";
 // 头像组件 方便以后独立，增加裁剪之类的功能
 // const AvatarView = ({ avatar }) => (
 //   <Fragment>
@@ -16,16 +16,7 @@ const { Option } = Select;
 //   </Fragment>
 // );
 
-const validatorGeographic = (rule, value, callback) => {
-  const { province, city } = value;
-  if (!province.key) {
-    callback('Please input your province!');
-  }
-  if (!city.key) {
-    callback('Please input your city!');
-  }
-  callback();
-};
+
 
 const validatorPhone = (rule, value, callback) => {
   // const values = value.split('-');
@@ -71,8 +62,10 @@ class BaseView extends Component {
 
   getAvatarURL() {
     const { currentUser } = this.props;
-    if (currentUser.avatar) {
-      return "http://127.0.0.1:8080/common/getImage?filename="+currentUser.avatar;
+    if(this.state.pics){
+      return url+this.state.pics;
+    }else if (currentUser.avatar) {
+      return url+currentUser.avatar;
     }
     return avatar;
   }
@@ -96,8 +89,8 @@ class BaseView extends Component {
   handleChange = ( file) => {
     this.setState( file );
     this.handleFile(this.state.file);
-    console.log(this.state.pics);
-    document.getElementById('avatar').src="http://127.0.0.1:8080/common/getImage?filename="+this.state.pics;
+    this.refs.src=
+    url+this.state.pics;
   }
 
   handleSubmit = e => {
@@ -128,10 +121,9 @@ getEducationOptops=(dict)=>{
   let educationOptops=new Array;
   if(typeof(dict)!='undefined'&&dict!=null){
     for(var key in dict){
-      console.log(key+":"+dict[key])
       if(key=='学历'&&Array.isArray(dict[key])&&dict[key].length>0){
         dict[key].forEach((Item,index)=>{
-          educationOptops.push( <Option value={Item.value}>{Item.name}</Option>);
+          educationOptops.push( <Option key={index} value={Item.value}>{Item.name}</Option>);
           })
       }
     }
@@ -145,10 +137,9 @@ getSexRadios=(dict)=>{
   let educationOptops=new Array;
   if(typeof(dict)!='undefined'&&dict!=null){
     for(var key in dict){
-      console.log(key+":"+dict[key])
       if(key=='性别'&&Array.isArray(dict[key])&&dict[key].length>0){
         dict[key].forEach((Item,index)=>{
-          educationOptops.push( <Radio value={Item.value}>{Item.name}</Radio>);
+          educationOptops.push( <Radio key={index} value={Item.value}>{Item.name}</Radio>);
           })
       }
     }
@@ -218,10 +209,6 @@ getSexRadios=(dict)=>{
                 {this.getEducationOptops(dict)}
               </Select>)}
             </FormItem>
-            {/* <FormItem >
-              {getFieldDecorator('pic')
-              (<Input  type="hidden" value={this.state.pics}/>)}
-            </FormItem> */}
             <FormItem style={{ marginTop: 32 }}>
             <Button type="primary" htmlType="submit" loading={submitting}>
               <FormattedMessage
@@ -232,12 +219,9 @@ getSexRadios=(dict)=>{
             </FormItem>
           </Form>
         </div>
-        {/* <FormItem {...formItemLayout} label="上传室内图">
-            <PicturesWall handleFileList={this.handleFileList.bind(this)}/>
-        </FormItem> */}
         <div className={styles.right}>
             <div className={styles.avatar}>
-              <Avatar size={130} id="avatar" src={this.getAvatarURL()} alt="avatar" />
+              <Avatar ref="avatar" size={130}  src={this.getAvatarURL()} alt="avatar" />
             </div>
             <Upload file={file}
                     action="/xyl/common/picUpload"

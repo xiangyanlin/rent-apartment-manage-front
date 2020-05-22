@@ -294,8 +294,11 @@ export default [
         ],
       },
       {
-        component: '404',
+        component: './Exception/404',
       },
+      // {
+      //   component: '404',
+      // },
     ],
   },
   //前台
@@ -450,6 +453,12 @@ export default [
           },
         ],
       },
+      {
+        component: './Exception/404',
+      },
+      // {
+      //   component: '404',
+      // },
     ],
   },
 ];
