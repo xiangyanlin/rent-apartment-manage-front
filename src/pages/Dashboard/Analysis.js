@@ -33,11 +33,8 @@ import { getTimeDistance } from '@/utils/utils';
 
 import styles from './Analysis.less';
 
-const IconFont = Icon.createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js',   //阿里巴巴图标引用地址
-});
 
-
+const { RangePicker } = DatePicker;
 
 @connect(({ chart, loading }) => ({
   chart,
@@ -64,6 +61,7 @@ class Analysis extends Component {
 
   componentDidMount() {
     const { dispatch } = this.props;
+    const {rangePickerValue}=this.state;
     this.reqRef = requestAnimationFrame(() => {
       dispatch({
         type: 'chart/fetch',
@@ -88,6 +86,10 @@ class Analysis extends Component {
     });
     dispatch({
       type: 'chart/countUserByMon',
+      payload:{
+        startTime:rangePickerValue[0]._i,
+        endTime:rangePickerValue[1]._i,
+      }
     });
     dispatch({
       type: 'chart/counHouseByO',
@@ -117,12 +119,17 @@ class Analysis extends Component {
 
   handleRangePickerChange = rangePickerValue => {
     const { dispatch } = this.props;
+    // debugger
     this.setState({
       rangePickerValue,
     });
-
+    console.log(rangePickerValue)
     dispatch({
-      type: 'chart/fetchSalesData',
+      type: 'chart/countUserByMon',
+      payload:{
+        startTime:rangePickerValue[0].format("YYYY-MM-DD HH:mm:ss"),
+        endTime:rangePickerValue[1].format("YYYY-MM-DD HH:mm:ss"),
+      }
     });
   };
 
@@ -137,25 +144,20 @@ class Analysis extends Component {
     });
   };
 
-  isActive(type) {
-    const { rangePickerValue } = this.state;
-    const value = getTimeDistance(type);
-    if (!rangePickerValue[0] || !rangePickerValue[1]) {
-      return '';
-    }
-    if (
-      rangePickerValue[0].isSame(value[0], 'day') &&
-      rangePickerValue[1].isSame(value[1], 'day')
-    ) {
-      return styles.currentDate;
-    }
-    return '';
-  }
+
 
   render() {
-    console.log(this.props)
-    const {userTotal,houseTotal,estateTotal,decorationProp,userNumbyTime,countHouseByO}=this.props.chart;
+    
+    const {
+      userTotal,
+      houseTotal,
+      estateTotal,
+      decorationProp,
+      userNumbyTime,
+      countHouseByO,
+    } = this.props.chart;
     const { rangePickerValue, salesType, loading: propsLoding, currentTabKey } = this.state;
+    console.log(rangePickerValue[0]._i);
     const { chart, loading: stateLoading } = this.props;
     const {
       salesData,
@@ -189,17 +191,15 @@ class Analysis extends Component {
               title="用户总量"
               loading={loading}
               action={
-                <Tooltip
-                  title="本系统注册用户总数"
-                >
+                <Tooltip title="本系统注册用户总数">
                   <Icon type="info-circle-o" />
                 </Tooltip>
               }
               total={numeral(userTotal).format('0,0')}
               contentHeight={46}
-              style={{height:"180px"}}
+              style={{ height: '180px' }}
             >
-              <Icon type="contacts" theme="twoTone" style={{fontSize:"90px",float:"right"}} />
+              <Icon type="contacts" theme="twoTone" style={{ fontSize: '90px', float: 'right' }} />
             </ChartCard>
           </Col>
           <Col {...topColResponsiveProps}>
@@ -208,17 +208,15 @@ class Analysis extends Component {
               loading={loading}
               title="房源总量"
               action={
-                <Tooltip
-                  title="登记房源总数"
-                >
+                <Tooltip title="登记房源总数">
                   <Icon type="info-circle-o" />
                 </Tooltip>
               }
               total={numeral(houseTotal).format('0,0')}
               contentHeight={46}
-              style={{height:"180px"}}
+              style={{ height: '180px' }}
             >
-              <Icon type="home" theme="twoTone" style={{fontSize:"85px",float:"right"}} />
+              <Icon type="home" theme="twoTone" style={{ fontSize: '85px', float: 'right' }} />
             </ChartCard>
           </Col>
           <Col {...topColResponsiveProps}>
@@ -227,17 +225,15 @@ class Analysis extends Component {
               loading={loading}
               title="楼盘总量"
               action={
-                <Tooltip
-                  title="系统录入楼盘总量"
-                >
+                <Tooltip title="系统录入楼盘总量">
                   <Icon type="info-circle-o" />
                 </Tooltip>
               }
               total={numeral(estateTotal).format('0,0')}
               contentHeight={46}
-              style={{height:"180px"}}
+              style={{ height: '180px' }}
             >
-               <Icon type="bank" theme="twoTone" style={{fontSize:"85px",float:"right"}} />
+              <Icon type="bank" theme="twoTone" style={{ fontSize: '85px', float: 'right' }} />
             </ChartCard>
           </Col>
           <Col {...topColResponsiveProps}>
@@ -246,46 +242,51 @@ class Analysis extends Component {
               bordered={false}
               title="精装房源占比"
               action={
-                <Tooltip
-                  title="精装房源占房源总量的比例"
-                >
+                <Tooltip title="精装房源占房源总量的比例">
                   <Icon type="info-circle-o" />
                 </Tooltip>
               }
-              total={decorationProp+"%"}
+              total={decorationProp + '%'}
               contentHeight={46}
-              style={{height:"180px"}}
+              style={{ height: '180px' }}
             >
               <MiniProgress percent={decorationProp} strokeWidth={8} target={80} color="#13C2C2" />
             </ChartCard>
           </Col>
         </Row>
 
-        <Card loading={loading} bordered={false} bodyStyle={{ padding: 0 }} title="新增用户数量图">
+        <Card
+          loading={loading}
+          bordered={false}
+          bodyStyle={{ padding: 0 }}
+          title="新增用户数量图"
+          extra={
+            <RangePicker
+              defaultValue={rangePickerValue}
+              onChange={this.handleRangePickerChange}
+              style={{ width: 256 }}
+            />
+          }
+        >
           <div className={styles.salesCard}>
-                <Row>
-                  <Col >
-                    <div className={styles.salesBar}>
-                      <Bar
-                        height={295}
-                        data={userNumbyTime}
-                      />
-                    </div>
-                  </Col>
-                </Row>
+            <Row>
+              <Col>
+                <div className={styles.salesBar}>
+                  <Bar height={295} data={userNumbyTime} />
+                </div>
+              </Col>
+            </Row>
           </div>
         </Card>
 
         <Row gutter={24}>
-
-          <Col >
+          <Col>
             <Card
               loading={loading}
               className={styles.salesCard}
               bordered={false}
               title="房源朝向占比"
               bodyStyle={{ padding: 24 }}
-              
               style={{ marginTop: 24, minHeight: 509 }}
             >
               <Pie
