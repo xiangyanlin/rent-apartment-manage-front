@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Form, Input, Button, Alert, Divider } from 'antd';
+import { Form, Input, Button, Alert, Divider, Popover, Progress } from 'antd';
 import router from 'umi/router';
 import { digitUppercase } from '@/utils/utils';
+import { formatMessage, FormattedMessage } from 'umi/locale';
 import styles from './style.less';
-
+const FormItem = Form.Item;
 const formItemLayout = {
   labelCol: {
     span: 5,
@@ -14,30 +15,133 @@ const formItemLayout = {
   },
 };
 
+const passwordStatusMap = {
+  ok: (
+    <div className={styles.success}>
+      <FormattedMessage id="validation.password.strength.strong" />
+    </div>
+  ),
+  pass: (
+    <div className={styles.warning}>
+      <FormattedMessage id="validation.password.strength.medium" />
+    </div>
+  ),
+  poor: (
+    <div className={styles.error}>
+      <FormattedMessage id="validation.password.strength.short" />
+    </div>
+  ),
+};
+
+const passwordProgressMap = {
+  ok: 'success',
+  pass: 'normal',
+  poor: 'exception',
+};
+
 @connect(({ form, loading }) => ({
   submitting: loading.effects['form/submitStepForm'],
-  data: form.step,
 }))
 @Form.create()
 class Step2 extends React.PureComponent {
+
+  state = {
+    count: 0,
+    confirmDirty: false,
+    visible: false,
+    help: '',
+    prefix: '86',
+  };
+
+  getPasswordStatus = () => {
+    const { form } = this.props;
+    const value = form.getFieldValue('password');
+    if (value && value.length > 9) {
+      return 'ok';
+    }
+    if (value && value.length > 5) {
+      return 'pass';
+    }
+    return 'poor';
+  };
+
+  
+
+  checkConfirm = (rule, value, callback) => {
+    const { form } = this.props;
+    if (value && value !== form.getFieldValue('password')) {
+      callback(formatMessage({ id: 'validation.password.twice' }));
+    } else {
+      callback();
+    }
+  };
+
+  checkPassword = (rule, value, callback) => {
+    const { visible, confirmDirty } = this.state;
+    if (!value) {
+      this.setState({
+        help: formatMessage({ id: 'validation.password.required' }),
+        visible: !!value,
+      });
+      callback('error');
+    } else {
+      this.setState({
+        help: '',
+      });
+      if (!visible) {
+        this.setState({
+          visible: !!value,
+        });
+      }
+      if (value.length < 6) {
+        callback('error');
+      } else {
+        const { form } = this.props;
+        if (value && confirmDirty) {
+          form.validateFields(['confirm'], { force: true });
+        }
+        callback();
+      }
+    }
+  };
+
+  renderPasswordProgress = () => {
+    const { form } = this.props;
+    const value = form.getFieldValue('password');
+    const passwordStatus = this.getPasswordStatus();
+    return value && value.length ? (
+      <div className={styles[`progress-${passwordStatus}`]}>
+        <Progress
+          status={passwordProgressMap[passwordStatus]}
+          className={styles.progress}
+          strokeWidth={6}
+          percent={value.length * 10 > 100 ? 100 : value.length * 10}
+          showInfo={false}
+        />
+      </div>
+    ) : null;
+  };
+  
   render() {
+    const { count, prefix, help, visible } = this.state;
     const { form, data, dispatch, submitting } = this.props;
     const { getFieldDecorator, validateFields } = form;
     const onPrev = () => {
-      router.push('/form/step-form/info');
+      router.push('/user/forgetPassword/info');
     };
     const onValidateForm = e => {
       e.preventDefault();
       validateFields((err, values) => {
-        if (!err) {
-          dispatch({
-            type: 'form/submitStepForm',
-            payload: {
-              ...data,
-              ...values,
-            },
-          });
-        }
+        // if (!err) {
+        //   dispatch({
+        //     type: 'form/submitStepForm',
+        //     payload: {
+        //       ...values,
+        //     },
+        //   });
+        //   router.push('/user/forgetPassword/confirm');
+        // }
+        router.push('/user/forgetPassword/result');
       });
     };
     return (
@@ -45,34 +149,59 @@ class Step2 extends React.PureComponent {
         <Alert
           closable
           showIcon
-          message="确认转账后，资金将直接打入对方账户，无法退回。"
+          message="修改密码后后，请牢记您的新密码！"
           style={{ marginBottom: 24 }}
         />
-        <Form.Item {...formItemLayout} className={styles.stepFormText} label="付款账户">
-          {data.payAccount}
-        </Form.Item>
-        <Form.Item {...formItemLayout} className={styles.stepFormText} label="收款账户">
-          {data.receiverAccount}
-        </Form.Item>
-        <Form.Item {...formItemLayout} className={styles.stepFormText} label="收款人姓名">
-          {data.receiverName}
-        </Form.Item>
-        <Form.Item {...formItemLayout} className={styles.stepFormText} label="转账金额">
-          <span className={styles.money}>{data.amount}</span>
-          <span className={styles.uppercase}>（{digitUppercase(data.amount)}）</span>
-        </Form.Item>
-        <Divider style={{ margin: '24px 0' }} />
-        <Form.Item {...formItemLayout} label="支付密码" required={false}>
-          {getFieldDecorator('password', {
-            initialValue: '123456',
+          <FormItem help={help}>
+          <Popover
+            getPopupContainer={node => node.parentNode}
+            content={
+              <div style={{ padding: '4px 0' }}>
+                {passwordStatusMap[this.getPasswordStatus()]}
+                {this.renderPasswordProgress()}
+                <div style={{ marginTop: 10 }}>
+                  <FormattedMessage id="validation.password.strength.msg" />
+                </div>
+              </div>
+            }
+            overlayStyle={{ width: 240 }}
+            placement="right"
+            visible={visible}
+          >
+            {getFieldDecorator('password', {
+              rules: [
+                {
+                  validator: this.checkPassword,
+                },
+              ],
+            })(
+              <Input.Password 
+                size="large"
+                type="password"
+                placeholder={formatMessage({ id: 'form.password.placeholder' })}
+              />
+            )}
+          </Popover>
+        </FormItem>
+        <FormItem>
+          {getFieldDecorator('confirm', {
             rules: [
               {
                 required: true,
-                message: '需要支付密码才能进行支付',
+                message: formatMessage({ id: 'validation.confirm-password.required' }),
+              },
+              {
+                validator: this.checkConfirm,
               },
             ],
-          })(<Input type="password" autoComplete="off" style={{ width: '80%' }} />)}
-        </Form.Item>
+          })(
+            <Input.Password 
+              size="large"
+              type="password"
+              placeholder={formatMessage({ id: 'form.confirm-password.placeholder' })}
+            />
+          )}
+        </FormItem>
         <Form.Item
           style={{ marginBottom: 8 }}
           wrapperCol={{
