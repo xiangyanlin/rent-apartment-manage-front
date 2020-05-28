@@ -8,6 +8,34 @@ export default [
       { path: '/user/login', component: './User/Login' },
       { path: '/user/register', component: './User/Register' },
       { path: '/user/register-result', component: './User/RegisterResult' },
+      {
+        path: '/user/forgetPassword',
+        name: 'stepform',
+        component: './User/ForgetPassword',
+        hideChildrenInMenu: true,
+        routes: [
+          {
+            path: '/user/forgetPassword',
+            name: 'forgetPassword',
+            redirect: '/user/forgetPassword/info',
+          },
+          {
+            path: '/user/forgetPassword/info',
+            name: 'info',
+            component: './User/ForgetPassword/Step1',
+          },
+          {
+            path: '/user/forgetPassword/confirm',
+            name: 'confirm',
+            component: './User/ForgetPassword/Step2',
+          },
+          {
+            path: '/user/forgetPassword/result',
+            name: 'result',
+            component: './User/ForgetPassword/Step3',
+          },
+        ],
+      },
     ],
   },
   // app
