@@ -57,3 +57,13 @@ export async function queryUserTotal() {
 export async function countUserByMon(params) {
   return request(`/xyl/user/countByMon?${stringify(params)}`);
 }
+
+//获取邮箱验证码
+export async function sendVerification(params) {
+  return request(`/xyl/user/sendVerification?${stringify(params)}`);
+}
+
+//获取邮箱验证码
+export async function queryByUserNameAndEmail(params) {
+  return request(`/xyl/user/queryByUserNameAndEmail?${stringify(params)}`);
+}
