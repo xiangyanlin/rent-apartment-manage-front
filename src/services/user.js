@@ -68,7 +68,13 @@ export async function queryByUserNameAndEmail(params) {
   return request(`/xyl/user/queryByUserNameAndEmail?${stringify(params)}`);
 }
 
-//通过用户名邮箱获取用户
+//验证邮箱验证码
 export async function verificationCheck(params) {
   return request(`/xyl/user/verificationCheck?${stringify(params)}`);
+}
+
+
+//通过邮箱验证码修改密码
+export async function updatePWByVerificationCode(params) {
+  return request(`/xyl/user/updatePWByVerificationCode?${stringify(params)}`);
 }

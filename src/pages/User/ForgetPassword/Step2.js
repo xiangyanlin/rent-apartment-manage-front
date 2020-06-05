@@ -1,8 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Form, Input, Button, Alert, Divider, Popover, Progress } from 'antd';
+import { Form, Input, Button, Alert, Divider, Popover, Progress,message } from 'antd';
 import router from 'umi/router';
-import { digitUppercase } from '@/utils/utils';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import styles from './style.less';
 const FormItem = Form.Item;
@@ -40,7 +39,7 @@ const passwordProgressMap = {
 };
 
 @connect(({ form, loading }) => ({
-  submitting: loading.effects['form/submitStepForm'],
+  submitting: loading.effects['user/updatePWByVerificationCode'],
 }))
 @Form.create()
 class Step2 extends React.PureComponent {
@@ -121,29 +120,48 @@ class Step2 extends React.PureComponent {
       </div>
     ) : null;
   };
+
+  onValidateForm = e => {
+    const { form, dispatch } = this.props;
+    const { user,code,operation } = this.props.location.state;
+    e.preventDefault();
+    form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        dispatch({
+          type: 'user/updatePWByVerificationCode',
+          payload: {
+            newPassword:values.password,
+            ...user,
+            code:code,
+            operation:operation
+          },
+          callback: res => {
+            let { data } = res;
+            if (res.code === 200) {
+              router.push('/user/forgetPassword/result');
+            } else {
+              message.error(res.message);
+            }
+          },
+        });
+      }
+      
+    });
+  };
   
   render() {
+    const { user,code,operation } = this.props.location.state;
     const { count, prefix, help, visible } = this.state;
     const { form, data, dispatch, submitting } = this.props;
     const { getFieldDecorator, validateFields } = form;
     const onPrev = () => {
       router.push('/user/forgetPassword/info');
     };
-    const onValidateForm = e => {
-      e.preventDefault();
-      validateFields((err, values) => {
-        // if (!err) {
-        //   dispatch({
-        //     type: 'form/submitStepForm',
-        //     payload: {
-        //       ...values,
-        //     },
-        //   });
-        //   router.push('/user/forgetPassword/confirm');
-        // }
-        router.push('/user/forgetPassword/result');
-      });
-    };
+    console.log(this.props)
+    if(user===null||code===null||operation===null){
+      this.props.history.go(-1)
+    }
+    
     return (
       <Form layout="horizontal" className={styles.stepForm}>
         <Alert
@@ -213,7 +231,7 @@ class Step2 extends React.PureComponent {
           }}
           label=""
         >
-          <Button type="primary" onClick={onValidateForm} loading={submitting}>
+          <Button type="primary" onClick={this.onValidateForm} loading={submitting}>
             提交
           </Button>
           <Button onClick={onPrev} style={{ marginLeft: 8 }}>

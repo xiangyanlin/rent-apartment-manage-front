@@ -7,6 +7,7 @@ import {
   sendVerification,
   queryByUserNameAndEmail,
   verificationCheck,
+  updatePWByVerificationCode,
 } from '@/services/user';
 import { message } from 'antd';
 export default {
@@ -52,6 +53,13 @@ export default {
     //验证邮箱验证码
     *verificationCheck({ payload, callback }, { call }) {
       const response = yield call(verificationCheck, payload);
+      if (callback && typeof callback == 'function') {
+        callback(response); // 返回结果
+      }
+    },
+    //通过邮箱验证码修改密码
+    *updatePWByVerificationCode({ payload, callback }, { call }) {
+      const response = yield call(updatePWByVerificationCode, payload);
       if (callback && typeof callback == 'function') {
         callback(response); // 返回结果
       }

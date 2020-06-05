@@ -70,11 +70,10 @@ class Step1 extends React.PureComponent {
             if (res.code === 200) {
               this.props.history.push(
                 '/user/forgetPassword/confirm',
-                { user: user},
-                { code: values.code }
+                { user: user, code: values.code,operation:operation},
               );
             } else {
-              message.error('验证码错误！');
+              message.error(res.message);
             }
           },
         });
