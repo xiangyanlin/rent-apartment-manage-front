@@ -6,6 +6,7 @@ import {
   removeUser,
   sendVerification,
   queryByUserNameAndEmail,
+  verificationCheck,
 } from '@/services/user';
 import { message } from 'antd';
 export default {
@@ -39,11 +40,18 @@ export default {
 
     //发送邮箱验证码
     *sendMailCode({ payload }, { call, put }) {
-       yield call(sendVerification, payload);
+      yield call(sendVerification, payload);
     },
     //根据用户名和邮箱查询用户
-    *queryByUserNameAndEmail({ payload, callback }, { call }){
+    *queryByUserNameAndEmail({ payload, callback }, { call }) {
       const response = yield call(queryByUserNameAndEmail, payload);
+      if (callback && typeof callback == 'function') {
+        callback(response); // 返回结果
+      }
+    },
+    //验证邮箱验证码
+    *verificationCheck({ payload, callback }, { call }) {
+      const response = yield call(verificationCheck, payload);
       if (callback && typeof callback == 'function') {
         callback(response); // 返回结果
       }
